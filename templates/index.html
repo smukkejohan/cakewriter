@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    {% for chapter in chapters %}
+        
+        <div class="chapter">
+
+            <h2><a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h2>
+            
+            <div class="meta">
+                  last modified: {{ chapter.mod_date}}
+                <div class="rating">
+                  {{ chapter.rating.get_percent }}%
+                </div>
+            </div>
+            
+        </div>
+                
+    {% endfor %}
+    
+{% endblock %}
