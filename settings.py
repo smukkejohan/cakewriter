@@ -8,7 +8,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
 DEVELOPMENT_MODE = (platform.node() != "tango")
 
 if DEVELOPMENT_MODE:
-    DEBUG: True
+    DEBUG = True
     MEDIA_URL = '/m/'
     ADMIN_MEDIA_PREFIX = '/media/'
 else:
