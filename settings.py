@@ -7,24 +7,32 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 DEVELOPMENT_MODE = (platform.node() != "tango")
 
-DEBUG = True
+if DEVELOPMENT_MODE:
+    DEBUG: True
+    MEDIA_URL = '/m/'
+    ADMIN_MEDIA_PREFIX = '/media/'
+else:
+    DEBUG = False
+    MEDIA_URL = 'http://static.cakethebook.com'
+    ADMIN_MEDIA_PREFIX = MEDIA_URL + '/admin/'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'cakewriter.dev.db',        
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',  
+        'PORT': '',
+        }
+}
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Johan Bichel Lindegaard', 'sysadmin@johan.cc'),
 )
 MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cakewriter.dev.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -48,20 +56,6 @@ USE_I18N = True
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
 USE_L10N = True
-
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/m/'
-
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = ')dtk*18jea%+khj_6s)j_x8^nd6jat=^h4xta&sh8hkxxue8sv'
@@ -96,7 +90,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.comments',
-    #'rated_comments',
     'registration',
     'djangoratings',
     'book',
@@ -104,7 +97,14 @@ INSTALLED_APPS = (
     'voting',
 )
 
-ACCOUNT_ACTIVATION_DAYS = 4
+ACCOUNT_ACTIVATION_DAYS = 30
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
+try:
+    from settings_local import *
+except ImportError:
+    import sys
+    sys.stderr.write('Unable to read settings_local.py\n')
+    sys.exit(1)
