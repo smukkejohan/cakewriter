@@ -25,22 +25,50 @@
 
 
 
-<div id="header">
+<div id="header" class="container_12 clearfix">
+    <div class="grid_2">
+        <div id="site-logo"><a href="/">Logo</a></div>
+    </div>
+    
+    <div class="grid_7">
+        <a id="site-title" href="/">CAKE – how you can have your cake and eat it too</a>
+    </div>
+    
 </div><!-- /header -->
 
 {% if messages %}
-<div id="messages" class="span-24 last">
+<div id="messages" class="container_12 clearfix">
   <ul>{% for message in messages %}
     <li>{{ message }}</li>{% endfor %}</ul>
 </div>
 {% endif %}
 
-<div id="content">  
-    {% block content %}{% endblock %}
+<div id="content" class="container_12 clearfix">
+    
+    <div id="main-content" class="grid_9 alpha">
+        {% block content %}{% endblock %}
+    </div>
+    <div id="context-sidebar" class="grid_3 omega">  
+        <div id="user-context">
+            {% if user.is_authenticated %}
+                <p>You are logged in as {{ user.username }}
+                <a href="{% url auth_logout %}">log out</a></p>
+            {% else %}
+                <p><a href="{% url registration_register %}">register</a>
+                <a href="{% url auth_login %}">log in</a></p>
+            {% endif %}    
+        </div>
+    </div>
+    
 </div><!-- /content -->
     
-<div id="footer">
+<div id="footer" class="container_12 clearfix">
+    <div class="prefix_2 grid_7">
+        <p>about open source linode ...</p>
+    </div>
 </div><!-- /footer -->
+
+
 
 
 {# google js API #}

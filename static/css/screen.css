@@ -1,0 +1,20 @@
+body {background-color:#fff;}
+
+#logo {background-color: red;}
+
+#site-title {font-size: 24px;}
+
+.meta {color: #333;
+    font-size: 13px;}
+
+/* chapters */
+h1 a, h2 a, h3 a {text-decoration: none;}
+
+ 
+
+.chapter h1.title {font-size:48px;}
+
+/* chapter teaser */
+.chapter.teaser h2.title a {font-size: 36px;}
+
+/* chapter full */

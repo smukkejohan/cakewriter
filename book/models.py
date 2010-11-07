@@ -14,7 +14,7 @@ class Chapter(models.Model):
     mod_date = models.DateTimeField(default=datetime.now)
     pub_date = models.DateTimeField(default=datetime.now)
     index = models.IntegerField(help_text="position i bogen, højere = senere")
-    rating = RatingField(range=5)
+    rating = RatingField(range=5, can_change_vote = True)
     
     class Meta:
         ordering = ['-index']
@@ -31,3 +31,4 @@ class Chapter(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('chapter', [str(self.id)])
+

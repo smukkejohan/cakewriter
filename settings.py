@@ -3,8 +3,9 @@
 import os.path, sys, platform
 
 PROJECT_ROOT = os.path.dirname(__file__)
-
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
+DEVELOPMENT_MODE = (platform.node() != "tango")
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -55,7 +56,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/static/'
+MEDIA_URL = '/m/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -95,7 +96,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.comments',
-    #'rated-comments',
+    #'rated_comments',
     'registration',
     'djangoratings',
     'book',

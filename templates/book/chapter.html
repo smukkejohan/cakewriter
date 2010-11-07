@@ -1,16 +1,106 @@
 {% extends 'base.html' %}
 {% load comments %}
+{% load voting_tags %}
 
 {% block content %}
     
-        to do: rating here
-        <div class="chapter">
-            <h1>{{ chapter.title }}</h1>
+<div class="chapter grid_9 clearfix">
+    <h1 class="title grid_7 prefix_2 alpha omega">{{ chapter.title }}</h1>
+    
+    <div class="meta grid_2 alpha">
+    
+        
+    
+        rating, last updated, chapter number ...
+    </div>
+    
+    <div class="grid_7 omega">
+        {{ chapter.body }}
+    </div>
+    
+</div>
+
+
+<div id="comments" class="grid_9">
+{% get_comment_list for chapter as comment_list %}
+{% for comment in comment_list %}
+    <div class="comment grid_9 alpha omega clearfix">
+    
+        <!--<a name="c{{ comment.id }}"></a>
+        <a href="{% get_comment_permalink comment %}">#</a>                
+    -->
+    
+        <div class="meta grid_2 alpha">
+        
+            <div class="score">
             
-            {{ chapter.body }}
+            
+        <form class="commentvote" id="commentup{{ comment.id }}" action="/book/comment/{{ comment.id }}/{% if vote and vote.is_upvote %}clear{% else %}up{% endif %}vote/" method="POST">
+            {% csrf_token %}
             
             
+        <input type="image" id="commentuparrow{{ comment.id }}" src="{{ media_url }}img/aup{% if vote and vote.is_upvote %}mod{% else %}grey{% endif %}.png">
+      </form>
+
+
+{% score_for_object comment as score %}
+                {{ score.score }}
+
+
+      <form class="commentvote" id="commentdown{{ comment.id }}" action="/book/comment/{{ comment.id }}/{% if vote and vote.is_downvote %}clear{% else %}down{% endif %}vote/" method="POST">
+      
+      {% csrf_token %}
+      
+        <input type="image" id="commentdownarrow{{ link.id }}" src="{{ media_url }}img/adown{% if vote and vote.is_downvote %}mod{% else %}grey{% endif %}.png">
+      </form>
+            
+                
+            </div>                 
+                            
         </div>
+        
+        <div class="grid_7 omega">
+            <p>{{ comment.comment }}</p>
+            <p class="meta">{{ comment.submit_date|timesince }} ago
+            by {{ comment.user_name }}</p>
+        </div>               
+        
+    </div>
+    
+{% endfor %}
+        
+<div id="comment-form" class="grid_7 prefix_2 alpha omega">
+{% if user.is_authenticated %}
+    {% get_comment_form for chapter as form %}
+    <form action="{% comment_form_target %}" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{% url book.views.chapter chapter.pk %}" />
+        {% for field in form %}
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                {% if field.name != "name" and field.name != "email" and field.name != "url" %}
+                    
+                    <p {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+                
+                    {% if field.errors %}{{ field.errors }}{% endif %}
+                    {{ field }}
+                    </p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <input class="submit-post" name="post" type="submit" value="Send feedback" />
+    </form>
+{% else %}
+    Log in or register to comment!
+{% endif %}
+</div>
+
+</div>
+    
+        
+        
+    
                 
     
 {% endblock %}
