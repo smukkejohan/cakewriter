@@ -7,7 +7,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 DEVELOPMENT_MODE = (platform.node() != "tango")
 
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/admin/'
 
 if DEVELOPMENT_MODE:
     DEBUG = True
@@ -15,6 +15,7 @@ if DEVELOPMENT_MODE:
 else:
     DEBUG = False
     MEDIA_URL = 'http://m.cakethebook.com/'
+    ADMIN_MEDIA_PREFIX = MEDIA_URL + 'admin/'
 
 DATABASES = {
     'default': {
