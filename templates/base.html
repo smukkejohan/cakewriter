@@ -27,11 +27,16 @@
 
 <div id="header" class="container_12 clearfix">
     <div class="grid_2">
-        <div id="site-logo"><a href="/">Logo</a></div>
+        <div id="site-logo"><a href="/">Cake The Book</a></div>
     </div>
     
     <div class="grid_7">
-        <a id="site-title" href="/">CAKE – how you can have your cake and eat it too</a>
+        <div id="site-title">
+            <a href="/">
+                <span id="htitle">Cake</span>
+                <span id="hsubtitle">How you can have your cake and eat it too</span>
+                <span id="hsubsubtitle">A co-creation project to discover and share the secrets of how to become an successful entrepreneur while living a balanced life.</span></a>
+        </div>
     </div>
     
 </div><!-- /header -->
@@ -48,16 +53,8 @@
     <div id="main-content" class="grid_9 alpha">
         {% block content %}{% endblock %}
     </div>
-    <div id="context-sidebar" class="grid_3 omega">  
-        <div id="user-context">
-            {% if user.is_authenticated %}
-                <p>You are logged in as {{ user.username }}
-                <a href="{% url auth_logout %}">log out</a></p>
-            {% else %}
-                <p><a href="{% url registration_register %}">register</a>
-                <a href="{% url auth_login %}">log in</a></p>
-            {% endif %}    
-        </div>
+    <div id="context-sidebar" class="grid_3 omega">
+        {% block context %}{% endblock %}
     </div>
     
 </div><!-- /content -->
@@ -68,7 +65,24 @@
     </div>
 </div><!-- /footer -->
 
-
+<div id="user-context">
+<div class="content">
+    {% if user.is_authenticated %}
+        <span><em>{{ user.username }}</em> |
+            <a href="{% url auth_logout %}">log out</a>
+            </span>
+    {% else %}
+        <span><a href="{% url registration_register %}">register</a> |
+        <a href="{% url auth_login %}">log in</a></span>
+        
+        
+        
+    {% endif %}
+    
+    {% block usercontext %}
+    {% endblock %}
+</div>      
+</div>
 
 
 {# google js API #}

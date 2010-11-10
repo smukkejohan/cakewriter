@@ -11,7 +11,9 @@
     
         
     
-        rating, last updated, chapter number ...
+        <p>rating, 
+        Last updated: {{ chapter.mod_date|timesince }} ago
+        </p>
     </div>
     
     <div class="grid_7 omega">
@@ -24,45 +26,22 @@
 <div id="comments" class="grid_9">
 {% get_comment_list for chapter as comment_list %}
 {% for comment in comment_list %}
-    <div class="comment grid_9 alpha omega clearfix">
+    <div id="c{{ comment.id }}" class="comment grid_9 alpha omega clearfix">
     
-        <!--<a name="c{{ comment.id }}"></a>
-        <a href="{% get_comment_permalink comment %}">#</a>                
-    -->
-    
-        <div class="meta grid_2 alpha">
-        
-            <div class="score">
-            
-            
-        <form class="commentvote" id="commentup{{ comment.id }}" action="/book/comment/{{ comment.id }}/{% if vote and vote.is_upvote %}clear{% else %}up{% endif %}vote/" method="POST">
-            {% csrf_token %}
-            
-            
-        <input type="image" id="commentuparrow{{ comment.id }}" src="{{ media_url }}img/aup{% if vote and vote.is_upvote %}mod{% else %}grey{% endif %}.png">
-      </form>
-
-
-{% score_for_object comment as score %}
-                {{ score.score }}
-
-
-      <form class="commentvote" id="commentdown{{ comment.id }}" action="/book/comment/{{ comment.id }}/{% if vote and vote.is_downvote %}clear{% else %}down{% endif %}vote/" method="POST">
-      
-      {% csrf_token %}
-      
-        <input type="image" id="commentdownarrow{{ link.id }}" src="{{ media_url }}img/adown{% if vote and vote.is_downvote %}mod{% else %}grey{% endif %}.png">
-      </form>
-            
-                
-            </div>                 
-                            
+        <div class="meta grid_1 prefix_1 alpha">
+            {% score_for_object comment as score %}
+            <div class="vote">        
+                <span class="vote-up-off" title="This input is useful (click again to undo)">vote up</span>                
+                <span class="vote-score">{{ score.score }}</span>
+                <span class="vote-down-off" title="This input is not useful (click again to undo)">vote down</span>
+             
+             </div>    
         </div>
         
         <div class="grid_7 omega">
             <p>{{ comment.comment }}</p>
             <p class="meta">{{ comment.submit_date|timesince }} ago
-            by {{ comment.user_name }}</p>
+            by <em>{{ comment.user_name }}</em></p>
         </div>               
         
     </div>
