@@ -14,10 +14,10 @@ comment_dict = {
 
 urlpatterns = patterns('',
     url(r'^chapter/(?P<chapter_id>\d+)/$', views.chapter, name='chapter'),
-    (r'^comment/(?P<object_id>\d+)/(?P<direction>up|down|clear)vote/?$', vote_on_object, comment_dict),
+    (r'^comment/(?P<object_id>\d+)/(?P<direction>up|down|clear)/?$', vote_on_object, comment_dict),
 
     url(r'^chapter/(?P<object_id>\d+)/rate/(?P<score>\d+)/', AddRatingFromModel(), {
-        'app_label': 'chapters',
+        'app_label': 'book',
         'model': 'chapter',
         'field_name': 'rating',
     }),

@@ -9,8 +9,7 @@ body {background-color:#eeeeec;
   font-size:1px;
   text-indent:-9999em;}
 
-#site-title a {font-size: 20px;
-  text-decoration: none;}
+#site-title a {font-size: 20px;}
 #site-title span {display: block;}
 #site-title #htitle {text-transform: uppercase;
   font-size: 36px;
@@ -24,8 +23,11 @@ body {background-color:#eeeeec;
 .meta {font-size: 13px;
     color: #555753;}
 
+a {text-decoration: none;
+  color: #3465a4;}
+    
 /* chapters */
-h1 a, h2 a, h3 a {text-decoration: none;}
+h1 a, h2 a, h3 a {}
 
 .chapter h1.title {font-size:48px;}
 
@@ -43,17 +45,19 @@ h1 a, h2 a, h3 a {text-decoration: none;}
   font-weight: bold;
   margin: 0 auto;}
 .vote-score {font-size: 24px; padding:4px 0 0;}
-.vote-up-off, .vote-down-off {cursor: pointer;
+.vote-up, .vote-down {cursor: pointer;
   width: 36px;
   height: 13px;}
 
-.vote-up-off {background-position: 0 0;}
-.vote-down-off {background-position: 0 -16px;}
+.vote-up {background-position: 0 0;}
+.vote-up.vote-on {background-position: 0 -16px;}
+.vote-down {background-position: 0 -16px;}
+.vote-down.vote-on {background-position: 0 0px;}
 
 /* chapter rating */
 
 /* sprite base */
-.vote-up-off, .vote-down-off {background-image: url('../images/cakethebook-sprite.png');
+.vote-up, .vote-down {background-image: url('../images/cakethebook-sprite.png');
   font-size:1px;
   text-indent:-9999em;
   background-repeat: no-repeat;}
@@ -65,4 +69,5 @@ h1 a, h2 a, h3 a {text-decoration: none;}
   height: 40px;
   text-align: right;}
 
-#user-context .content {padding: 10px 18px;}
+#user-context .content {padding: 10px 18px;
+  font-weight: bold;}

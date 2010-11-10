@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
+{% block title %}Login{% endblock %}
+
+
 {% block content %}
 
+<div class="grid_7 prefix_2 alpha omega">
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
@@ -27,6 +31,6 @@
 <p>
 <a href="{% url auth_password_reset %}">I forgot my password</a>
 </p>
-
+</div>
 {% endblock %}
 

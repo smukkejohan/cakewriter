@@ -16,9 +16,9 @@
     
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/latest/" />
     
-    <meta name="keywords" content="{{ keywords }}" />
-    <meta name="description" content="{{ description }}" />    
-    <title>{% if title %}{{ title }} | {% endif%}Cake the book</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />    
+    <title>{% block title %}Have your cake and eat it too {% endblock %} &middot; Cake the book</title>
     
 </head>
 <body>
@@ -50,10 +50,10 @@
 
 <div id="content" class="container_12 clearfix">
     
-    <div id="main-content" class="grid_9 alpha">
+    <div id="main-content" class="grid_9">
         {% block content %}{% endblock %}
     </div>
-    <div id="context-sidebar" class="grid_3 omega">
+    <div id="context-sidebar" class="grid_3">
         {% block context %}{% endblock %}
     </div>
     
