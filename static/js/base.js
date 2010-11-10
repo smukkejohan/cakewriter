@@ -13,7 +13,7 @@ google.setOnLoadCallback(function() {
         else { action = 'down'; }
         
         $.post('/book/comment/' + uid + '/' + action, function(data) {
-            if(data.success == 'true'){
+            if(data.success == true){
                 self.siblings(".vote-score").html(data.score.score);
                 if(action == 'clear') {
                     self.removeClass("vote-on");
