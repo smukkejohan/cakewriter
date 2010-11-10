@@ -25,6 +25,7 @@ class Chapter(models.Model):
         
     def save(self):
         # to do implement markdown,
+        self.body_html = self.body
         self.mod_date = datetime.now()
         super(Chapter, self).save()
         

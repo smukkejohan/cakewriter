@@ -10,11 +10,24 @@
     
     <div class="meta grid_2 alpha">
     
-        
+      <form id="rating-widget" action="{% url rate-chapter chapter.id %}" method="post">
+             {% csrf_token %}
+             <select name="rate">
+                 <option value="1">Very poor</option>
+                 <option value="2">Not that bad</option>
+                 <option value="3">Average</option>
+                 <option value="4">Good</option>
+                 <option value="5">Perfect</option>
+            </select>
+            
+            <input type="submit" value="Rate it!" />
+
+     </form>
     
-        <p>rating, 
-        Last updated: {{ chapter.mod_date|timesince }} ago
-        </p>
+     <p>
+       Last updated: {{ chapter.mod_date|timesince }} ago
+     </p>
+        
     </div>
     
     <div class="grid_7 omega">

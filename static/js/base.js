@@ -1,8 +1,6 @@
-google.load("jquery", "1.4");
 
-google.setOnLoadCallback(function() {
-    
-    
+$(function() {
+     
     $(".vote-up, .vote-down").click(function() {
         var self = $(this);
         var uid = self.parents(".comment").attr("id").substr(1);
@@ -12,7 +10,7 @@ google.setOnLoadCallback(function() {
         else if (self.hasClass('vote-up')) { action = 'up'; }    
         else { action = 'down'; }
         
-        $.post('/book/comment/' + uid + '/' + action, function(data) {
+        $.post('/book/comment/' + uid + '/vote/' + action, function(data) {
             if(data.success == true){
                 self.siblings(".vote-score").html(data.score.score);
                 if(action == 'clear') {
@@ -26,6 +24,29 @@ google.setOnLoadCallback(function() {
             }
         }, "json");               
     });
-    
+});
+
+  
+
+$(function() {
+   $("#rating-widget").children().not("select").hide();
+   
+   // Create target element for onHover titles
+   $caption = $("<span/>");
+   
+   $("#rating-widget").stars({       
+        inputType: "select",
+        cancelShow: false,
+        captionEl: $caption,
+        callback: function(ui, type, value)
+        {
+
+            $.post($("#rating-widget").attr("action"), {rate: value}, function(data)
+            {
+                
+            });
+        } 
+   });
+   $caption.appendTo("#rating-widget");
     
 });
