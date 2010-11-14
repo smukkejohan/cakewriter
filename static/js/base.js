@@ -41,7 +41,7 @@ $(function() {
         callback: function(ui, type, value)
         {
 
-            $.post($("#rating-widget").attr("action"), {rate: value}, function(data)
+            $.post($("#rating-widget").attr("action"), {score: value}, function(data)
             {
                 
             });

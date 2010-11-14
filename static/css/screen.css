@@ -72,19 +72,8 @@ h1 a, h2 a, h3 a {}
   
 
   
-/*!
- * jQuery UI Stars v3.0.1
- * http://plugins.jquery.com/project/Star_Rating_widget
- *
- * Copyright (c) 2010 Marek "Orkan" Zajac (orkans@gmail.com)
- * Dual licensed under the MIT and GPL licenses.
- * http://docs.jquery.com/License
- *
- * $Rev: 164 $
- * $Date:: 2010-05-01 #$
- * $Build: 35 (2010-05-01)
- *
- */
+#rating {
+  height: 20px;  }
 .ui-stars-star,
 .ui-stars-cancel {
   float: left;

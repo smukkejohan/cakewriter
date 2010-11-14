@@ -4,8 +4,7 @@
 
 
 {% block content %}
-
-<div class="grid_7 prefix_2 alpha omega">
+<h1 class="title">Login</h1>
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
@@ -29,8 +28,8 @@
 </form>
 <br />
 <p>
-<a href="{% url auth_password_reset %}">I forgot my password</a>
+<a href="{% url auth_password_reset %}">I forgot my password.</a> 
 </p>
-</div>
+
 {% endblock %}
 

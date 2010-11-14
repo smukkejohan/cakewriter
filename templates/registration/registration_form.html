@@ -4,7 +4,6 @@
 
 
 {% block content %}
-<div class="grid_7 prefix_2 alpha omega">
 <form action="{% url registration_register %}" method="POST">
 
 {% csrf_token %}
@@ -21,5 +20,5 @@
 
 <input type="submit" value="Register" />
 </form>
-</div>
+
 {% endblock %}

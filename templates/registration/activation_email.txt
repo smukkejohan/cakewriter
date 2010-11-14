@@ -1,5 +1,5 @@
-Hej smukke
+Hi
 
-Tryk her for at aktivere din bruger: http://{{ site }}/accounts/activate/{{ activation_key }}/
+Welcome to {{ site }}. Please confirm your email address and activate your account by going to http://{{ site }}/accounts/activate/{{ activation_key }}/
 
-Venligst Alfakryl
+Kind regards {{ site }}

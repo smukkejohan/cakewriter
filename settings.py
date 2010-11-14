@@ -7,11 +7,13 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 DEVELOPMENT_MODE = (platform.node() != "tango")
 
-ADMIN_MEDIA_PREFIX = '/admin/'
+ADMIN_MEDIA_PREFIX = '/media/'
 
 if DEVELOPMENT_MODE:
     DEBUG = True
     MEDIA_URL = '/m/'
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = '../tmp-emails/app-messages'
 else:
     DEBUG = False
     MEDIA_URL = 'http://m.cakethebook.com/'
@@ -102,6 +104,8 @@ ACCOUNT_ACTIVATION_DAYS = 30
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
+RATINGS_VOTES_PER_IP = 3
 
 try:
     from settings_local import *

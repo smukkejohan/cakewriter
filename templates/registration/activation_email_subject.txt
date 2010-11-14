@@ -1,1 +1,1 @@
-Account Activation – {{ site }}
+Welcome to {{ site }}

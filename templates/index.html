@@ -2,20 +2,14 @@
 
 {% block content %}
     {% for chapter in chapters %}       
-        <div class="chapter teaser">         
+        <div class="chapter teaser">                     
+            <h2 class="title">
+                <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h2>                                  
             
-            <h2 class="title grid_7 prefix_2 alpha omega"><a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h2>                      
-            <div class="meta grid_2 alpha">
-                <div class="rating">
-                {{ chapter.rating.get_percent }}% rating
-                </div>
-            </div>
-            
-            <div class="body grid_7 omega">
+            <div class="body">
                 summary here
-            </div>
-                                  
+            </div>                                  
         </div>
-        <div class="clear"></div>                
+                
     {% endfor %}  
 {% endblock %}

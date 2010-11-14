@@ -2,35 +2,37 @@
 {% load comments %}
 {% load voting_tags %}
 
+
 {% block title %}{{ chapter.title }}{% endblock %}
 
 {% block content %}
 <div class="chapter clearfix">
-    <h1 class="title grid_7 prefix_2 alpha omega">{{ chapter.title }}</h1>
+    <h1 class="title">{{ chapter.title }}</h1>
     
-    <div class="meta grid_2 alpha">
+    <div class="meta">
     
+      <div id="rating">
+            
       <form id="rating-widget" action="{% url rate-chapter chapter.id %}" method="post">
              {% csrf_token %}
              <select name="rate">
-                 <option value="1">Very poor</option>
-                 <option value="2">Not that bad</option>
-                 <option value="3">Average</option>
-                 <option value="4">Good</option>
-                 <option value="5">Perfect</option>
+                 <option value="1" {% if usersrating == 1 %}selected="selected"{% endif %}>Very poor</option>
+                 <option value="2" {% if usersrating == 2 %}selected="selected"{% endif %}>Not that bad</option>
+                 <option value="3" {% if usersrating == 3 %}selected="selected"{% endif %}>Average</option>
+                 <option value="4" {% if usersrating == 4 %}selected="selected"{% endif %}>Good</option>
+                 <option value="5" {% if usersrating == 5 %}selected="selected"{% endif %}>Perfect</option>
             </select>
             
             <input type="submit" value="Rate it!" />
-
      </form>
-    
+     </div>
      <p>
        Last updated: {{ chapter.mod_date|timesince }} ago
      </p>
         
     </div>
     
-    <div class="grid_7 omega">
+    <div class="body">
         {{ chapter.body }}
     </div>
     
@@ -39,33 +41,33 @@
 
 <div id="comments">
 
-    <h2 class="grid_7 prefix_2 alpha omega">Feedback</h2>
+    <h2 class="title page-section">Feedback</h2>
 {% get_comment_list for chapter as comment_list %}
 {% for comment in comment_list %}
-    <div id="c{{ comment.id }}" class="comment grid_9 alpha omega clearfix">
-    
-        <div class="meta grid_1 prefix_1 alpha">
-            {% score_for_object comment as score %}
-            {% vote_by_user user on comment as vote %}
-            <div class="vote">        
-                <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="This input is useful (click again to undo)">vote up</span>                
-                <span class="vote-score">{{ score.score }}</span>
-                <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="This input is not useful (click again to undo)">vote down</span>
-             
-             </div>    
-        </div>
-        
-        <div class="grid_7 omega">
+
+    {% score_for_object comment as score %}
+    {% vote_by_user user on comment as vote %}
+    <div id="c{{ comment.id }}" class="comment clearfix">        
+            
+
+            <h3 class="title">{{ comment.user_name }}:</h3>
             <p>{{ comment.comment }}</p>
-            <p class="meta">{{ comment.submit_date|timesince }} ago
-            by <em>{{ comment.user_name }}</em></p>
-        </div>               
-        
+            <p class="meta">          
+                <span class="submitted">
+                    Submitted {{ comment.submit_date|timesince }} ago
+                </span>
+            </p>          
+            
+            <div class="vote">        
+               <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="This input is useful (click again to undo)">vote up</span>                
+               <span class="vote-score">{{ score.score }}</span>
+               <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="This input is not useful (click again to undo)">vote down</span>            
+            </div>        
     </div>
     
 {% endfor %}
         
-<div id="comment-form" class="grid_7 prefix_2 alpha omega">
+<div id="comment-form">
 {% if user.is_authenticated %}
     {% get_comment_form for chapter as form %}
     <form action="{% comment_form_target %}" method="post">
@@ -94,8 +96,4 @@
 
 </div>
     
-{% endblock %}
-
-{% block context %}
-next chapter previous chapter
 {% endblock %}
