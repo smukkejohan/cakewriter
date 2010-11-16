@@ -10,6 +10,8 @@ from djangoratings.views import AddRatingFromModel
 urlpatterns = patterns('',
     url(r'^chapter/(?P<chapter_id>\d+)/$', views.chapter, name='chapter'),
     
+    url(r'^chapter/(?P<chapter_id>\d+)/widget$', views.rating_widget, name='rating_widget'),
+    
     url(r'^comment/(?P<object_id>\d+)/vote/(?P<direction>up|down|clear)/?$', vote_on_object, {
         'model': Comment,
         'template_object_name': 'comment',

@@ -17,6 +17,13 @@ def chapter(request, chapter_id):
         'book/chapter.html', {'chapter': chapter,},
         context_instance = RequestContext(request)
     )
+
+def rating_widget(request, chapter_id):
+    chapter = Chapter.objects.get(pk=chapter_id)
+    return render_to_response(
+        'book/rating_widget.html', {'chapter': chapter,},
+        context_instance = RequestContext(request)
+    )
     
     
 def rate_chapter(request, chapter_id, score = None):
