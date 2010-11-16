@@ -5,9 +5,11 @@ from django.contrib.auth.models import User, SiteProfileNotAvailable
 from django.core.exceptions import ObjectDoesNotExist
 from registration.signals import user_activated
 from django.db.models.signals import post_save
+from django.contrib.comments.signals import comment_was_posted
 from book.models import Chapter
 from datetime import datetime
 
+import logging
 
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
@@ -31,7 +33,7 @@ class ScoreLog(models.Model):
 ## handle scores through a bunch of signals 
 # vote post save, comment post save, rate post save
 
-def create_profile(sender, user, request, **kw):
+def create_profile(sender, user, request, **kwargs):
     
     try:
         p = user.get_profile()
@@ -52,7 +54,20 @@ def create_profile(sender, user, request, **kw):
         del request.session['pendingrating_chapter']
         del request.session['pendingrating_score']
         
-        logging.debug('session vars deleted')
-
-    
+   
 user_activated.connect(create_profile)
+
+
+def user_commented(sender, request, **kwargs):
+    try:
+        p = request.user.get_profile()
+    except ObjectDoesNotExist:
+        p = Profile(user=request.user)
+        p.save()
+    
+    log = ScoreLog(profile=p, description='Submitted feedback to a chapter', points=4)
+    log.save()
+    
+    
+comment_was_posted.connect(user_commented)
+
