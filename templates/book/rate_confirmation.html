@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm rating!{% endblock %}
+
+
+{% block content %}
+    
+    <h1>Do you want to rate the chapter <em><a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></em> {{ score }} out of 5?</h1>
+    
+    <form action="" method="post">
+    {% csrf_token %}
+    <input type="hidden" value="{{ score }}" name="score">
+    <input type="submit" value="Confirm rating">
+    </form>
+             
+
+{% endblock %}

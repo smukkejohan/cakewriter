@@ -12,14 +12,14 @@ from django.shortcuts import redirect, get_object_or_404
 
 
 def chapter(request, chapter_id): 
-    chapter = Chapter.objects.get(pk=chapter_id)
+    chapter = get_object_or_404(Chapter, pk=chapter_id)
     return render_to_response(
         'book/chapter.html', {'chapter': chapter,},
         context_instance = RequestContext(request)
     )
 
 def rating_widget(request, chapter_id):
-    chapter = Chapter.objects.get(pk=chapter_id)
+    chapter = get_object_or_404(Chapter, pk=chapter_id)
     return render_to_response(
         'book/rating_widget.html', {'chapter': chapter,},
         context_instance = RequestContext(request)
@@ -35,7 +35,10 @@ def rate_chapter(request, chapter_id, score = None):
     if request.method == 'GET':
         if score:
             if request.user.is_authenticated():
-                return HttpResponse('You are logged in confirm rate score:' + score)  
+                return render_to_response(
+                    'book/rate_confirmation.html', {'chapter': chapter, 'score': score},
+                    context_instance = RequestContext(request)
+                ) 
             
             else:
                 request.session['pendingrating_chapter'] = chapter_id
@@ -62,9 +65,10 @@ def rate_chapter(request, chapter_id, score = None):
         
         chapter = Chapter.objects.get(pk=chapter_id)
         
-        # if ajax, return json else redirect to chapter
-        
-        return HttpResponse(response, mimetype="application/javascript")
+        if request.is_ajax():      
+            return HttpResponse(response, mimetype="application/javascript")
+        else:
+            return redirect(chapter)
         
 
 
