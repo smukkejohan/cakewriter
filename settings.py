@@ -114,6 +114,8 @@ AUTH_PROFILE_MODULE = 'accounts.Profile'
 
 RATINGS_VOTES_PER_IP = 3
 
+DEFAULT_FROM_EMAIL = 'noreply@cakethebook.com'
+EMAIL_SUBJECT_PREFIX = '[cakethebook.com] '
 try:
     from settings_local import *
 except ImportError:
