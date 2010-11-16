@@ -39,7 +39,7 @@ def create_profile(sender, user, request, **kw):
         p = Profile(user=user)
         p.save()
        
-    if request.session['pendingrating_chapter']:
+    if request.session.get('pendingrating_chapter'):
         pending_chapter_id = request.session['pendingrating_chapter']
         pending_score = request.session['pendingrating_score']
         
