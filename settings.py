@@ -101,10 +101,10 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.comments',
     'djangoratings',
-    'cakewriter.book',
-    'cakewriter.accounts',
+    'book',
+    'accounts',
     'voting',
-    'cakewriter.registration',
+    'registration',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 30
