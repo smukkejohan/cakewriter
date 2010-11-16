@@ -8,7 +8,8 @@ from django.contrib.auth.models import User
 from djangoratings.fields import RatingField
 
 class Chapter(models.Model):
-    title = models.CharField('title', max_length=200)
+    title = models.CharField('title', max_length=90)
+    summary = models.CharField('summary', max_length=200)
     body = models.TextField("body", help_text="You can use markdown formatting. Start with h2 '##' headers as the title is rendered as h1 '#'.")
     body_html = models.TextField()
     mod_date = models.DateTimeField(default=datetime.now)

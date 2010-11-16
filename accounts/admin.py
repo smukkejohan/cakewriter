@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from accounts.models import UserProfile
+from accounts.models import Profile
 
-class UserProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('user', 'score', 'level')
@@ -11,4 +11,4 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
     list_display = ('user', 'score', 'level')
 
-admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Profile, ProfileAdmin)

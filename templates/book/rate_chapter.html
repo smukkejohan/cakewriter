@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Thanks for your feedback!{% endblock %}
+
+
+{% block content %}
+    
+    <h1>Thanks for your feedback!</h1>
+    
+    <p>Thanks for taking the time to read and rate the chapter <em><a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></em>!</p>
+    
+    <p>To get credited for your contribution and help us further in coauthoring this book. Please <a href="{% url registration_register %}">register</a> or <a href="{% url auth_login %}">log in</a>!</p>
+             
+
+{% endblock %}

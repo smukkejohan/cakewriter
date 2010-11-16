@@ -6,7 +6,7 @@ from book.models import Chapter
 class ChapterAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'body')
+            'fields': ('title', 'summary', 'body')
         }),
         ('Meta', {
             'fields': ('pub_date', 'mod_date', 'index')

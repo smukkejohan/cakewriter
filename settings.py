@@ -1,6 +1,7 @@
 # coding=<utf-8>
 
 import os.path, sys, platform
+import logging
 
 PROJECT_ROOT = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
@@ -14,6 +15,12 @@ if DEVELOPMENT_MODE:
     MEDIA_URL = '/m/'
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = '../tmp-emails/app-messages'
+    
+    logging.basicConfig(
+        level = logging.DEBUG,
+        format = '%(asctime)s %(levelname)s %(message)s',
+    )
+    
 else:
     DEBUG = False
     MEDIA_URL = 'http://m.cakethebook.com/'
@@ -93,17 +100,17 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.comments',
-    'registration',
     'djangoratings',
     'book',
     'accounts',
     'voting',
+    'registration',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 30
 LOGIN_REDIRECT_URL = '/'
 
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+AUTH_PROFILE_MODULE = 'accounts.Profile'
 
 RATINGS_VOTES_PER_IP = 3
 
