@@ -35,11 +35,20 @@
             <a href="/">
                 <span id="htitle">Cake</span>
                 <span id="hsubtitle">How you can have your cake and eat it too</span>
-                <span id="hsubsubtitle">A co-creation project to discover and share the secrets of how to become an successful entrepreneur while living a balanced life.</span></a>
+                <span id="hsubsubtitle">A co-creation project to discover and share the secrets of how to become a successful entrepreneur while living a balanced life.</span></a>
         </div>
     </div>
     
 </div><!-- /header -->
+
+
+<div id="navigation" class="container_12 clearfix">
+  <ul>
+    <li>link</li>
+    <li>link</li>
+  </ul>
+</div>
+
 
 {% if messages %}
 <div id="messages" class="container_12 clearfix">
@@ -47,6 +56,7 @@
     <li>{{ message }}</li>{% endfor %}</ul>
 </div>
 {% endif %}
+
 
 <div id="content" class="container_12 clearfix">
     
@@ -68,15 +78,15 @@
 <div id="user-context">
 <div class="content">
     {% if user.is_authenticated %}
+        
+        <span>{{ user.get_profile.score }}</span>
         <span><em>{{ user.username }}</em> |
             <a href="{% url auth_logout %}">log out</a>
             </span>
     {% else %}
         <span><a href="{% url registration_register %}">register</a> |
         <a href="{% url auth_login %}">log in</a></span>
-        
-        
-        
+             
     {% endif %}
     
     {% block usercontext %}
