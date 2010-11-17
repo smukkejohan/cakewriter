@@ -4,12 +4,13 @@ from django.db import models
 from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
-#from markdown2 import markdown
+from markdown2 import markdown
 from djangoratings.fields import RatingField
 
 class Chapter(models.Model):
     title = models.CharField('title', max_length=90)
     summary = models.TextField('summary', help_text="A short summary of the chapter.")
+    summary_html = models.TextField()
     body = models.TextField("body", help_text="You can use markdown formatting. Start with h2 '##' headers as the title is rendered as h1 '#'.")
     body_html = models.TextField()
     mod_date = models.DateTimeField(default=datetime.now)
@@ -25,8 +26,8 @@ class Chapter(models.Model):
         return self.title
         
     def save(self):
-        # to do implement markdown,
-        self.body_html = self.body
+        self.body_html = markdown(self.body)
+        self.summary_html = markdown(self.summary)
         self.mod_date = datetime.now()
         super(Chapter, self).save()
         
