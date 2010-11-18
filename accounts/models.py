@@ -62,7 +62,6 @@ def update_score(sender, instance, using, **kwargs):
     logs = ScoreLog.objects.filter(profile=profile)
     profile.score = logs.aggregate(Sum('points'))['points__sum']
     profile.save()
-    print 'score updated'
       
 post_save.connect(update_score, sender=ScoreLog)
 post_delete.connect(update_score, sender=ScoreLog)
@@ -87,9 +86,7 @@ def rating_submitted(sender, instance, created, using, **kwargs):
 post_save.connect(rating_submitted, sender=djangoratings.models.Vote)
 
 def vote_submitted(sender, instance, created, using, **kwargs): 
-    
-    print 'signal'
-    
+
     comment = instance.object
     chapter = comment.content_object
      
@@ -134,7 +131,12 @@ def vote_submitted(sender, instance, created, using, **kwargs):
     elif instance.vote == -1:
         actorLog.points = 0
         targetLog.points = -1
-            
+    
+    if target_profile == actor_profile:
+        # You dont get points for voting on your own stuff
+        actorLog.points = 0
+        targetLog.points = 0
+           
     targetLog.save()
     actorLog.save()
     
