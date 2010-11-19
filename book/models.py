@@ -25,7 +25,7 @@ class Chapter(models.Model):
     def __unicode__(self):
         return self.title
         
-    def save(self):
+    def save(self, *args, **kwargs):
         self.body_html = markdown(self.body)
         self.summary_html = markdown(self.summary)
         self.mod_date = datetime.now()

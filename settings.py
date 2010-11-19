@@ -21,21 +21,19 @@ if DEVELOPMENT_MODE:
         format = '%(asctime)s %(levelname)s %(message)s',
     )
     
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'cakewriter.dev.db',
+            }
+    }
+    
 else:
     DEBUG = False
     MEDIA_URL = 'http://m.cakethebook.com/'
     ADMIN_MEDIA_PREFIX = MEDIA_URL + 'admin/'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'cakewriter.dev.db',        
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',  
-        'PORT': '',
-        }
-}
+
 
 TEMPLATE_DEBUG = DEBUG
 
