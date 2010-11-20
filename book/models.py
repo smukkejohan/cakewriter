@@ -4,7 +4,7 @@ from django.db import models
 from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
-from markdown2 import markdown
+from markdown import markdown
 from djangoratings.fields import RatingField
 
 class Chapter(models.Model):
