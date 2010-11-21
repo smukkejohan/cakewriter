@@ -66,7 +66,7 @@ def update_score(sender, instance, using, **kwargs):
 post_save.connect(update_score, sender=ScoreLog)
 post_delete.connect(update_score, sender=ScoreLog)
 
-def rating_submitted(sender, instance, created, using, **kwargs): 
+def rating_submitted(sender, instance, created, **kwargs): 
 
     chapter = instance.content_type.get_object_for_this_type(pk=instance.object_id)
         
