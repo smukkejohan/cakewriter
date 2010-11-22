@@ -57,7 +57,10 @@ class ScoreLog(models.Model):
     def __unicode__(self):
         return u'log: %s %s' % (self.description, self.id)
 
-def update_score(sender, instance, using, **kwargs): 
+def update_score(sender, **kwargs):
+
+    instance = kwargs.get('instance')
+    
     profile = instance.profile
     logs = ScoreLog.objects.filter(profile=profile)
     profile.score = logs.aggregate(Sum('points'))['points__sum']
@@ -66,8 +69,11 @@ def update_score(sender, instance, using, **kwargs):
 post_save.connect(update_score, sender=ScoreLog)
 post_delete.connect(update_score, sender=ScoreLog)
 
-def rating_submitted(sender, instance, created, **kwargs): 
-
+def rating_submitted(sender, **kwargs): 
+    
+    instance = kwargs.get('instance')
+    created = kwargs.get('created')
+    
     chapter = instance.content_type.get_object_for_this_type(pk=instance.object_id)
         
     try:
@@ -85,8 +91,10 @@ def rating_submitted(sender, instance, created, **kwargs):
     
 post_save.connect(rating_submitted, sender=djangoratings.models.Vote)
 
-def vote_submitted(sender, instance, created, using, **kwargs): 
-
+def vote_submitted(sender, **kwargs): 
+    
+    instance = kwargs.get('instance')
+    
     comment = instance.object
     chapter = comment.content_object
      
@@ -143,10 +151,13 @@ def vote_submitted(sender, instance, created, using, **kwargs):
 post_save.connect(vote_submitted, sender=voting.models.Vote)
 
 
-def create_profile(sender, user, request, **kwargs):
+def create_profile(sender, **kwargs):
     """
     Is called on user activation. Creates profile and checks for  pending rating in signals.
     """ 
+       
+    request = kwargs.get('request')
+    user = request.user
     
     try:
         p = user.get_profile()
@@ -170,7 +181,11 @@ def create_profile(sender, user, request, **kwargs):
 user_activated.connect(create_profile)
 
 
-def user_commented(sender, comment, request, **kwargs):
+def user_commented(sender, **kwargs):
+    
+    request = kwargs.get('request')
+    comment = kwargs.get('comment')
+    
     try:
         p = request.user.get_profile()
     except ObjectDoesNotExist:
