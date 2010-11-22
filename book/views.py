@@ -6,7 +6,7 @@ from book.models import Chapter
 from djangoratings.views import AddRatingFromModel
 from django.http import HttpResponse
 from django.utils import simplejson
-
+from django.contrib.sites.models import Site
 
 from django.shortcuts import redirect, get_object_or_404
 
@@ -29,8 +29,10 @@ def rating_widget(request, chapter_id):
         ('5', 'Perfect'),
     )
     
+    domain = Site.objects.get_current().domain
+    
     return render_to_response(
-        'book/rating_widget.html', {'chapter': chapter, 'options': OPTIONS},
+        'book/rating_widget.html', {'chapter': chapter, 'options': OPTIONS, 'domain': domain},
         context_instance = RequestContext(request)
     )
     

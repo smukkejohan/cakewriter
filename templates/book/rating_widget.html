@@ -3,26 +3,23 @@
 {% block title %}Rating widget for {{ chapter.title }}{% endblock %}
 
 {% block content %}
+
 <div class="chapter clearfix">
     <h1 class="title">Rating widget for {{ chapter.title }}</h1>
     
     <p>Include this widget on blogs or other sites to get peoples ratings.</p>
     
     <div id="external-rating-widget" style="backgound-color:#eeeeec;text-align:center;border:1px solid grey;padding:8px;width:200px;">
-    <style>#external-rating-widget a:hover {border-bottom: 2px solid #000000;}</style>
         <span style="color: #000000;">Give your feedback!</span> <br />    
         {% for value, label in options %}
-            <a href="{{ chapter.get_absolute_url }}rate/{{ value }}">
-                <img border="none" style="margin:0;padding:0;" src="{{ MEDIA_URL }}images/icon.tango.star.png" alt="{{ label }}" title="{{ label }}"/></a>
+            <a href="http://{{ domain }}{{ chapter.get_absolute_url }}rate/{{ value }}">
+                <img border="none" style="margin:0;padding:0;display:inline;" src="{{ MEDIA_URL }}images/icon.tango.star.png" alt="{{ label }}" title="{{ label }}"/></a>
         {% endfor %} 
     </div>
     
     <p>Copy this code and insert it whereever you want this widget!</p>
     <textarea rows="16" cols="55">
-&lt;div id=&quot;external-rating-widget&quot; style=&quot;backgound-color:#eeeeec;text-align:center;border:1px solid grey;padding:8px;width:200px;&quot;&gt;&lt;style&gt;#external-rating-widget a:hover {border-bottom: 2px solid #000000;}&lt;/style&gt;&lt;span style=&quot;color: #000000;&quot;&gt;Give your feedback!&lt;/span&gt; &lt;br /&gt;
-{% for value, label in options %}
-&lt;a href=&quot;{{ chapter.get_absolute_url }}rate/{{ value }}&quot;&gt;&lt;img border=&quot;none&quot; style=&quot;margin:0;padding:0;&quot; src=&quot;{{ MEDIA_URL }}images/icon.tango.star.png&quot; alt=&quot;{{ label }}&quot; title=&quot;{{ label }}&quot;/&gt;&lt;/a&gt;
-{% endfor %}&lt;/div&gt;
+&lt;div id=&quot;external-rating-widget&quot;style=&quot;backgound-color:#eeeeec;text-align:center;border:1px solid grey;padding:8px;width:200px;&quot;&gt;&lt;span style=&quot;color: #000000;&quot;&gt;Give your feedback!&lt;/span&gt; &lt;br /&gt;{% for value, label in options %}&lt;a href=&quot;http://{{ domain }}{{ chapter.get_absolute_url }}rate/{{ value }}&quot;&gt;&lt;img border=&quot;none&quot; style=&quot;margin:0;padding:0;display:inline;&quot; src=&quot;{{ MEDIA_URL }}images/icon.tango.star.png&quot; alt=&quot;{{ label }}&quot; title=&quot;{{ label }}&quot;/&gt;&lt;/a&gt;{% endfor %}&lt;/div&gt;
     </textarea>
                 
 {% endblock %}
