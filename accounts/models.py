@@ -157,7 +157,7 @@ def create_profile(sender, **kwargs):
     """ 
        
     request = kwargs.get('request')
-    user = request.user
+    user = kwargs.get('user')
     
     try:
         p = user.get_profile()
