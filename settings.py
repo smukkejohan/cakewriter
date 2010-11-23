@@ -30,7 +30,7 @@ if DEVELOPMENT_MODE:
     
 else:
     DEBUG = False
-    MEDIA_URL = 'http://m.cakethebook.com/'
+    MEDIA_URL = 'http://m.winning-without-losing.com/'
     ADMIN_MEDIA_PREFIX = MEDIA_URL + 'admin/'
 
 
