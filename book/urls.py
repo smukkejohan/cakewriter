@@ -20,6 +20,11 @@ urlpatterns = patterns('',
 
     url(r'^chapter/(?P<chapter_id>\d+)/rate/$', views.rate_chapter, name='rate-chapter'),
     url(r'^chapter/(?P<chapter_id>\d+)/rate/(?P<score>\d+)/$', views.rate_chapter, name='rate-chapter'),
+    
+    
+    (r'^api/getchapters/$', views.api_get_chapters),
+    (r'^api/getchapter/(?P<chapter_id>\d+)/$', views.api_get_chapter),
+    (r'^api/getcommentsforchapter/(?P<chapter_id>\d+)/$', views.api_get_comments_for_chapter),
 )
 
 

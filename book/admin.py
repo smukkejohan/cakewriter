@@ -9,7 +9,7 @@ class ChapterAdmin(admin.ModelAdmin):
             'fields': ('title', 'summary', 'body')
         }),
         ('Meta', {
-            'fields': ('pub_date', 'mod_date', 'index')
+            'fields': ('author', 'pub_date', 'mod_date', 'index')
          }),
     )
     list_display = ('title', 'pub_date', 'mod_date', 'index')

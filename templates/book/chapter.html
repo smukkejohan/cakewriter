@@ -9,39 +9,40 @@
 <div class="chapter clearfix">
     <h1 class="title">{{ chapter.title }}</h1>
     
-    <div class="meta">
-    
-      <div id="rating">
-            
-      <form id="rating-widget" action="{% url rate-chapter chapter.id %}" method="post">
-             {% csrf_token %}
-             <select name="rate">
-                 <option value="1" {% if usersrating == 1 %}selected="selected"{% endif %}>Very poor</option>
-                 <option value="2" {% if usersrating == 2 %}selected="selected"{% endif %}>Not that bad</option>
-                 <option value="3" {% if usersrating == 3 %}selected="selected"{% endif %}>Average</option>
-                 <option value="4" {% if usersrating == 4 %}selected="selected"{% endif %}>Good</option>
-                 <option value="5" {% if usersrating == 5 %}selected="selected"{% endif %}>Perfect</option>
-            </select>
-            
-            <input type="submit" value="Rate it!" />
-     </form>
-     </div>
-     <p>
-       Last updated: {{ chapter.mod_date|timesince }} ago
+     <p class="author meta">
+       By {{ chapter.author.get_full_name }}
      </p>
-        
-    </div>
     
     <div class="body">
         {{ chapter.body_html|safe }}
     </div>
     
+    
+    <p class="meta">
+       This chapter was last updated: {{ chapter.mod_date|timesince }} ago.
+     </p>
+     
+    
+    <h2>Your rating:</h2>
+    
+    <div id="rating">       
+     <form id="rating-widget" action="{% url rate-chapter chapter.id %}" method="post">
+             {% csrf_token %}
+             <select name="score">             
+             {% for value, label in options %}             
+                 <option value="{{ value }}" {% ifequal score value %}selected="selected"{% endifequal %}>{{ label }}</option>
+             {% endfor %}
+            </select>          
+            <input type="submit" value="Rate it!" />
+      </form></div>
+
+     
 </div>
 
 
 <div id="comments">
 
-    <h2 class="title page-section">Feedback</h2>
+    <h2 class="section-title">Feedback</h2>
 {% get_comment_list for chapter as comment_list %}
 {% for comment in comment_list %}
 
@@ -66,8 +67,12 @@
     </div>
     
 {% endfor %}
-        
+
+
+  <h2 class="section-title">What do you think about this chapter?</h2>
 <div id="comment-form">
+
+
 {% if user.is_authenticated %}
     {% get_comment_form for chapter as form %}
     <form action="{% comment_form_target %}" method="post">
@@ -87,7 +92,7 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
-        <input class="submit-post" name="post" type="submit" value="Send feedback" />
+        <input class="submit-post" name="post" type="submit" value="Share your feedback" />
     </form>
 {% else %}
     Log in or register to comment!

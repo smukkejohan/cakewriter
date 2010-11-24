@@ -115,6 +115,16 @@ RATINGS_VOTES_PER_IP = 3
 
 DEFAULT_FROM_EMAIL = 'noreply@cakethebook.com'
 EMAIL_SUBJECT_PREFIX = '[cakethebook.com] '
+
+
+CHAPTER_RATING_OPTIONS = (
+    ('1', 'Not good'),
+    ('2', 'Mediocre'),
+    ('3', 'Good'),
+    ('4', 'Very good'),
+    ('5', 'Brilliant'),
+)
+
 try:
     from settings_local import *
 except ImportError:
