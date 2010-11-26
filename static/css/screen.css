@@ -1,18 +1,41 @@
-body {background-color:#fff;
-  color: #2e3436;
-  margin-top: 0;
+body {background-color:#2e3436;
+  color: #eeeeec;
+  margin: 0;
   font: 13.34px helvetica,arial,freesans,clean,sans-serif;}
+
+  
+  
+#header {background: url("../images/blue-grad-up.png") repeat-x scroll 0 bottom #2e3436; 
+  border-bottom: 1px solid #2e3436;}
+
+
+#content {background: #eeeeec; color: #2e3436; padding: 18px 0;}
+
+#footer {background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #2e3436;
+  border-top: 1px solid #2e3436;
+  padding-top: 12px;}
+
+
+#introduction p {text-align: justify;}  
 
 #site-logo a {width: 140px;
   height: 1px;
   display: block;
-  background: #fff no-repeat 0 0;
+  background: #2e3436 no-repeat 0 0;
   font-size:1px;
   text-indent:-9999em;}
 
-#site-title a {font-size: 48px; color: #2e3436;}
+#site-title a {font-size: 48px; color: #eeeeec;}
 
-#site-title {background: url("../images/blue-grad-up.png") repeat-x scroll 0 bottom #EEEEEC; border-bottom: 2px solid #2e3436; padding: 12px;}
+#site-title h1 {margin: 0;}
+
+#site-title {padding: 18px 0 0 0;}
+
+#tagline {padding: 8px 0 20px 0;
+  width: 400px;
+  font-size: 14px;
+  color:#D3D7CF;
+  font-weight: bold;}
 
 .meta {font-size: 13px;
     color: #555753;}
@@ -21,20 +44,11 @@ a {text-decoration: none;
   color: #3465a4;}
 
   
-.section-title {margin: 18px 0 -10px 0;
-  font-size: 16px;}
-  
 /* chapters */
 h1 a, h2 a, h3 a {}
 
-.chapter {padding: 12px; 
-margin: 10px 0; 
-border-top: 2px solid #2e3436;
-background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #EEEEEC;}
-
-.chapter h1.title {font-size:48px; margin: 4px 0;}
-.chapter h2.title {font-size: 36px; margin: 4px 0;}
-
+.chapter {}
+.chapter .title {font-size:36px; margin: 4px 0;}
 .chapter .body, .chapter .summary {text-align: justify;}
 
 /* chapter teaser */
@@ -44,8 +58,7 @@ background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #EEEEEC;
 
 /* comments */
 #comments {}
-.comment, #comment-form {background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #EEEEEC; padding: 12px; margin: 10px 0;
-  position: relative; border-top: 2px solid #2e3436;}
+.comment, #comment-form {}
 
 .comment h3.title {margin: 4px 0;}
 
@@ -74,21 +87,33 @@ background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #EEEEEC;
   background-repeat: no-repeat;}
   
 /* user context */
-#user-context {position: fixed; top: 100px; right: 0px;
-  background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #EEEEEC;
-  border-top: 2px solid;
-  text-align: right;}
+#user-context {position: fixed; top: 0px; right: 10px;
+  background: #2e3436;
+  border-left: 1px solid #3465A4;
+  border-right: 1px solid #3465A4;
+  text-align: right;
+  height: 100%;}
 
-#user-context .content {padding: 10px 18px; font-size: 16px;}
+#user-context .content {padding: 10px 18px; font-size: 16px; margin-top: 20px;}
 
 #user-context  ul {list-style: none; margin:0; padding: 0;} 
 li#user-score {font-size: 24px; font-weight: bold;}
 
 
 /** navigation **/
- ul#navigation {margin: 12px 0; padding: 0; list-style: none;}
- ul#navigation li {float:left; display: block;}
- ul#navigation li a {padding: 4px 24px;}
+#navigation {background: #3465A4; border-bottom: 1px solid #2e3436;}
+
+#navigation ul {margin: 8px 0 0 0; padding: 0; 
+  list-style: none outside none;
+  float: left;}
+
+#navigation ul li {float:left;
+  margin: 0 0.5em 0 0;}
+  
+#navigation ul li a {padding: 0 24px; 
+  color: #2e3436;
+  display: block;
+  border-bottom: 0.5em solid #2e3436;}
   
 #rating {
   height: 20px;  }

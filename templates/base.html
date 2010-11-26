@@ -18,36 +18,38 @@
     
     <meta name="keywords" content="" />
     <meta name="description" content="" />    
-    <title>{% block title %}{% endblock %} &middot; Winning without loosing</title>
+    <title>{% block title %}{% endblock %} &middot; Winning without losing</title>
     
 </head>
 <body>
 
 
-
-<div id="header" class="container_12 clearfix">
-    
-    <div class="grid_7">
-        <div id="site-title">
-            <a href="/">
-                Winning without loosing</a>
-        </div>
-    
-        
-          <ul id="navigation">
-            <li><a href="">About</a></li>
-            <li><a href="">All Chapters</a></li>
-          </ul>
-    
-    
+<div id="header" >
+    <div class="container_12 clearfix">
+        <div class="grid_7">
+            <div id="site-title">
+                <h1><a href="/">Winning without losing</a></h1>
+            </div>
+            <div id="tagline">
+                Discover how a new class of entrepreneurs are building their fortunes
+while living a happy and balanced life
+            </div>
+        </div> 
     </div>
-    
-    
-
-    
-    
 </div><!-- /header -->
 
+<div id="navigation">
+    <div class="container_12 clearfix">
+        <div class="grid_7">
+            <ul>
+                <li><a href="">about the project</a></li>
+                <li><a href="">awards</a></li>
+                <li><a href="">all chapters</a></li>
+                <li><a href="">role models</a></li>
+            </ul>
+        </div>
+    </div>            
+</div>
 
 
 {% if messages %}
@@ -57,41 +59,63 @@
 </div>
 {% endif %}
 
-
-<div id="content" class="container_12 clearfix">
-    
-    <div id="main-content" class="grid_7">
-        {% block content %}{% endblock %}
-    </div>
-    <div id="context-sidebar" class="grid_3">
-        {% block context %}{% endblock %}
-    </div>
-    
+<div id="content">
+    <div class="container_12 clearfix">   
+        <div id="main-content-block" class="grid_7">
+            {% block content %}{% endblock %}
+        </div>
+        
+        <div id="context-block" class="grid_3">
+            {% block context %}
+            
+            <div id="theauthors">
+                <h2>The authors</h2>
+                
+                
+                
+                <h3>Martin</h3>             
+                <img width="100" src="http://dl.dropbox.com/u/5236439/img/Martin.jpg" alt="Martin"/>
+                <p>Entrepreneur and Partner at 
+<a href="www.rainmaking.dk" title="Rainmaking">Rainmaking</a></p>
+                
+                
+                <h3>Jordan Milne</h3>               
+                <img width="100" src="http://dl.dropbox.com/u/5236439/img/jordan.JPG" alt="Jordan"/>
+                <p>Entrepreneur and Writer at
+                <a href="http://www.equity-lab.com/" title="Equity lab">Equity lab</a>.</p>
+            </div>
+            
+            
+            {% endblock %}
+        </div>
+    </div>   
 </div><!-- /content -->
-    
-<div id="footer" class="container_12 clearfix">
-    <div class="grid_7">
-        <p>Winning without loosing is hosted on a <a href="http://linode.com">Linode</a>. The code is available Open Source at <a href="https://github.com/mrbichel/cakewriter">Github</a>.</p>
+
+<div id="footer">    
+    <div class="container_12 clearfix">
+        <div class="grid_7">
+            <p>Winning without loosing is hosted on a <a href="http://linode.com">Linode</a>. The code is available Open Source at <a href="https://github.com/mrbichel/cakewriter">Github</a>.</p>
+        </div>
     </div>
 </div><!-- /footer -->
 
 <div id="user-context">
-<div class="content">
-  <ul id="user-menu">
-    {% if user.is_authenticated %}
-        <li id="username">{{ user.username }}</li>
-        <li id="user-score">{{ user.get_profile.score }} points</li>
-        <li><a href="{% url auth_logout %}">log out</a></li>
-        
-    {% else %}
-        <li><a href="{% url registration_register %}">register</a></li>
-        <li><a href="{% url auth_login %}">log in</a></li>
-             
-    {% endif %}
-  </ul>
-    {% block usercontext %}
-    {% endblock %}
-</div>      
+    <div class="content">
+      <ul id="user-menu">
+        {% if user.is_authenticated %}
+            <li id="username">{{ user.username }}</li>
+            <li id="user-score">{{ user.get_profile.score }} points</li>
+            <li><a href="{% url auth_logout %}">log out</a></li>
+            
+        {% else %}
+            <li><a href="{% url registration_register %}">register</a></li>
+            <li><a href="{% url auth_login %}">log in</a></li>
+                 
+        {% endif %}
+      </ul>
+        {% block usercontext %}
+        {% endblock %}
+    </div>      
 </div>
 
 
