@@ -48,7 +48,7 @@ def api_get_comments_for_chapter(request, chapter_id):
 def chapter(request, chapter_id): 
     chapter = get_object_or_404(Chapter, pk=chapter_id)
     
-    if chapter.rating.score == 0:
+    if chapter.rating.score == 0 or chapter.rating.votes == 0:
         score = chapter.rating.score
     else:
         score = chapter.rating.score / chapter.rating.votes
