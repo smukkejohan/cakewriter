@@ -48,8 +48,11 @@ def api_get_comments_for_chapter(request, chapter_id):
 def chapter(request, chapter_id): 
     chapter = get_object_or_404(Chapter, pk=chapter_id)
     
-    score = chapter.rating.score / chapter.rating.votes
-    
+    if chapter.rating.score == 0:
+        score = chapter.rating.score
+    else:
+        score = chapter.rating.score / chapter.rating.votes
+        
     return render_to_response(
         'book/chapter.html', {'chapter': chapter, 'options': CHAPTER_RATING_OPTIONS, 'score': str(score)},
         context_instance = RequestContext(request)
