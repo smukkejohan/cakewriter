@@ -9,10 +9,12 @@ Winning-Without-Losing is a collaborative book creation project initiated by Mar
     </div>
 
 
+
+<h2>Most recent chapters</h2>  
+ <div class="chapter-list">
+ 
     {% for chapter in chapters %}
-    
-    <div class="chapter-list">
-            <h2>Most recent chapters</h2>      
+          
             <div class="chapter teaser">                     
                 <h3 class="title">
                     <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h3>                                  
