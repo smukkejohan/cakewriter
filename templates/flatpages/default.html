@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load markup %}
 
 {% block title %}{{ flatpage.title }}{% endblock %}
 
@@ -6,6 +7,6 @@
 
     <h1>{{ flatpage.title }}</h1>
     <div id="flatpage-content">
-        {{ flatpage.content }}
+        {{ flatpage.content|markdown }}
     </div>   
 {% endblock %}
