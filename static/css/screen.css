@@ -44,7 +44,7 @@ h1 a, h2 a, h3 a {}
 
 .chapter {}
 .chapter .title {font-size:36px; margin: 4px 0;}
-.chapter .body, .chapter .summary {text-align: justify;}
+.chapter .body, .chapter .summary, .flatpage-content p {text-align: justify;}
 
 /* chapter teaser */
 .chapter.teaser h2.title a {color: #2E3436;}
