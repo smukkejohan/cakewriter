@@ -49,6 +49,12 @@ h1 a, h2 a, h3 a {}
 /* chapter teaser */
 .chapter.teaser h2.title a {color: #2E3436;}
 
+.chapter.teaser {
+    border-top:1px dashed;
+    margin-bottom:20px;
+    padding-top:10px;
+}
+
 /* chapter full */
 
 /* comments */
