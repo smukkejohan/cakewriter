@@ -3,7 +3,8 @@ $(function() {
      
     $(".vote-up, .vote-down").click(function() {
         var self = $(this);
-        var uid = self.parents(".comment").attr("id").substr(1);
+        var comment = self.parents(".comment");
+        var uid = comment.attr("id").substr(1);
         var action;
              
         if (self.hasClass('vote-on')) { action = 'clear'; }
@@ -12,7 +13,7 @@ $(function() {
         
         $.post('/book/comment/' + uid + '/vote/' + action, function(data) {
             if(data.success == true){
-                self.siblings(".vote-score").html(data.score.score);
+                comment.find(".vote-score").html(data.score.score);
                 if(action == 'clear') {
                     self.removeClass("vote-on");
                 } else {

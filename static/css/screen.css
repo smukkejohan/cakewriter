@@ -1,7 +1,7 @@
 body {background-color:#2e3436;
   color: #eeeeec;
   margin: 0;
-  font: 13.34px helvetica,arial,freesans,clean,sans-serif;}
+  font: 16px helvetica,arial,freesans,clean,sans-serif;}
  
 #header {background: url("../images/blue-grad-up.png") repeat-x scroll 0 bottom #2e3436; 
   border-bottom: 1px solid #2e3436;}
@@ -53,7 +53,8 @@ h1 a, h2 a, h3 a {}
 
 /* comments */
 #comments {}
-.comment, #comment-form {}
+.comment, #comment-form {border-top:1px dashed;
+padding-top:10px;}
 
 .comment h3.title {margin: 4px 0;}
 
@@ -61,22 +62,26 @@ h1 a, h2 a, h3 a {}
   text-align: justify;}
 
 /* comment voting */
-.vote {}
-.vote span {display: block;
+.vote {width: 170px;}
+.vote .options, .vote .status {display: block;
   font-weight: bold;
   float: left;}
-.vote-score {font-size: 28px; line-height: 0.5;
+.vote-score {font-size: 60px; line-height: 1.4;
     padding:4px 20px;}
 
-.vote-up {background-position: 0 0;}
-.vote-up.vote-on {background-position: 0 0px;}
-.vote-down {background-position: 0 -16px;}
-.vote-down.vote-on {background-position: 0 -16px;}
+.vote-up {background-position: 0 -40px; color: #73d216;}
+.vote-up.vote-on {background-position: 0 -40px;}
+.vote-down {background-position: 0 0px; color: #cc0000;}
+.vote-down.vote-on {background-position: 0 0;}
 
 .vote-up, .vote-down {background-image: url('../images/cakethebook-sprite.png');
   background-repeat: no-repeat;
   cursor: pointer;
-  padding: 2px 0 2px 20px;}
+  display: block;
+  padding: 2px 0 2px 40px;
+  height: 36px;
+  line-height: 1.9;
+  font-size: 18px;}
   
 /* user context */
 #user-context {position: fixed; top: 0px; right: 10px;

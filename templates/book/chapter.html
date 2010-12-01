@@ -49,32 +49,32 @@
     {% score_for_object comment as score %}
     {% vote_by_user user on comment as vote %}
     <div id="c{{ comment.id }}" class="comment clearfix">        
-         
-      <div class="comment-title-bar clearfix">      
-          <div class="grid_4 alpha">
-              <h3 class="title">{{ comment.user_name }}:</h3>
-          </div>
-          <div class="grid_3 omega">   
-              <div class="vote clearfix">                 
-                 <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="This input is useful (click again to undo)">Yay!!!</span>
-                 
-                 <span class="vote-score">{{ score.score }}</span>
-                 
-                 <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="This input is not useful (click again to undo)">Meh...</span>
-                                      
-              </div>
-            </div>  
-        </div>    
-        
-        <div class="comment-main grid_7 alpha omega">    
+            
+
+
+        <div class="grid_4 alpha">
+            <h3 class="title">{{ comment.user_name }}:</h3>
+            
             <p class="content">{{ comment.comment }}</p>
             <p class="meta">          
                 <span class="submitted">
                     Submitted {{ comment.submit_date|timesince }} ago
                 </span>
             </p>          
-        </div> 
-        
+        </div>    
+            <div class="grid_3 omega vote clearfix">
+              <div class="options">
+                <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="This input is useful (click again to undo)">Yay!!!</span>
+                
+                <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="This input is not useful (click again to undo)">Meh...</span>
+              
+              </div>
+              
+              <div class="status">
+                <span class="vote-score">{{ score.score }}</span>
+              </div>
+                            
+            </div>        
     </div>
     
 {% endfor %}
