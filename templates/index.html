@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<h1>Welcome to Winning Without Losing</h1>
+
     <div id="introduction">
         <h2>A little about us</h2>
         <p>Traditional wisdom tells us that achieving financial success comes with great personal cost and sacrifice of other areas of life. We disagree that this is the only truth as we see a new movement of ultra-successful entrepreneurs emerging, who are also living a happy and balanced life.
@@ -16,8 +18,8 @@ Winning-Without-Losing is a collaborative book creation project initiated by Mar
     {% for chapter in chapters %}
           
             <div class="chapter teaser">                     
-                <h3 class="title">
-                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h3>                                  
+                <h2 class="title">
+                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h2>                                  
                 
                 <div class="summary">
                     {{ chapter.summary_html|safe }}  

@@ -3,5 +3,9 @@
 {% block title %}{{ flatpage.title }}{% endblock %}
 
 {% block content %}
-    {{ flatpage.content }}    
+
+    <h1>{{ flatpage.title }}</h1>
+    <div id="flatpage-content">
+        {{ flatpage.content }}
+    </div>   
 {% endblock %}
