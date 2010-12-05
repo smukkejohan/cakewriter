@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>All chapters</h1>  
+ <div class="chapter-list">
+ 
+    {% for chapter in chapters %}
+          
+            <div class="chapter teaser">                     
+                <h2 class="title">
+                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h2>                                  
+                
+                <div class="summary">
+                    {{ chapter.summary_html|safe }}  
+                </div>
+                
+                <a href="{{ chapter.get_absolute_url }}">Read more &hellip;</a>                                 
+            </div>
+            
+                 
+    {% endfor %} 
+    
+   <!--<a href="{# all_chapters #}">See all chapters</a>-->
+  </div>   
+{% endblock %}
