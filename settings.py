@@ -115,8 +115,8 @@ AUTH_PROFILE_MODULE = 'accounts.Profile'
 
 RATINGS_VOTES_PER_IP = 3
 
-DEFAULT_FROM_EMAIL = 'noreply@cakethebook.com'
-EMAIL_SUBJECT_PREFIX = '[cakethebook.com] '
+DEFAULT_FROM_EMAIL = 'noreply@winning-without-losing.com'
+EMAIL_SUBJECT_PREFIX = ''
 
 
 CHAPTER_RATING_OPTIONS = (

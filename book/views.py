@@ -43,7 +43,14 @@ def api_get_comments_for_chapter(request, chapter_id):
     
     return HttpResponse(json_response, mimetype="application/javascript")
     
-  
+
+def all_chapters(request): 
+    chapters = Chapter.objects.all()
+    return render_to_response(
+        'book/all_chapters.html', {'chapters': chapters,},
+        context_instance = RequestContext(request)
+    )
+ 
     
 def chapter(request, chapter_id): 
     chapter = get_object_or_404(Chapter, pk=chapter_id)

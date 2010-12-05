@@ -8,6 +8,8 @@ from djangoratings.views import AddRatingFromModel
 
 
 urlpatterns = patterns('',
+    url(r'^$', views.all_chapters, name='all_chapters'),
+    
     url(r'^chapter/(?P<chapter_id>\d+)/$', views.chapter, name='chapter'),
     
     url(r'^chapter/(?P<chapter_id>\d+)/widget$', views.rating_widget, name='rating_widget'),

@@ -1,5 +1,8 @@
 Hi
 
-Welcome to {{ site }}. Please confirm your email address and activate your account by going to http://{{ site }}/accounts/activate/{{ activation_key }}/
+Welcome to Winning Without Losing!
 
-Kind regards {{ site }}
+Please confirm your email address and activate your account by going to http://{{ site }}/accounts/activate/{{ activation_key }}/
+
+Thanks for joining,
+Martin and Jordan

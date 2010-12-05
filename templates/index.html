@@ -18,8 +18,8 @@ Winning-Without-Losing is a collaborative book creation project initiated by Mar
     {% for chapter in chapters %}
           
             <div class="chapter teaser">                     
-                <h2 class="title">
-                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h2>                                  
+                <h3 class="title">
+                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h3>                                  
                 
                 <div class="summary">
                     {{ chapter.summary_html|safe }}  
