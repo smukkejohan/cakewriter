@@ -48,7 +48,7 @@ a {text-decoration: none;
 h1 a, h2 a, h3 a {}
 
 .chapter {}
-.chapter .title {font-size:36px; margin: 4px 0;}
+.chapter .title {font-size:36px; margin: 4px 0; border-bottom: 1px dashed #4E9A06;}
 .chapter .body, .chapter .summary, #flatpage-content p {text-align: left;}
 
 /* chapter teaser */
