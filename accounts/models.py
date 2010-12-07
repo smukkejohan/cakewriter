@@ -85,7 +85,7 @@ def rating_submitted(sender, **kwargs):
     if created:     
         log = ScoreLog(chapter=chapter, 
             profile=p, 
-            points=2, 
+            points=1, 
             ctype="rate")
         log.save()
     
@@ -134,8 +134,8 @@ def vote_submitted(sender, **kwargs):
     targetLog.time = datetime.now()
         
     if instance.vote == 1:
-        actorLog.points = 2
-        targetLog.points = 3
+        actorLog.points = 1
+        targetLog.points = 2
     elif instance.vote == -1:
         actorLog.points = 0
         targetLog.points = -1
@@ -196,7 +196,7 @@ def user_commented(sender, **kwargs):
         chapter=comment.content_object, 
         profile=p, 
         description='Submitted feedback to a chapter', 
-        points=4, 
+        points=3, 
         ctype="comment")
     log.save()
     

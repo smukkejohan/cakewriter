@@ -7,7 +7,7 @@ from book.models import Chapter
 from datetime import datetime
 
 def index(request): 
-    chapters = Chapter.objects.all()
+    chapters = Chapter.objects.all()[:5]
     return render_to_response(
         'index.html', {'chapters': chapters,},
         context_instance = RequestContext(request)

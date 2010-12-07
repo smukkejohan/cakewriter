@@ -1,12 +1,16 @@
+@import url(http://fonts.googleapis.com/css?family=Neucha&subset=latin);
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic&subset=latin);
+
 body {background-color:#2e3436;
   color: #eeeeec;
   margin: 0;
-  font: 16px helvetica,arial,freesans,clean,sans-serif;}
+  font: 16px 'PT Sans', arial, serif;}
  
 #header {background: url("../images/blue-grad-up.png") repeat-x scroll 0 bottom #2e3436; 
-  border-bottom: 1px solid #2e3436;}
+  border-bottom: 1px solid #2e3436;
+  padding-bottom: 20px;}
 
-#content {background: #eeeeec; color: #2e3436; padding: 18px 0;}
+#content {background: #ffffff; color: #2e3436; padding: 18px 0;}
 
 #footer {background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #2e3436;
   border-top: 1px solid #2e3436;
@@ -21,16 +25,16 @@ body {background-color:#2e3436;
   font-size:1px;
   text-indent:-9999em;}
 
-#site-title a {font-size: 48px; color: #eeeeec;}
+#site-title a {font-size: 48px; color: #3465A4;}
 
 #site-title h1 {margin: 0;}
 
-#site-title {padding: 18px 0 0 0;}
+#site-title {padding: 18px 0 0 0; font-family: 'Neucha';}
 
-#tagline {padding: 8px 0 20px 0;
-  width: 400px;
-  font-size: 14px;
-  color:#D3D7CF;
+p.tagline {margin: 8px 0;
+  width: 500px;
+  font-size: 16px;
+  color:#4E9A06;
   font-weight: bold;}
 
 .meta {font-size: 13px;
@@ -38,16 +42,17 @@ body {background-color:#2e3436;
 
 a {text-decoration: none;
   color: #3465a4;}
-  
+
+.title {}
 /* chapters */
 h1 a, h2 a, h3 a {}
 
 .chapter {}
 .chapter .title {font-size:36px; margin: 4px 0;}
-.chapter .body, .chapter .summary, #flatpage-content p {text-align: justify;}
+.chapter .body, .chapter .summary, #flatpage-content p {text-align: left;}
 
 /* chapter teaser */
-.chapter.teaser h2.title a {color: #2E3436;}
+.chapter.teaser .title a {color: #2E3436;}
 
 .chapter.teaser {
     border-top:1px dashed;
@@ -91,17 +96,18 @@ padding-top:10px;}
   
 /* user context */
 #user-context {position: fixed; top: 0px; right: 10px;
-  background: #2e3436;
+  background: #8ae234;
   border-left: 1px solid #3465A4;
   border-right: 1px solid #3465A4;
   text-align: right;
   height: 100%;}
 
-#user-context .content {padding: 10px 18px; font-size: 16px; margin-top: 20px;}
+#user-context .content {padding: 10px 18px; font-size: 18px; margin-top: 20px;}
 
 #user-context  ul {list-style: none; margin:0; padding: 0;} 
 li#user-score {font-size: 24px; font-weight: bold;}
 
+#user-context a {text-decoration: underline; font-weight: bold;}
 
 /** navigation **/
 #navigation {background: #3465A4; border-bottom: 1px solid #2e3436;}
@@ -114,9 +120,11 @@ li#user-score {font-size: 24px; font-weight: bold;}
   margin: 0 0.5em 0 0;}
   
 #navigation ul li a {padding: 0 24px; 
-  color: #2e3436;
+  color: #8ae234;
   display: block;
-  border-bottom: 0.5em solid #2e3436;}
+  border-bottom: 0.5em solid #2e3436;
+  font-weight: bold;
+  font-size: 18px;}
   
 #rating {
   height: 20px;  }
