@@ -6,13 +6,14 @@ body {background-color:#2e3436;
   margin: 0;
   font: 16px 'PT Sans', arial, serif;}
  
-#header {background: url("../images/blue-grad-up.png") repeat-x scroll 0 bottom #2e3436; 
+#header {background: url("../images/blue-grad-up.png") repeat-x scroll 0 bottom #8AE234; 
   border-bottom: 1px solid #2e3436;
   padding-bottom: 20px;}
 
 #content {background: #ffffff; color: #2e3436; padding: 18px 0;}
 
-#footer {background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #2e3436;
+#footer {background: url("../images/blue-grad-down.png") repeat-x scroll right 0 #8ae234;
+  color: #204A87;
   border-top: 1px solid #2e3436;
   padding-top: 12px;}
 
@@ -25,7 +26,7 @@ body {background-color:#2e3436;
   font-size:1px;
   text-indent:-9999em;}
 
-#site-title a {font-size: 48px; color: #3465A4;}
+#site-title a {font-size: 48px; color: #ffffff;}
 
 #site-title h1 {margin: 0;}
 
@@ -34,7 +35,7 @@ body {background-color:#2e3436;
 p.tagline {margin: 8px 0;
   width: 500px;
   font-size: 16px;
-  color:#4E9A06;
+  color:#204A87;
   font-weight: bold;}
 
 .meta {font-size: 13px;
@@ -43,7 +44,7 @@ p.tagline {margin: 8px 0;
 a {text-decoration: none;
   color: #3465a4;}
 
-.title {}
+
 /* chapters */
 h1 a, h2 a, h3 a {}
 
@@ -52,6 +53,7 @@ h1 a, h2 a, h3 a {}
 .chapter .body, .chapter .summary, #flatpage-content p {text-align: left;}
 
 /* chapter teaser */
+.title {}
 .chapter.teaser .title a {color: #2E3436;}
 
 .chapter.teaser {
@@ -102,7 +104,7 @@ padding-top:10px;}
   height: 100%;
   color: #3465A4;}
 
-#user-context .content {color: #3465A4; padding: 10px 18px; font-size: 18px; margin-top: 20px;}
+#user-context .content {color: #204A87; padding: 10px 18px; font-size: 18px; margin-top: 20px;}
 
 #user-context  ul {list-style: none; margin:0; padding: 0;} 
 li#user-score {font-size: 24px; font-weight: bold;}
@@ -110,7 +112,7 @@ li#user-score {font-size: 24px; font-weight: bold;}
 #user-context a {text-decoration: underline; font-weight: bold;}
 
 /** navigation **/
-#navigation {background: #3465A4; border-bottom: 1px solid #2e3436;}
+#navigation {background: #4E9A06; border-bottom: 1px solid #2e3436;}
 
 #navigation ul {margin: 8px 0 0 0; padding: 0; 
   list-style: none outside none;
@@ -120,9 +122,9 @@ li#user-score {font-size: 24px; font-weight: bold;}
   margin: 0 0.5em 0 0;}
   
 #navigation ul li a {padding: 0 24px; 
-  color: #8ae234;
+  color: #ffffff;
   display: block;
-  border-bottom: 0.5em solid #2e3436;
+  border-bottom: 0.5em solid #204A87;
   font-weight: bold;
   font-size: 18px;}
   
