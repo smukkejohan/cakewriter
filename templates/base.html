@@ -107,7 +107,13 @@ while living a happy and balanced life
       <ul id="user-menu">
         {% if user.is_authenticated %}
             <li id="username">{{ user.username }}</li>
-            <li id="user-score">{{ user.get_profile.score }} points</li>
+            <li id="user-score">
+                {% if user.get_profile %}
+                    {{ user.get_profile.score }}
+                {% else %}
+                    0
+                {% endif %} 
+                points</li>
             <li><span class="small">In this beta version <br /> you need to <br /> refresh your browser <br /> to see new points.</span></li>
             <li><a href="{% url auth_logout %}">log out</a></li>
             
