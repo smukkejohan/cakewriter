@@ -5,7 +5,6 @@ import logging
 
 PROJECT_ROOT = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
-
 DEVELOPMENT_MODE = (platform.node() != "tango")
 
 ADMIN_MEDIA_PREFIX = '/media/'
@@ -37,8 +36,18 @@ else:
 
 TEMPLATE_DEBUG = DEBUG
 
+TEMPLATE_CONTEXT_PROCESSORS =(
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+    'pages.context_processors.random_rolemodel',
+    'emencia.django.newsletter.context_processors.media',
+)
+
 ADMINS = (
-    ('Johan Bichel Lindegaard', 'sysadmin@johan.cc'),
+    ('Thomas Pethick', 'info@tmpproductions.dk'),
 )
 MANAGERS = ADMINS
 
@@ -106,6 +115,23 @@ INSTALLED_APPS = (
     'accounts',
     'voting',
     'registration',
+    'captcha',
+    'simplewiki',
+    'pages',
+    'tinymce',
+    'tagging',
+    'emencia.django.newsletter',
+    'extemail',
+    #'south',
+    #'django_evolution',
+    #'mailer',
+    'html_mailer',
+    #'quiz',
+)
+
+FEEDBACK_CHOICES = (
+        ('bug', 'Bug'),
+        ('feature_request', 'Feature Request')
 )
 
 ACCOUNT_ACTIVATION_DAYS = 30

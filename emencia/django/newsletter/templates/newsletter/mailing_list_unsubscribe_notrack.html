@@ -1,0 +1,22 @@
+{% extends "newsletter/base.html"%}
+{% load i18n %}
+
+{% block title %}{% trans "Unsubscription" %}{% endblock %}
+
+{% block content %}
+  <h2>{% trans "Unsubscription" %}</h2>
+  {% if finished %}
+  <p>The email was successfully unsubscribed.</p>
+  {% else %}
+  <p>{% trans "Validate this form to unsubscribe to this mailing list." %}</p>
+  {% if message %}
+    <p>{{ message }}</p>
+  {%  endif %}
+  <form action="." method="post">
+    {% csrf_token %}
+    <input type="text" value="" name="email" />
+    <input type="submit" value="{% trans "Unsubscribe" %}" />
+  </form>
+  {% endif %}
+{% endblock %}
+

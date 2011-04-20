@@ -15,11 +15,20 @@ urlpatterns = patterns('',
     
     (r'^accounts/', include('registration.urls')),
     
+     (r'^rolemodels/$', include('pages.urls')),
+    
     (r'^c/', include('django.contrib.comments.urls')),
     
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
+    (r'^edit', include('simplewiki.urls')),
+    (r'^captcha/', include('captcha.urls')),
+    (r'^tinymce/', include('tinymce.urls')),
+    (r'^newsletters/', include('emencia.django.newsletter.urls')),
+    (r'^subscribe/$', 'views.subscribe_resent_chapters'),
+    #(r'^quiz/', include('quiz.urls'))
 )
+
 
 
 if settings.DEVELOPMENT_MODE:

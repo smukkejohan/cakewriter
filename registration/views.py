@@ -90,8 +90,7 @@ def activate(request, backend,
     return render_to_response(template_name,
                               kwargs,
                               context_instance=context)
-
-
+            
 def register(request, backend, success_url=None, form_class=None,
              disallowed_url='registration_disallowed',
              template_name='registration/registration_form.html',

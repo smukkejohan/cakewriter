@@ -1,0 +1,23 @@
+<div id="content_overview">
+        {% if not user.is_authenticated %}
+        <h3>Subscribe to new chapters</h3>
+        <form action="/subscribe/" method="post">
+        {% csrf_token %}
+        <input type="text" name="email" value="" />
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <input type="submit" value="subscribe" />
+        </form>
+        <br />
+        {% else %}
+        <a id="create_chapter_button" href="{% url user_chapter %}">Create chapter</a>
+        {% endif %}
+        
+        <h3>Chapters</h3>
+        {% for chapter in chapters %}
+        <p><a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a> 
+        {% for votes in chapter.get_votes_on_chapter %}
+            {% ifequal votes.user user %}<span class="new">read</span>{% endifequal %}
+        {% endfor %}
+        </p>
+        {% endfor %} 
+    </div>

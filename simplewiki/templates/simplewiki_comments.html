@@ -1,0 +1,71 @@
+{% extends "simplewiki_base.html" %}
+{% load i18n simplewiki_utils %}
+{% load comments %}
+{% block wiki_page_title %}
+	{{wiki_article.title}}
+{% endblock %}
+{% block title %}
+    {{ wiki_article.title }}
+{% endblock %}
+{% block wiki_body %}
+<div id="comments">
+
+    <h2 class="section-title">Feedback</h2>
+{% get_comment_list for chapter as comment_list %}
+{% for comment in comment_list %}
+
+    <div id="c{{ comment.id }}" class="comment clearfix">        
+            
+
+
+        <div class="comment_text alpha">
+            <h3 class="title">{{ comment.user_name }}:</h3>
+            
+            <p class="content">{{ comment.comment|linebreaks }}</p>
+            <p class="meta">          
+                <span class="submitted">
+                    Submitted {{ comment.submit_date|timesince }} ago
+                </span>
+            </p>          
+        </div>    
+       
+    </div>
+    
+{% endfor %}
+
+
+  <h2 class="section-title">What do you think about this chapter?</h2>
+<div id="comment-form">
+
+
+{% if user.is_authenticated %}
+    {% get_comment_form for chapter as form %}
+    <form action="{% comment_form_target %}" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{% url wiki_discussion wiki_article.get_url %}" />
+        {% for field in form %}
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                {% if field.name != "name" and field.name != "email" and field.name != "url" %}
+                    
+                    <p {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+                
+                    {% if field.errors %}{{ field.errors }}{% endif %}
+                    {{ field }}
+                    </p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <input class="submit-post" name="post" type="submit" value="Share your feedback" />
+    </form>
+{% else %}
+    <p>
+    <a href="/accounts/login/?next={{ request.path }}">Log in</a> or <a href="/accounts/register?next={{ request.path }}">register</a> to comment!
+    </p>
+{% endif %}
+</div>
+
+</div>
+
+{% endblock %}

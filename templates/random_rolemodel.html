@@ -1,0 +1,9 @@
+<div class="sidebar_mentor">
+    <img src="{%if random_rolemodel.picture.url_130x120 %}{{random_rolemodel.picture.url_130x120}}{%else%}{{MEDIA_URL}}img/rolemodel.jpg{%endif%}" class="float_left" alt="mentor_1" />
+    <div class="sidebar_text">
+        <h4>{{random_rolemodel.name}}</h4>
+        {{random_rolemodel.content_html|safe|truncatewords:15}}
+        <p><a href="/rolemodels/#r{{random_rolemodel.pk}}">Read more</a></p>
+    </div>
+    <div class="clear"></div>
+</div>

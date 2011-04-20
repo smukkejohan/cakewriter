@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from book.models import Chapter
 from djangoratings.views import AddRatingFromModel
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson as json
 from django.contrib.sites.models import Site
 from django.contrib.comments.models import Comment
@@ -12,7 +12,8 @@ from settings import CHAPTER_RATING_OPTIONS
 from django.shortcuts import redirect, get_object_or_404
 from django.core import serializers
 from django.contrib.contenttypes.models import ContentType
-
+from simplewiki.models import Article
+from djangoratings.models import Vote
 
 def api_get_chapters(request):
     chapters = Chapter.objects.all()
@@ -45,23 +46,36 @@ def api_get_comments_for_chapter(request, chapter_id):
     
 
 def all_chapters(request): 
-    chapters = Chapter.objects.all()
+    chapters = Chapter.objects.filter(visible=True)
     return render_to_response(
-        'book/all_chapters.html', {'chapters': chapters,},
+        'book/all_chapters.html', {'chapters': chapters,'options': CHAPTER_RATING_OPTIONS},
         context_instance = RequestContext(request)
     )
  
     
 def chapter(request, chapter_id): 
+    chapters = Chapter.objects.filter(visible=True)
     chapter = get_object_or_404(Chapter, pk=chapter_id)
+    chapter_type = ContentType.objects.get_for_model(chapter)
+    try:
+        vote = Vote.objects.get(object_id=chapter.pk, content_type=chapter_type, user=request.user).score
+    except:
+        vote = 0
+    
+    try:
+        related_wiki = Article.objects.get(chapter_related=chapter)
+    except MultipleObjectsReturned:
+        related_wiki = Article.objects.filter(chapter_related=chapter)[0]       
+    except ObjectDoesNotExist:
+        related_wiki = None
     
     if chapter.rating.score == 0 or chapter.rating.votes == 0:
         score = chapter.rating.score
     else:
         score = chapter.rating.score / chapter.rating.votes
-        
+    
     return render_to_response(
-        'book/chapter.html', {'chapter': chapter, 'options': CHAPTER_RATING_OPTIONS, 'score': str(score)},
+        'book/chapter.html', {'related_wiki': related_wiki, 'chapter': chapter, 'chapters': chapters, 'options': CHAPTER_RATING_OPTIONS, 'score': str(score), 'rating_on_chapter':vote},
         context_instance = RequestContext(request)
     )
 
@@ -126,5 +140,58 @@ def rate_chapter(request, chapter_id, score = None):
         
 
 ##score = chapter.rating.get_rating(request.user, request.META['REMOTE_ADDR'])  
-
-
+from book.forms import UserChapter
+from html2text import html2text
+from django.db.models import Max
+from datetime import datetime
+def user_chapter(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            form = UserChapter(request.POST)
+            if form.is_valid():
+                title = form.cleaned_data['title']
+                summary_html = form.cleaned_data['summary']
+                body_html = form.cleaned_data['content']
+                
+                highest_index = Chapter.objects.aggregate(Max('index'))
+                index = highest_index['index__max']+1
+                '''
+                if highest_index['index__max'] < 1000:
+                    index = 1000
+                else:
+                    index = highest_index['index__max']+1
+                '''
+                user_chapter = Chapter(title=title,
+                                       summary=html2text(summary_html),
+                                       summary_html=summary_html,
+                                       body=html2text(body_html),
+                                       body_html=body_html,
+                                       mod_date=datetime.now(),
+                                       pub_date=datetime.now(),
+                                       index=index,
+                                       author=request.user,
+                                       user_created=True,
+                                       visible=False)
+                user_chapter.save()
+                return HttpResponseRedirect('/book/user_chapter/thanks/')
+            else:
+                data = {'title':request.POST['title'],
+                        'summary':request.POST['summary'],
+                        'content':request.POST['content']}
+                form = UserChapter(data)
+                return render_to_response('book/user_chapter.html', 
+                                        {'form': form,},
+                                        context_instance = RequestContext(request))
+        else:
+            form = UserChapter()
+    
+        return render_to_response('book/user_chapter.html', 
+                                {'form': form,},
+                                context_instance = RequestContext(request))
+    else:
+       return HttpResponseRedirect('/accounts/login/?next=/book/user_chapter/') 
+def user_chapter_thanks(request):
+    chapters = Chapter.objects.filter(visible=True)
+    return render_to_response('book/user_chapter_thanks.html',
+                                {'chapters': chapters,},
+                                context_instance = RequestContext(request))

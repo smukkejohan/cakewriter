@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Subscribe to new chapters</h1> 
+<br />
+<h2>An error occured:</h2>
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <br /><br />
+<h2>Please try again below:</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="text" name="email" value="{{ email }}" />
+    <input type="hidden" name="next" value="{{ older_side }}" />
+    <input type="submit" value="subscribe" />
+  </form>
+{% endblock %}

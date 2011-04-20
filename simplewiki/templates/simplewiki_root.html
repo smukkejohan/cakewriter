@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block title %}Edit chapters{% endblock %}
+{% block sideheader %}Edit chapters{% endblock %}
+
+{% block contentview %}
+    <div id="content_overview">
+        {% if not user.is_authenticated %}
+        <h3>Subscribe to new chapters</h3>
+        <form action="/subscribe/" method="post">
+        {% csrf_token %}
+        <input type="text" name="email" value="" />
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <input type="submit" value="subscribe" />
+        </form>
+        <br />
+        {% endif %}
+        <h3>Chapters</h3>
+        {% for chapter in chapters %}
+        <p><a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></p>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+{% for editpage in editpage %}{{ editpage.content|markdown }}{% endfor %}
+{% endblock %}
+
+{% block context %}
+{% endblock %}

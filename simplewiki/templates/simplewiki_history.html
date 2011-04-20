@@ -1,0 +1,70 @@
+{% extends "simplewiki_base.html" %}
+{% load markup %}
+{% load i18n simplewiki_utils %}
+{% block wiki_page_title %}
+    {{ wiki_article.title }}
+{% endblock %}
+{% block title %}
+    {{ wiki_article.title }}
+{% endblock %}
+{% block wiki_body %}
+<form method="POST">
+{% csrf_token %}
+<table id="wiki_history_table" width="650px">
+    <thead>
+        <tr>
+            <th width="150px" id="revision">Revision</th>
+            <th width="250px" id="comment">Comment</th>
+            <th width="250px" id="modified">Modified</th>
+        </tr>
+    </thead>
+</table>
+        {% for revision in wiki_history %}
+        <div class="trigger">
+            <table width="650px">
+            <tr style="border-top: 1px" {%cycle '' 'class="dark"'%}>
+                <td width="150px">
+                    <input  type="radio" name="revision" id="{{ revision.id }}" value="{{ revision.id }}"{%ifequal wiki_article.current_revision.id revision.id%} checked{%endifequal%} />
+                    <label for="{{ revision.id }}">
+                        {{ revision }}
+                        {% if revision.previous_revision %}
+                            {% ifnotequal revision.counter revision.previous_revision.counter|add:1 %}
+                                (based on {{ revision.previous_revision }})
+                            {% endifnotequal %}
+                        {% endif %}
+                    </label>
+                </td>
+                <td width="250px">{% if revision.revision_text %}{{ revision.revision_text}}{% else %}<i>None</i>{% endif %}</td>
+                <td width="250px">{{ revision.get_user}} <i>{{ revision.revision_date|date}} {{ revision.revision_date|time}}</i>
+                </td>
+            </tr>
+            </table>
+        </div>
+           
+            <div class="toggle_container">
+            <table width="650px">
+            <tr>
+                <td class="diff">{{ revision.get_diff|markdown|safe }}</td>
+            </tr>
+            </table>
+            </div>
+        {% endfor %}
+    </tbody>
+    {% if wiki_prev_page or wiki_next_page %}
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    {% if wiki_prev_page %}
+                        <a href="{% url wiki_history wiki_article.get_url wiki_prev_page %}">{% trans "Previous page" %}</a>
+                    {% endif %}
+                    {% if wiki_next_page %}
+                        <a href="{% url wiki_history wiki_article.get_url wiki_next_page %}">{% trans "Next page" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        </tfoot>
+    {% endif %}
+</table>
+<input type="submit" value="Change revision"{% if not wiki_write %} disabled="true"{% endif %} />
+</form>
+{% endblock %}

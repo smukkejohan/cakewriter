@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n simplewiki_utils %}
+
+{% block title %}{{ wiki_title }}{% endblock %}
+{% block sideheader %}Edit chapters{% endblock %}
+
+{% block contentview %}
+{% comment %}
+    <div id="content_overview">
+        <h3>Chapters</h3>
+        {% for chapter in chapters %}
+        {% if chapter.parent == None %}{% else %}<p><a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></p>{% endif %}
+        
+        {% endfor %} 
+    </div>
+{% endcomment %} 
+
+
+    {% include 'chapter_overview_snippet.html' %}                                
+{% endblock %}
+
+{% block content %}
+    <h1>{% block wiki_page_title %}{% endblock %}</h1>
+    
+    
+    {% block wiki_panel %}
+        	
+    	    {% if wiki_article %} 
+    	    <div class="button_container">
+    	    <a class="button" href="{% url wiki_view wiki_article.get_url %}">View</a>
+    	    <a class="button" href="{% url wiki_edit wiki_article.get_url %}">Edit</a>
+    	    <a class="button" href="{% url wiki_history wiki_article.get_url 1 %}">History</a>
+    	    <a class="button" href="{% url wiki_discussion wiki_article.get_url %}">Discussion</a>
+    	    </div>
+        	{% endif %}
+    
+    
+    {% endblock %}
+    
+    {% block wiki_body %}
+        <p>
+            <i>{% trans "Last modified" %}: {{ wiki_article.modified_on|date }}, {{ wiki_article.modified_on|time }}</i>
+        </p>
+    {% endblock %}
+{% endblock %}
+
+{% block context %}
+{% endblock %}

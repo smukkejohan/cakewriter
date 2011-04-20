@@ -1,19 +1,35 @@
 {% extends 'base.html' %}
+{% load markup %}
+{% load voting_tags %}
+{% block contentinner %}{% endblock %}
+{% block contentinnerend %}{% endblock %}
+{% block banner %}
+<div id="home_banner_container">
+        <div id="home_banner">
+            <h1>A collaborative book project to discover how to be <b>an ultra successful entrepreneur</b>  while living a happy and <b>balanced life</b></h1>
+            <div id="home_banner_text" class="float_left">
+            <h3>How it works:</h3>
+            <ul>
+                <li>Read, Rate and comment chapters. </li>
+                <li>Join wiki and edit in the text directly.</li>
+                <li>Become a co-author and get credited in the book.</li>
+                       
+            </ul>
+            <!-- <br />Change your life by start working on the real issue: <br />How to win without losing. -->
+            <a id="home_banner_button" href="/howitworks/" nclick="this.blur();"><span>Get started</span></a> 
+            </div>
+            <img src="{{ MEDIA_URL }}img/home_banner_book.png" alt="home_banner_book" id="home_banner_book" class="float_right" width="429" height="209" />
+            <div class="clear"></div>
+        </div>
+    </div>   
+{% endblock %}
 
 {% block content %}
-
-<h1>Sacrifice no more</h1>
-
-    <div id="introduction">
-        <p>Traditional wisdom tells us that achieving financial success comes with great personal cost and sacrifice of other areas of life. We disagree that this is the only truth as we see a new movement of ultra-successful entrepreneurs emerging, who are also living a happy and balanced life.</p><p>
-Winning Without Losing is a collaborative book creation project initiated by Martin and Jordan to discover and share the secrets of how to become successful and live a balanced life. We interview role models all around the world, and write chapters with insights on how they succeed to be successful and happy at the same time.
-Every other day we present one thought provoking chapter and let you judge whether we are right or wrong using ratings and comments. In this collaborative search process your ratings and comments determine the content of the final book.</p><p>
-Everyone who contributes will be credited in the book. We want to thank people for their ratings, comments and suggestion and offer awards to all contributors. For instance, the chance to have lunch with one of the role models profiled in the book.</p>
-    </div>
+{% for frontpage in frontpage %}{{ frontpage.content|markdown }}{% endfor %}
+ 
 
 
-
-<h2>Most recent chapters</h2>  
+<!-- <h2>Read, rate and comment on the most recent chapters</h2>  -->
  <div class="chapter-list">
  
     {% for chapter in chapters %}
@@ -21,7 +37,20 @@ Everyone who contributes will be credited in the book. We want to thank people f
             <div class="chapter teaser">                     
                 <h3 class="title">
                     <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h3>                                  
+                <div class="author meta float_left">
+                    {{ chapter.pub_date|timesince }} old | By: <i>{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}{% else %}{{ chapter.author.username }}{% endif %}</i> who has {{ chapter.author.get_profile.score }} points
+                </div>
                 
+                <div class="author meta float_right">
+                    {% for value, label in options %}  
+                    {% if chapter.get_score|slugify >= value %}
+                    <div class="ui-stars-star ui-stars-star-on ui-stars-star-disabled"><a title="">{{value}}</a></div>
+                    {% else %}
+                    <div class="ui-stars-star ui-stars-star-disabled"><a title="">{{value}}</a></div>
+                    {% endif %}
+		            {% endfor %}	
+                </div>
+                <div class="clear"></div>
                 <div class="summary">
                     {{ chapter.summary_html|safe }}  
                 </div>
@@ -32,6 +61,6 @@ Everyone who contributes will be credited in the book. We want to thank people f
                  
     {% endfor %} 
     
-   <!--<a href="{# all_chapters #}">See all chapters</a>-->
+   <a href="/book/">See all chapters</a>
   </div>   
 {% endblock %}

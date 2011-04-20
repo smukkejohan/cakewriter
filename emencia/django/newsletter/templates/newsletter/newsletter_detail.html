@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+  </head>
+  {% block body %}
+    {{ content|safe }}
+  {% endblock %}
+</html>
+
+
+
+
+

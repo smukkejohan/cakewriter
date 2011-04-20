@@ -38,6 +38,12 @@ urlpatterns = patterns('',
                            activate,
                            {'backend': 'registration.backends.default.DefaultBackend'},
                            name='registration_activate'),
+                      # url(r'^register/$', 
+                      #     'registration.views.register', 
+                      #     {'form_class': RegistrationFormWithNext, 'profile_callback': UserProfile.objects.create }, 
+                      #     name='registration_register'),
+                      
+                      
                        url(r'^register/$',
                            register,
                            {'backend': 'registration.backends.default.DefaultBackend'},

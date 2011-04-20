@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
-
 {% block title %}All chapters{% endblock %}
+{% block sideheader %}All chapters{% endblock %}
+{% load voting_tags %}
+{% block contentview %}
+    {% include 'chapter_overview_snippet.html' %}
+                                     
+{% endblock %}
 
 {% block content %}
 
@@ -11,8 +16,23 @@
           
             <div class="chapter teaser">                     
                 <h2 class="title">
-                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h2>                                  
+                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a>
+                </h2>                                  
+                <div class="author meta float_left">
+                    {{ chapter.pub_date|timesince }} old | By: <i>{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}{% else %}{{ chapter.author.username }}{% endif %}</i> who has {{ chapter.author.get_profile.score }} points
+                </div>
                 
+                <div class="author meta float_right">
+                    {% for value, label in options %}  
+                    {% if chapter.get_score|slugify >= value %}
+                    <div class="ui-stars-star ui-stars-star-on ui-stars-star-disabled"><a title="">{{value}}</a></div>
+                    {% else %}
+                    <div class="ui-stars-star ui-stars-star-disabled"><a title="">{{value}}</a></div>
+                    {% endif %}
+		            {% endfor %}	
+                </div>
+    
+                <div class="clear"></div>
                 <div class="summary">
                     {{ chapter.summary_html|safe }}  
                 </div>
@@ -25,4 +45,7 @@
     
    <!--<a href="{# all_chapters #}">See all chapters</a>-->
   </div>   
+{% endblock %}
+
+{% block context %}
 {% endblock %}

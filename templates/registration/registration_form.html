@@ -19,7 +19,8 @@
     {% if field.errors %}<dd class="myerrors">{{ field.errors }}</dd>{% endif %}
 {% endfor %}
 </dl>
-
+<input type="hidden" name="next" id="id_next" value="{{ request.REQUEST.next }}" />
+{% comment %}{{ request.REQUEST.next }}{% endcomment %}
 <input type="submit" value="Register" />
 </form>
 

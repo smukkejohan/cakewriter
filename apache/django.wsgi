@@ -1,8 +1,8 @@
 import os
 import sys
 
-sys.path.append('/home/johan/srv/cakethebook')
-sys.path.append('/home/johan/srv/cakethebook/cakewriter')
+sys.path.append('/home/wwl/srv')
+sys.path.append('/home/wwl/srv/cakewriter')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'cakewriter.settings'
 

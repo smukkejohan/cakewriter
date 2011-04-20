@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
-
+from django.utils.text import truncate_words
 from django.db import models
 from django.contrib.auth.models import User, SiteProfileNotAvailable
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from registration.signals import user_activated
 from django.db.models.signals import post_save, post_delete
 from django.contrib.comments.signals import comment_was_posted
 from book.models import Chapter
 from datetime import datetime
 from django.contrib.comments.models import Comment
-
+from simplewiki.models import Article
 import djangoratings.models
 import voting.models
-
+from html_mailer.models import Message, Organizer
 from django.db.models import Sum
-
-
+from emencia.django.newsletter.models import Contact
+from markdown import markdown
+from django.contrib.sites.models import Site
 import logging
+from simplewiki.models import Revision
 
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
@@ -34,6 +36,8 @@ CTYPE_CHOICES = (
         ('vote', 'user voted on a comment'),    
         ('commentvoted','users comment was voted on by someone else'),
         ('comment', 'user submitted feedback to a chapter'),
+        ('wikicomment', 'user submitted feedbact to a wikichapter'),
+        ('editedarticle', 'user edited an article'),
     )
     
 class ScoreLog(models.Model):
@@ -180,6 +184,23 @@ def create_profile(sender, **kwargs):
    
 user_activated.connect(create_profile)
 
+#10 points when user EDIT ARTICLE
+
+def user_edited_article(sender, **kwargs):
+    revision = kwargs.get('instance')
+    try:
+        p = revision.revision_user.get_profile()
+    except ObjectDoesNotExist:
+        p = Profile(user=revision.revision_user)
+        p.save()
+        
+    log = ScoreLog(chapter=revision.article.chapter_related, 
+                profile=p, 
+                description='user edited an article', 
+                points=10, 
+                ctype="editedarticle")
+    log.save()
+post_save.connect(user_edited_article, sender=Revision)
 
 def user_commented(sender, **kwargs):
     
@@ -191,15 +212,135 @@ def user_commented(sender, **kwargs):
     except ObjectDoesNotExist:
         p = Profile(user=request.user)
         p.save()
+    chap = Chapter.objects.all()
+    for chapter in chap:
+        if comment.content_object==chapter:
+            log = ScoreLog(comment=comment, 
+                chapter=comment.content_object, 
+                profile=p, 
+                description='Submitted feedback to a chapter', 
+                points=3, 
+                ctype="comment")
+    '''
+        else:
+            log = ScoreLog(comment=comment, 
+                chapter=comment.content_object.chapter_related, 
+                profile=p, 
+                description='Submitted feedback to a wikichapter', 
+                points=3, 
+                ctype="wikicomment")
+    '''
+    art = Article.objects.all()
+    for article in art:
+        if comment.content_object==article:
+            log = ScoreLog(comment=comment, 
+                chapter=comment.content_object.chapter_related, 
+                profile=p, 
+                description='Submitted feedback to a wikichapter', 
+                points=3, 
+                ctype="wikicomment")
     
-    log = ScoreLog(comment=comment, 
-        chapter=comment.content_object, 
-        profile=p, 
-        description='Submitted feedback to a chapter', 
-        points=3, 
-        ctype="comment")
     log.save()
     
+    #--------------------------------AUTOEMAIL----------------------------------#
     
+    #Email send when someone has commented in a thread where another user has commented
+    contentpk = comment.object_pk
+    contenttype = comment.content_type
+    users = User.objects.all()
+    for user in users:
+        try:
+            contact = Contact.objects.get(email=user.email)
+        except:
+            contact = None
+        if contact:
+            if contact.subscriber==True:
+                try:
+                    usercomment = Comment.objects.get(content_type=contenttype, object_pk=contentpk, user=user)
+                except MultipleObjectsReturned:
+                    usercomment = Comment.objects.filter(content_type=contenttype, object_pk=contentpk, user=user)[0]       
+                except ObjectDoesNotExist:
+                    usercomment = None
+                if usercomment and user!=comment.user:
+                    message_text = "%s with %s points has commented on the same chapter as you: [%s](http://%s%s#c%s), saying: \"%s\"" % (comment.user,
+                                                                                                     comment.user.get_profile().score,
+                                                                                                     comment.content_object.title,
+                                                                                                     Site.objects.get_current(),
+                                                                                                     comment.content_object.get_absolute_url(),
+                                                                                                     comment.id,
+                                                                                                     truncate_words(comment.comment,8))
+                    organizer_message = Organizer(user=contact, message=message_text, when_added=datetime.now(), category=1)
+                    organizer_message.save()
+
 comment_was_posted.connect(user_commented)
 
+#Send email to users who have edited chapter when other user has edited the same chapter
+def revision_on_revision(sender, **kwargs):
+    revision = kwargs.get('instance')
+
+#Send new chapters to everybody that have subscribe (no registration is required)
+def email_when_chapter(sender, **kwargs):
+    chapter = kwargs.get('instance')
+    created = kwargs.get('created')
+    if created and chapter.visible:
+        for user in Contact.objects.all():
+            if user.subscriber==True:
+                if chapter.author.first_name and chapter.author.last_name:
+                    author = chapter.author.first_name+' '+chapter.author.last_name
+                else:
+                    author = chapter.author.username
+                message = "[%s](http://%s%s) by %s: \"%s\"" %(chapter.title,
+                                                                           Site.objects.get_current(),
+                                                                           chapter.get_absolute_url(),
+                                                                           author,
+                                                                           truncate_words(chapter.summary,20))
+                organizer_message = Organizer(user=user, message=message, when_added=datetime.now(), category=4)
+                organizer_message.save()
+post_save.connect(email_when_chapter, sender=Chapter)
+#--------------------------------EMAILCONTACTS----------------------------------#
+
+#Email-contacts created when user is saved
+from django.db.models import signals
+from emencia.django.newsletter.models import Contact
+from emencia.django.newsletter.models import MailingList
+
+def create_contact(sender, **kwargs):
+    user = kwargs.get('instance')
+    created = kwargs.get('created')
+    if created:
+        #contact, created = Contact.objects.get_or_create(email=user.email,
+        #                                                 defaults={'first_name':user.username,
+        #                                                           'last_name': '',
+        #                                                           'content_object':user})
+        try:
+            contact = Contact.objects.get(email=user.email)
+            if contact:
+                if contact.content_object==None:
+                    contact.content_object = user
+                    contact.first_name = user.username
+                    contact.save()
+        except ObjectDoesNotExist:
+            contact_final = Contact.objects.create(email=user.email, first_name=user.username, content_object=user)
+            contact_final.save()
+        #all users is made ready for the ManytoManyField
+        subscribers=[]
+        contacts = Contact.objects.all()
+        for e in contacts:
+            subscribers.append(e)
+        #Create Maillist with all users
+        mailinglists = MailingList.objects.filter(name='All users')
+        if mailinglists.count() > 0:
+            mailinglist = mailinglists[0]
+            mpk = mailinglist.pk
+            new_mailing = MailingList(pk=mpk,
+                                      name='All users',
+                                      description='Mailinglist with all users',
+                                      creation_date=mailinglist.creation_date,
+                                      modification_date=mailinglist.modification_date,)
+        else: 
+            new_mailing = MailingList(name='All users',
+                                      description='Mailinglist with all users')
+        new_mailing.save()
+        new_mailing.subscribers.add(*subscribers)
+        new_mailing.save()    
+post_save.connect(create_contact, sender=User)

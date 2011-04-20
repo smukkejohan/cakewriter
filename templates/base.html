@@ -4,14 +4,12 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-language" content="da" />
-    
-    <link rel="stylesheet" href="{{ MEDIA_URL }}css/960.css"
-        type="text/css" media="screen, projection" />
-
+    <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/960.css" type="text/css" media="screen, projection" />
     <!-- Main CSS -->
-    <link rel="stylesheet" type="text/css" media="all"
-        href="{{ MEDIA_URL }}css/screen.css" />
-        
+    <link rel="stylesheet" type="text/css" media="all" href="{{ MEDIA_URL }}css/screen.css" />
+    <link type='text/css' href='{{ MEDIA_URL }}/feedback/css/basic.css' rel='stylesheet' media='screen' />
+
     {% block css %}{% endblock %}
     
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/latest/" />
@@ -19,123 +17,120 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />    
     <title>{% block title %}Welcome{% endblock %} &middot; Winning without losing</title>
-    
-</head>
-<body>
 
-
-<div id="header" >
-    <div class="container_12 clearfix">
-        <div class="grid_7">
-            <div id="site-title">
-                <a href="/">Winning Without Losing</a>
-            </div>
-            <p class="tagline">
-                Discover how a new class of entrepreneurs have built their fortunes
-while living a happy and balanced life
-            </p>
-            <p class="tagline">
-                Beta launch 7<sup>th</sup> December 2010. Free hard copy book and accreditation in the book as early adopters to the top 100 contributors.
-            </p>
-        </div> 
-    </div>
-</div><!-- /header -->
-
-<div id="navigation">
-    <div class="container_12 clearfix">
-        <div class="grid_12">
-            <ul>
-                <li><a href="/who/">who they are</a></li>
-                <li><a href="/book/">learn their secrets</a></li>
-                <li><a href="/awards/">win awards</a></li>
-                <li><a href="/about/">about this project</a></li>
-            </ul>
-        </div>
-    </div>            
-</div>
-
-
-{% if messages %}
-<div id="messages" class="container_12 clearfix">
-  <ul>{% for message in messages %}
-    <li>{{ message }}</li>{% endfor %}</ul>
-</div>
-{% endif %}
-
-<div id="content">
-    <div class="container_12 clearfix">   
-        <div id="main-content-block" class="grid_7">
-            {% block content %}{% endblock %}
-        </div>
+    <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-20534632-1']);
+          _gaq.push(['_trackPageview']);
         
-        <div id="context-block" class="grid_3">
-            {% block context %}
-            
-            <div id="theauthors">
-                <h2>The authors</h2>
-                
-                
-                
-                <h3>Martin Bjergegaard</h3>             
-                <img width="100" src="{{ MEDIA_URL }}images/martin.jpg" alt="Martin"/>
-                <p>Entrepreneur and Partner at 
-<a href="http://www.rainmaking.dk" title="Rainmaking">Rainmaking</a></p>
-                
-                
-                <h3>Jordan Milne</h3>               
-                <img width="100" src="{{ MEDIA_URL }}images/jordan.jpg" alt="Jordan"/>
-                <p>Entrepreneur and Writer at
-                <a href="http://www.equity-lab.com/" title="Equity lab">Equity lab</a>.</p>
-            </div>
-            
-            
-            {% endblock %}
-        </div>
-    </div>   
-</div><!-- /content -->
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+    </script>
+{% block wiki_head %}
+{% endblock %}
+</head>
 
-<div id="footer">    
-    <div class="container_12 clearfix">
-        <div class="grid_7">
-            <p>Winning Without Losing is hosted on a <a href="http://linode.com">Linode</a>. The code is available Open Source at <a href="https://github.com/mrbichel/cakewriter">Github</a>.</p>
+<body>
+<div id="container">
+    <div id="header" class="middel">
+    <div id="header_inner"><div id="header_inner_inner" class="middel">
+        <a href="/"><img src="{{ MEDIA_URL }}img/logo.jpg" alt="logo" id="sitelogo" width="338" height="49" /></a>
+        <div id="navbar">
+                <a href="/about/">About</a> |
+                <a href="/howitworks/">How it works</a> |
+                <a href="/book/">Read Rate & Edit</a> |
+                <a href="/rolemodels/">Role Models</a><!-- |
+                <a href="/authors/">Authors</a>-->
         </div>
-    </div>
-</div><!-- /footer -->
-
-<div id="user-context">
-    <div class="content">
-      <ul id="user-menu">
-        {% if user.is_authenticated %}
-            <li id="username">{{ user.username }}</li>
-            <li id="user-score">
+        <div id="profile">
+            <ul>
+            {% if user.is_authenticated %}
+                <li id="user-score">
                 {% if user.get_profile %}
-                    {{ user.get_profile.score }}
-                {% else %}
-                    0
-                {% endif %} 
-                points</li>
-            <li><span class="small">In this beta version <br /> you need to <br /> refresh your browser <br /> to see new points.</span></li>
-            <li><a href="{% url auth_logout %}">log out</a></li>
+                        {{ user.get_profile.score }}
+                    {% else %}
+                        0
+                    {% endif %} 
+                    points</li>
+                <li id="username">{{ user.username }}</li>
+                
+                <li><a href="{% url auth_logout %}">log out</a></li>
+            {% else %}
+
+                <li><p><a href="{% url auth_login %}?next={{ request.path }}">Log in</a></p></li>
+                <li><p><a href="{% url registration_register %}?next={{ request.path }}">Join</a></p></li>
             
-        {% else %}
-            <li><a href="{% url registration_register %}">register</a></li>
-            <li><a href="{% url auth_login %}">log in</a></li>
-                 
-        {% endif %}
-      </ul>
+            {% endif %}
+            </ul>
         {% block usercontext %}
         {% endblock %}
-    </div>      
+        </div>
+    </div> </div>    
+    </div>
+    
+    {% if messages %}
+    <div id="messages" class="container_12 clearfix">
+        <ul>{% for message in messages %}
+            <li>{{ message }}</li>{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% block banner %}
+        <div id="all_header_container">
+        <div id="all_header_banner">
+            <h1>{% block sideheader %}{% endblock %}</h1>
+        </div>
+    </div>  
+    {% endblock %}
+        
+    <div id="content_container">
+        <div id="content">
+        {% block contentinner %}<div id="content_inner">{% endblock %}
+        {% block contentview %}{% endblock %}
+            <div id="main_content">
+                {% block content %}
+                
+                
+                {% endblock %}
+            </div>
+            {% block context %}
+            <div id="sidebar">
+                <h1>Role models</h1>
+                {%include 'random_rolemodel.html'%}
+                <div class="clear"></div>
+                {% include 'facebook_widget.html' %}     
+            </div>
+            {% endblock %}
+            <div class="clear"></div>
+        </div>
+        {% block contentinnerend %}</div>{% endblock %}
+    </div>
+    <div id="footer">
+        <p>Winning Without Losing is hosted on a 
+        <a href="http://linode.com">Linode</a>
+        . The code is available Open Source at 
+        <a href="https://github.com/mrbichel/cakewriter">Github</a>.</p>
+    </div>
+
+</div>
+<div id="feedback"><a href="https://spreadsheets.google.com/viewform?hl=en&formkey=dFZ3akJxNlhGN2k1NERmR3cwUVBlNVE6MQ#gid=0" class="basic"><img src="{{ MEDIA_URL }}img/feedback.jpg" width="30" height="100" /></a></div>
+<div id="basic-modal-content">
+<iframe src="https://spreadsheets.google.com/viewform?hl=en&formkey=dFZ3akJxNlhGN2k1NERmR3cwUVBlNVE6MQ#gid=0" width="760" height="639" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+</div>
+<div style='display:none'>
+    <img src='img/basic/x.png' alt='' />
 </div>
 
-
-{# js #}
 <script src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
-
 <script src="{{ MEDIA_URL }}js/jquery.ui.stars.min.js" type="text/javascript"></script>
-
 <script src="{{ MEDIA_URL }}js/base.js" type="text/javascript"></script>
+<script type='text/javascript' src='{{ MEDIA_URL }}feedback/js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='{{ MEDIA_URL }}feedback/js/basic.js'></script>
+
 
 </body>
 </html>

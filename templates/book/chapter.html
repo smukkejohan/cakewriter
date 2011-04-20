@@ -1,42 +1,50 @@
 {% extends 'base.html' %}
 {% load comments %}
 {% load voting_tags %}
-
-
 {% block title %}{{ chapter.title }}{% endblock %}
+{% block sideheader %}Chapter{% endblock %}
+
+{% block contentview %}
+    {% include 'chapter_overview_snippet.html' %}                                
+{% endblock %}
 
 {% block content %}
+{% if chapter.visible %}
 <div class="chapter clearfix">
-    <h1 class="title">{{ chapter.title }}</h1>
-    
-     <p class="author meta">
-       By {{ chapter.author.get_full_name }}
+    <div id="chapter_header">
+        <h1 id="chapter_title" class="float_left">{{ chapter.title }}</h1>
+        
+        <div id="chapter_info">
+            <div id="rating_average"class="float_left">
+                {{ chapter.rating.votes }} {% ifequal chapter.rating.votes 1 %}vote{%else%}votes{%endifequal%}<br />
+                <form id="avg" action="{% url rate-chapter chapter.id %}" method="post">
+                {% for value, label in options %}             
+                    <input type="radio" name="rate_avg" value="{{ value }}" title="{{ label }}" disabled="disabled" {% ifequal score value %}checked="checked"{% endifequal %}/>
+                {% endfor %}	
+                </form>		        
+            </div>
+            {% if related_wiki %}<a id="edit_button" class="button float_left" title="Edit chapter" href="{{ related_wiki.get_absolute_url }}/_edit/"></a>{% endif %} 
+        </div>
+        <div class="clear"></div>
+    </div>
+     <p class="author meta float_left">
+       Date: {{ chapter.pub_date }}
      </p>
-    
+     <p class="author meta float_right">
+    By {% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}
+    {% else %}{{ chapter.author.username }}{% endif %}
+     </p>
+     <div class="clear"></div>
     <div class="body">
-        {{ chapter.body_html|safe }}
+        {% if chapter.picture %}<img src="{{ chapter.picture.url_500x100000 }}" />{% endif %}
+        {{ chapter.body_html|safe }} 
+       
     </div>   
     
-    <p class="meta">
+    <p class="meta">{{ v }}
        This chapter was last updated: {{ chapter.mod_date|timesince }} ago.
      </p>
-     
-    
-    <h2>Your rating:</h2>
-    
-    <div id="rating">       
-     <form id="rating-widget" action="{% url rate-chapter chapter.id %}" method="post">
-             {% csrf_token %}
-             <select name="score">             
-             {% for value, label in options %}             
-                 <option value="{{ value }}" {% ifequal score value %}selected="selected"{% endifequal %}>{{ label }}</option>
-             {% endfor %}
-            </select>          
-            <input type="submit" value="Rate it!" />
-      </form></div>
   
-  
-    <p><a href="{% url all_chapters %}">Read more chapters</a></p>
      
 </div>
 
@@ -53,30 +61,30 @@
             
 
 
-        <div class="grid_4 alpha">
-            <h3 class="title">{{ comment.user_name }}:</h3>
+        <div class="comment_text alpha">
+            <div class="comment_header">
+            <h3 class="title float_left">{{ comment.user_name }}:</h3>
+            {%comment%}
+            <span class="float_left comment_score"> have {{comment.user.get_profile.score}} activity points</span>
+            {%endcomment%}
+            <div class="vote">
+            <div class="options">
+            <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="Vote up (click again to undo)"></span>
+            <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="Vote down (click again to undo)"></span>
+            </div>
+            <div class="status"><span class="vote-score">{{ score.score }}</span></div>                
+            </div> 
+            </div>
             
-            <p class="content">{{ comment.comment }}</p>
+            <p class="content">{{ comment.comment|linebreaks }}</p>
             <p class="meta">          
                 <span class="submitted">
                     Submitted {{ comment.submit_date|timesince }} ago
                 </span>
             </p>          
         </div>    
-            <div class="grid_3 omega vote clearfix">
-              <div class="options">
-                <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="This input is useful (click again to undo)">Yay!!!</span>
-                
-                <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="This input is not useful (click again to undo)">Meh...</span>
-              
-              </div>
-              
-              <div class="status">
-                <span class="vote-score">{{ score.score }}</span>
-              </div>
-                            
-            </div>        
-    </div>
+                   
+     </div>
     
 {% endfor %}
 
@@ -108,11 +116,49 @@
     </form>
 {% else %}
     <p>
-    <a href="/accounts/login/">Log in</a> or <a href="/accounts/register">register</a> to comment!
+    <a href="/accounts/login/?next={{ request.path }}">Log in</a> or <a href="/accounts/register?next={{ request.path }}">register</a> to comment!
     </p>
 {% endif %}
 </div>
 
 </div>
-    
+<div class="float_right">
+<div id="share_box">
+    <h3>Your rating</h3>
+    {% if user.is_anonymous %}
+            Please 
+            <a href="{% url auth_login %}?next={{ request.path }}#rating">log in</a>
+             or 
+            <a href="{% url registration_register %}?next={{ request.path }}#rating">register</a>
+             to vote
+        {% else %}
+        <br/>
+            <div id="rating">      
+                <form id="rating-widget" action="{% url rate-chapter chapter.id %}" method="post">
+                    {% csrf_token %}
+                    
+                    <select name="score">             
+                    {% for value, label in options %}             
+                        <option value="{{ value }}" {% ifequal value rating_on_chapter|slugify %}selected="selected"{% endifequal %}>{{ label }}</option>
+                    {% endfor %}
+                    </select>          
+                    <input type="submit" value="Rate it!" />
+                </form>
+            </div>
+       {% endif %}
+       <div id="share_buttons">
+       <iframe src="http://www.facebook.com/plugins/like.php?href={{"http://winning-without-loosing.com"|urlencode}}{{ chapter.get_absolute_url|urlencode }}&amp;layout=box_count&amp;show_faces=true&amp;width=40&amp;action=like&amp;font&amp;colorscheme=light&amp;height=65&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:65px;" allowTransparency="true"></iframe>
+
+    <iframe allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" class="twitter-share-button twitter-count-vertical" src="http://platform0.twitter.com/widgets/tweet_button.html?_=1302986533278&amp;count=vertical&amp;lang=en&amp;text={{ chapter.title|urlencode }}%20on%20Winning%20Without%20Losing&amp;url={{"http://winning-without-loosing.com"|urlencode}}{{ chapter.get_absolute_url|urlencode }}" style="width: 55px; height: 67px; " title="Twitter For Websites: Tweet Button"></iframe>
+    </div>
+    </div>
+      </div>
+{% else %}
+<h3>This chapter is not yet ready</h3>
+We are sorry, please wait for the chapter to be finished.
+{% endif %}
+{% endblock %}
+
+{% block context %}
+ 
 {% endblock %}

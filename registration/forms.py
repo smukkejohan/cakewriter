@@ -3,11 +3,11 @@ Forms and validation code for user registration.
 
 """
 
-
 from django.contrib.auth.models import User
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-
+from captcha.fields import CaptchaField
+from django.shortcuts import render_to_response
 
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"
@@ -41,6 +41,7 @@ class RegistrationForm(forms.Form):
                                 label=_("Password"))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
                                 label=_("Password (again)"))
+    captcha = CaptchaField()
     
     def clean_username(self):
         """

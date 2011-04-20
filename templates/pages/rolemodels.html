@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block title %}Rolemodels{% endblock %}
+{% block sideheader %}Rolemodels{% endblock %}
+
+{% block contentview %}
+    <div id="content_overview" style="width:200px!important;">
+        {% for rolemodel in rolemodels %}
+        <p><a href="#r{{ rolemodel.pk }}">{{ rolemodel.name }}</a></p>
+        {% endfor %} 
+    </div>                                 
+{% endblock %}
+
+{% block content %}
+{% for rolemodeltop in rolemodelpage %}
+{{rolemodeltop.content|markdown }}
+{% endfor %}
+<hr />
+ <div class="chapter-list">
+ 
+    {% for rolemodel in rolemodels %}          
+                <h2 class="rolemodels_title title" id="r{{ rolemodel.pk }}">{{ rolemodel.name }}</h2>
+                {% if rolemodel.picture %}<img src="{{ rolemodel.picture.url_500x100000 }}" />{% endif %}
+                {{ rolemodel.content_html|safe }}
+                <p class="right_align"><a href="#container">To top</a></p>
+                <hr    />         
+                 
+    {% endfor %} 
+    
+  </div>   
+{% endblock %}
+
+{% block context %}
+{% endblock %}

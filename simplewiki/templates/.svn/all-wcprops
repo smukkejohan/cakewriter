@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/40/trunk/templates
+END
+simplewiki_history.html
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/22/trunk/templates/simplewiki_history.html
+END
+simplewiki_create.html
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/templates/simplewiki_create.html
+END
+simplewiki_edit.html
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2/trunk/templates/simplewiki_edit.html
+END
+simplewiki_searchresults.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/21/trunk/templates/simplewiki_searchresults.html
+END
+simplewiki_error.html
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/12/trunk/templates/simplewiki_error.html
+END
+simplewiki_view.html
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/40/trunk/templates/simplewiki_view.html
+END
+simplewiki_base.html
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/38/trunk/templates/simplewiki_base.html
+END
+simplewiki_updateprogressbar.html
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/36/trunk/templates/simplewiki_updateprogressbar.html
+END
