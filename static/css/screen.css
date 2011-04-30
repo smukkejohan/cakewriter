@@ -78,8 +78,9 @@ body {
 #container{
     width: 100%;
 }
+
+/*****************Header*********************/
 #header {
-    /*letter-spacing: 1px;*/
     color:#008bb6;
     background-color: #FFF;
     padding-top:0px;
@@ -91,43 +92,56 @@ body {
 #header_inner{
     position: fixed;
     z-index:7;
-    height:61px;
     width:100%;    
     background-color: #FFF;
-    padding-top: 5px;
     -moz-box-shadow: 0px 3px 10px #000;
 	-webkit-box-shadow: 0px 3px 10px #000;
 	-box-shadow: 0px 3px 10px #000;
+}
+#header_ieshadow{
+    z-index:1;
+    background: #FFF;
+    position: fixed;
+    height: 1px;
+    width:100%;
     zoom: 1;
     filter:
-        progid:DXImageTransform.Microsoft.Shadow(color=#515151,direction=180,strength=10)
+        progid:DXImageTransform.Microsoft.Shadow(color=#515151,direction=180,strength=10);
 }
-}
+
 #header_inner_inner{
+    padding-top: 5px;
     width:960px;
+    height:61px;
+    margin:0px auto;
 }
 #header a:hover {
 	text-decoration: underline;
 }
 #sitelogo{
+    margin-top:5px;
     float:left;
     border:none;
 }
 #navbar{
     float:left;
-    margin:18px 0px 0px 80px;
-    width:400px;
+    margin:18px 0px 0px 70px;
+    width:390px;
 
 }
 #profile ul{
 	list-style-type: none;
 }
 #profile{
+    overflow: visible;
+    text-transform:none;
     font-size: 9px;
     float:right;
-    margin:11px 20px 0px 0px;
-    overflow: hidden;
+    margin:11px 0px 0px 20px;
     width:120px;
+}
+#profile-login{
+    text-transform:uppercase;
 }
 #user-score{
     font-size: 14px;
@@ -402,7 +416,7 @@ h1 a, h2 a, h3 a {}
 }
 .comment_score{
     margin-top:3px;
-    margin-left:20px;
+    margin-left:5px;
 }
 #share_box{
     margin-left:20px;
@@ -503,8 +517,20 @@ h1 a, h2 a, h3 a {}
   cursor: default !important;
 }
 /*WIKI*/
-.toggle_container{
+#wiki_history_table .toggle_container{
     width:650px;
+}
+.toggle_container{
+    width:610px;
+}
+.activity{
+    cursor: pointer;
+    background-color:#eee;
+    padding:7px 5px 0px 5px!important;
+    border-bottom: #ccc 3px solid;
+    text-shadow: 0px 1px white;
+    margin-bottom:15px;
+    margin-top:15px;
 }
 .button_container{
     height:100px;
@@ -610,3 +636,108 @@ input:focus, textarea:focus{
 .rolemodels_title{
     margin-top: -100px; padding-top: 100px; display: block;
 }
+
+
+
+/*NOTIFICATION*/
+#info{
+    font-size:12px;
+	width:30px;
+	height:40px;
+	list-style:none;
+	margin:0px 5px 0px 0px;
+    padding: 0px;
+}
+#info li{
+	margin-right:10px;
+	position:relative;
+	display:block;
+	list-style: none;
+}
+#info a.infobuttons{
+    background-color: #DDD;
+    background-image: url(../img/notification-logo.jpg);
+    background-position: -2px -1px;
+	display:block;
+	padding:5px 6px;
+	border:#999 solid 1px;
+	color:#000;
+	text-decoration:none;
+	/*border:2px solid #c6b96d;*/
+	width:16px;
+	height:28px;
+	-webkit-box-shadow:0px 0px 1px #ccc;
+    -moz-box-shadow:0px 0px 1px #ccc;
+	box-shadow:0px 0px 1px #ccc;
+
+}
+#info a.infobuttons:hover, #info li:hover a.infobuttons{
+    background-image: url(../img/notification-logo-hover.jpg);
+}
+#info ul{
+	position:absolute;
+	left:-99999px;
+	display: block;
+	margin:0px;
+	padding:0px;
+	width:300px;
+	border:1px solid #333;
+	opacity:0;
+    -webkit-transition:0.25s linear opacity;
+    -moz-transition: 0.25s linear opacity;
+}
+#info ul li{
+	border-bottom-color: #eeeeee;
+	float:none;
+	margin:0px;
+	display:block;
+	padding:5px;
+	color: #464646;
+	background:white;
+	text-decoration:none;
+	border-bottom:solid 1px;
+	min-height:50px;
+}
+#info li:hover > ul{ 
+    left:-272px;
+	display: block;
+	opacity:1;
+}
+#info ul li:hover{
+	background-color: #f1f1f1;
+}
+#info ul li a{
+	color: #c35a39;
+}
+#info ul li a:hover{
+	text-decoration: none;
+	color: white;
+	background-color: #e78e4c;
+}
+#info #notifications-top{
+    border-bottom-style: solid;
+    border-bottom-color: #d1d1d1;
+    background-color: #f4f4f4;
+    font-weight: bold;
+	float:none;
+	margin:0px;
+	display:block;
+	padding:5px;
+	color: #404040;
+	text-decoration:none;
+	border-bottom-width: 1px;
+	min-height:10px;
+}
+#info #notifications-count{
+    display: block;
+    position: absolute;
+    z-index:20;
+    right:-13px;
+    top:-3px;
+    padding:2px;
+    -webkit-border-radius:3px;
+    color:#FFF;
+    background-color: #ff1218 ;
+}
+
+/* USER SIDE */

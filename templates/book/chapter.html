@@ -63,10 +63,9 @@
 
         <div class="comment_text alpha">
             <div class="comment_header">
-            <h3 class="title float_left">{{ comment.user_name }}:</h3>
-            {%comment%}
-            <span class="float_left comment_score"> have {{comment.user.get_profile.score}} activity points</span>
-            {%endcomment%}
+            <span class="float_left comment_score" style="margin-right:5px;">By </span>
+            <h3 class="title float_left"> {{ comment.user_name }}</h3>
+            <span class="float_left comment_score">who has <b>{{comment.user.get_profile.score}} Bi-winning points.</b></span>
             <div class="vote">
             <div class="options">
             <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="Vote up (click again to undo)"></span>

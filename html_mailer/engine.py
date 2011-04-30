@@ -5,7 +5,7 @@ import logging
 from lockfile import FileLock, AlreadyLocked, LockTimeout
 from socket import error as socket_error
 
-from html_mailer.models import Message, DontSendEntry, MessageLog, Organizer
+from html_mailer.models import Message, DontSendEntry, MessageLog
 
 from django.conf import settings
 from django.core.mail import send_mail as core_send_mail
@@ -43,15 +43,16 @@ def organize_all():
     from datetime import datetime, timedelta
     from markdown import markdown
     from django.contrib.sites.models import Site
+    from usermessage.models import UserMessage
     now = datetime.now()
     contacts = Contact.objects.all()
     for contact in contacts:
         if contact.subscriber==True:    
             message = ''
-            c_c = Organizer.objects.filter(user=contact, category=1)
-            r_r = Organizer.objects.filter(user=contact, category=2)
-            c_r = Organizer.objects.filter(user=contact, category=3)
-            nc = Organizer.objects.filter(user=contact, category=4)
+            c_c = UserMessage.objects.filter(contact=contact, category=1)
+            r_r = UserMessage.objects.filter(contact=contact, category=2)
+            c_r = UserMessage.objects.filter(contact=contact, category=3)
+            nc = UserMessage.objects.filter(contact=contact, category=4)
             #count how many of each
             inactive_count = 0
             c_r_count = 0
@@ -60,32 +61,32 @@ def organize_all():
             new_chapter_count = 0
             #Only for users
             if contact.content_object:
-                if now - contact.content_object.last_login>timedelta(7) and now - contact.content_object.last_login<timedelta(8):
+                if now - contact.content_object.last_login>timedelta(7) and now - contact.content_object.last_login<timedelta(13):
                     message+="We haven't seen you for a while on Winning-Without-Losing. New chapters have been added, go check them out here: [Click here](%s)\n\n" % Site.objects.get_current()
                     inactive_count+=1
                 if c_r:
                     message+= '###New comment on one of your chapter revisions\n'
                 for mails in c_r:
-                    message+='%s\n\n' % mails.message
+                    message+='%s\n\n' % mails.content_mail
                     mails.delete()
                     c_r_count+=1
                 if r_r:
                     message+= '###New chapter revision of the same chapter you have edited\n'
                 for mails in r_r:
-                    message+='%s\n\n' % mails.message
+                    message+='%s\n\n' % mails.content_mail
                     mails.delete()
                     r_r_count+=1
                 if c_c:
                     message+= '###New comment where you have commented\n'
                 for mails in c_c:
-                    message+='%s\n\n' % mails.message
+                    message+='%s\n\n' % mails.content_mail
                     mails.delete()
                     c_c_count+=1
             #New chapters for all subscribers
             if nc:
                 message+= '###New chapters have been submitted!\n'
             for mails in nc:
-                message+='%s\n\n' % mails.message
+                message+='%s\n\n' % mails.content_mail
                 mails.delete()
                 new_chapter_count+=1
             #finish

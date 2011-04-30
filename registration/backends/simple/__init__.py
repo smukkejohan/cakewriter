@@ -55,7 +55,10 @@ class SimpleBackend(object):
 
     def post_registration_redirect(self, request, user):
         if 'next' in request.REQUEST and request.REQUEST['next']:
-            next = request.REQUEST['next']         
+            if request.REQUEST['next']=="/accounts/logout/":
+                next = '/'
+            else:
+                next = request.REQUEST['next']
         else:
             next = '/'
         return (next, (), {})

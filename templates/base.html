@@ -1,3 +1,4 @@
+{% load markup %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="da" lang="da" dir="ltr">
@@ -34,9 +35,29 @@
 </head>
 
 <body>
+
+
 <div id="container">
+    {%comment%}
+<div id="notify-container">
+    {% if usermessages %}
+    {% for usermessage in usermessages %}
+        <div class="notify-container" id="notify--{{usermessage.pk}}">
+        <form id="{{usermessage.pk}}" method="post" action="/usermessage/delete/">
+        {% csrf_token %}
+        <input type="submit" name="submit" value="X" onclick="" />
+        <input type="hidden" name="usermessage" value="{{usermessage.pk}}" />
+        <input type="hidden" name="next" value="{{request.get_full_path}}" />
+        </form>
+        <span class="notify-text">{{ usermessage.content|markdown }}</span>
+        </div>
+    {% endfor %}
+    {% endif %}
+</div>
+{%endcomment%}
     <div id="header" class="middel">
-    <div id="header_inner"><div id="header_inner_inner" class="middel">
+    <div id="header_inner">
+    <div id="header_inner_inner">
         <a href="/"><img src="{{ MEDIA_URL }}img/logo.jpg" alt="logo" id="sitelogo" width="338" height="49" /></a>
         <div id="navbar">
                 <a href="/about/">About</a> |
@@ -46,38 +67,52 @@
                 <a href="/authors/">Authors</a>-->
         </div>
         <div id="profile">
-            <ul>
             {% if user.is_authenticated %}
-                <li id="user-score">
+                <span id="user-score">
                 {% if user.get_profile %}
                         {{ user.get_profile.score }}
                     {% else %}
                         0
                     {% endif %} 
-                    points</li>
-                <li id="username">{{ user.username }}</li>
-                
-                <li><a href="{% url auth_logout %}">log out</a></li>
+                    points</span>
+        <ul id="info" class="float_left">
+        	<li>
+                {% ifequal usermessages.count 0 %}{%else%}<span id="notifications-count">{{ usermessages.count }}</span>{% endifequal %}
+        		<a class="infobuttons" title="Notifications" href="#"></a>
+        
+        		<ul>
+        		    <li id="notifications-top">Notifications</li>
+        		    {% if usermessages %}
+                    {% for usermessage in usermessages %}
+                        <li>{{ usermessage.content|markdown }}</li>
+                    {% endfor %}
+                    {% else %}
+                        <li>No resent updates</li>
+                    {% endif %}
+        		</ul>
+        	</li>
+        </ul>
+            <span id="profile-login" class="float_left">
+                <a href="{% url user-overview username=user.username %}">{{ user.username }}</a><br />
+                <a href="{% url auth_logout %}">log out</a>
+            </span>
             {% else %}
-
-                <li><p><a href="{% url auth_login %}?next={{ request.path }}">Log in</a></p></li>
+            <ul id="profile-login">
+                <li><p><a href="{% url auth_login %}?next={% ifequal request.path "/accounts/logout/" %}{% else %}{{ request.path }}{% endifequal %}">Log in</a></p></li>
                 <li><p><a href="{% url registration_register %}?next={{ request.path }}">Join</a></p></li>
-            
-            {% endif %}
             </ul>
+            {% endif %}
+            
         {% block usercontext %}
         {% endblock %}
         </div>
-    </div> </div>    
     </div>
-    
-    {% if messages %}
-    <div id="messages" class="container_12 clearfix">
-        <ul>{% for message in messages %}
-            <li>{{ message }}</li>{% endfor %}
-        </ul>
+    </div>    
     </div>
-    {% endif %}
+    <!--[if IE]>
+    <div id="header_ieshadow">
+    </div>
+    <![endif]-->
     {% block banner %}
         <div id="all_header_container">
         <div id="all_header_banner">
@@ -88,6 +123,7 @@
         
     <div id="content_container">
         <div id="content">
+        
         {% block contentinner %}<div id="content_inner">{% endblock %}
         {% block contentview %}{% endblock %}
             <div id="main_content">

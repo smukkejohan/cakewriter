@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{ user.username }}{% endblock %}
+{% block sideheader %}Users{% endblock %}
+
+{% block contentview %}
+<div id="content_overview">
+{% for user in users %}
+<p><a href="{% url user-overview username=user.username %}">{{ user.username }}</a> <span class="new">{% if user.get_profile.score %}{{ user.get_profile.score }}{% else %}0{% endif %} points</span></p>
+{% endfor %}
+</div>                                     
+{% endblock %}
+
+
+{% block content %}
+{% if profile %}
+<table cellpadding="20px" width="650px">
+<tr valign="top">
+    <td width="180px">
+        <img src="{%if profile.get_profile.photo.url_150x150 %}{{profile.get_profile.photo.url_150x150}}{%else%}{{MEDIA_URL}}img/rolemodel.jpg{%endif%}" />
+    </td>
+    <td width="200px">
+        <h1>{{profile.username}}</h1><br />
+        <h3>{{profile.first_name}} {{profile.last_name}}</h3>
+        {% if profile.get_profile.firm %}<p>Firm: {{profile.get_profile.firm}}</p>{%endif%}
+    </td>
+    <td align="right" width="150px">
+        Bi-winning points:<br /><h1>{% if profile.get_profile.score %}{{profile.get_profile.score}}{%else%}0{%endif%}</h1>
+        {% if editable %}<a class="button" href="/users/edit/">Edit</a>{% endif %}
+    </td>
+</tr >
+    
+<tr valign="top">
+    <td colspan="3">
+    <h3>Websites</h3>
+    <p>Facebook: {% if profile.get_profile.facebook %}{{profile.get_profile.facebook|urlize}}{%else%}None{%endif%}</p>
+    <p>Twitter: {% if profile.get_profile.twitter %}{{profile.get_profile.twitter|urlize}}{%else%}None{%endif%}</p>
+    <p>www: {% if profile.get_profile.www %}{{profile.get_profile.www|urlize}}{%else%}None{%endif%}</p>
+    <p>Blog: {% if profile.get_profile.blog %}{{profile.get_profile.blog|urlize}}{%else%}None{%endif%}</p>
+    </td>
+</tr>
+{% if activity %}
+<tr valign="top">
+    <td colspan="3">
+    <hr />
+    <h1>Activity</h1>
+    {% if usercomments %}
+    <div class="trigger activity"><h3 class="float_left">Comments posted</h3><h3 class="float_right">{{ usercomments.count }}</h3><div class="clear"></div></div>
+    <div class="toggle_container">
+    {% for comment in usercomments %}
+    {{comment.user}} has posted a comment on <a href="{{comment.content_object.get_absolute_url}}">{{comment.content_object.title}}</a> starting with: "{{comment.comment|truncatewords:8}}"<br />
+    {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if userchapters %}
+    <div class="trigger activity"><h3 class="float_left">Chapters created</h3><h3 class="float_right">{{ userchapters.count }}</h3><div class="clear"></div></div>
+    <div class="toggle_container">
+    {% for chapter in userchapters %}
+    {{chapter.author}} has written the chapter: <a href="{{chapter.get_absolute_url}}">{{chapter.title}}</a><br />
+    {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if userratings %}
+    <div class="trigger activity"><h3 class="float_left">Chapters rated</h3><h3 class="float_right">{{ userratings.count }}</h3><div class="clear"></div></div>
+    <div class="toggle_container">
+    {% for ratings in userratings %}
+    {{ratings.user}} has given <a href="{{ratings.content_object.get_absolute_url}}">{{ratings.content_object.title}}</a> {{ ratings.score }} stars<br />
+    {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if userrevisions %}
+    <div class="trigger activity"><h3 class="float_left">Chapters rated</h3><h3 class="float_right">{{ userrevisions.count }}</h3><div class="clear"></div></div>
+    <div class="toggle_container">
+    {% for revision in userrevisions %}
+    {{revision.user}} has edited <a href="{{revision.article.get_absolute_url}}">{{revision.article.title}}</a>. {{ revision.counter|ordinal }} revision<br />
+    {% endfor %}
+    </div>
+    {% endif %}
+    </td>
+</tr>
+{% endif %}
+</table>
+
+{% else %}
+No user with the username "{{username}}" exists.
+{% endif %}
+{% endblock %}
+
+
+{% block context %}
+{% endblock %}

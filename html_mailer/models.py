@@ -9,13 +9,6 @@ PRIORITIES = (
     ('3', 'low'),
     ('4', 'deferred'),
 )
-CATEGORY = (
-    ('1', 'New comment on your comment'),
-    ('2', 'New revision on your revision'),
-    ('3', 'New comment on your revision'),
-    ('4', 'New chapters'),
-)
-
 
 class MessageManager(models.Manager):
     
@@ -87,12 +80,6 @@ class Message(models.Model):
             return True
         else:
             return False
-    
-class Organizer(models.Model):
-    user = models.ForeignKey(Contact)
-    message = models.TextField()
-    when_added = models.DateTimeField(default=datetime.now)
-    category = models.CharField(max_length=1, choices=CATEGORY, default='2')
 
 class DontSendEntryManager(models.Manager):
     

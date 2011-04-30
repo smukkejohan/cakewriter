@@ -3,7 +3,7 @@ from django.utils.text import truncate_words
 from django.db import models
 from django.contrib.auth.models import User, SiteProfileNotAvailable
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from registration.signals import user_activated
+from registration.signals import user_activated, user_registered
 from django.db.models.signals import post_save, post_delete
 from django.contrib.comments.signals import comment_was_posted
 from book.models import Chapter
@@ -12,24 +12,42 @@ from django.contrib.comments.models import Comment
 from simplewiki.models import Article
 import djangoratings.models
 import voting.models
-from html_mailer.models import Message, Organizer
+from html_mailer.models import Message
+from usermessage.models import UserMessage
 from django.db.models import Sum
 from emencia.django.newsletter.models import Contact
 from markdown import markdown
 from django.contrib.sites.models import Site
 import logging
 from simplewiki.models import Revision
+from thumbs import ImageWithThumbsField
+from settings import MEDIA_ROOT
+import os
 
 class Profile(models.Model):
+    def get_profile_path(instance, filename):
+        dir_for_field = "users/%s/profile_pics/%s" % (instance.user,filename)
+        dir_without_filename = "/users/%s/profile_pics/" % instance.user
+        full_dir = MEDIA_ROOT+dir_without_filename
+        if not os.path.exists(full_dir):
+            os.makedirs(full_dir)
+        return dir_for_field
+    
     user = models.ForeignKey(User, unique=True)
     score = models.IntegerField(default=0)
     level = models.IntegerField(default=0)
-    
-    def save(self, *args, **kwargs):
+    www = models.URLField(blank=True, null=True)
+    facebook = models.URLField(blank=True, null=True)
+    twitter = models.URLField(blank=True, null=True)
+    blog = models.URLField(blank=True, null=True)
+    firm = models.CharField(max_length=100,blank=True, null=True)
+    photo = ImageWithThumbsField(upload_to=get_profile_path, blank=True, null=True,sizes=((150,150),))
+            
+    def save(self, force_insert=False, force_update=False, *args, **kwarg):
         if not self.score:
-            self.score = 0
-        super(Profile, self).save(*args, **kwargs)
-
+            self.score = 0    
+        super(Profile, self).save(*args, **kwarg)
+    
 CTYPE_CHOICES = (
         ('custom', 'custom'),
         ('rate', 'user rated a chapter for the first time'),
@@ -79,7 +97,7 @@ def rating_submitted(sender, **kwargs):
     created = kwargs.get('created')
     
     chapter = instance.content_type.get_object_for_this_type(pk=instance.object_id)
-        
+    
     try:
         p = instance.user.get_profile()
     except ObjectDoesNotExist:
@@ -182,7 +200,7 @@ def create_profile(sender, **kwargs):
         del request.session['pendingrating_score']
         
    
-user_activated.connect(create_profile)
+user_registered.connect(create_profile)
 
 #10 points when user EDIT ARTICLE
 
@@ -212,91 +230,25 @@ def user_commented(sender, **kwargs):
     except ObjectDoesNotExist:
         p = Profile(user=request.user)
         p.save()
-    chap = Chapter.objects.all()
-    for chapter in chap:
-        if comment.content_object==chapter:
-            log = ScoreLog(comment=comment, 
-                chapter=comment.content_object, 
-                profile=p, 
-                description='Submitted feedback to a chapter', 
-                points=3, 
-                ctype="comment")
-    '''
-        else:
-            log = ScoreLog(comment=comment, 
-                chapter=comment.content_object.chapter_related, 
-                profile=p, 
-                description='Submitted feedback to a wikichapter', 
-                points=3, 
-                ctype="wikicomment")
-    '''
-    art = Article.objects.all()
-    for article in art:
-        if comment.content_object==article:
-            log = ScoreLog(comment=comment, 
-                chapter=comment.content_object.chapter_related, 
-                profile=p, 
-                description='Submitted feedback to a wikichapter', 
-                points=3, 
-                ctype="wikicomment")
+    log = None
+    if isinstance(comment.content_object, Chapter):
+        log = ScoreLog(comment=comment, 
+            chapter=comment.content_object, 
+            profile=p, 
+            description='Submitted feedback to a chapter', 
+            points=3, 
+            ctype="comment")
+    if isinstance(comment.content_object, Article):
+        log = ScoreLog(comment=comment, 
+            chapter=comment.content_object.chapter_related, 
+            profile=p, 
+            description='Submitted feedback to a wikichapter', 
+            points=3, 
+            ctype="wikicomment")
     
     log.save()
-    
-    #--------------------------------AUTOEMAIL----------------------------------#
-    
-    #Email send when someone has commented in a thread where another user has commented
-    contentpk = comment.object_pk
-    contenttype = comment.content_type
-    users = User.objects.all()
-    for user in users:
-        try:
-            contact = Contact.objects.get(email=user.email)
-        except:
-            contact = None
-        if contact:
-            if contact.subscriber==True:
-                try:
-                    usercomment = Comment.objects.get(content_type=contenttype, object_pk=contentpk, user=user)
-                except MultipleObjectsReturned:
-                    usercomment = Comment.objects.filter(content_type=contenttype, object_pk=contentpk, user=user)[0]       
-                except ObjectDoesNotExist:
-                    usercomment = None
-                if usercomment and user!=comment.user:
-                    message_text = "%s with %s points has commented on the same chapter as you: [%s](http://%s%s#c%s), saying: \"%s\"" % (comment.user,
-                                                                                                     comment.user.get_profile().score,
-                                                                                                     comment.content_object.title,
-                                                                                                     Site.objects.get_current(),
-                                                                                                     comment.content_object.get_absolute_url(),
-                                                                                                     comment.id,
-                                                                                                     truncate_words(comment.comment,8))
-                    organizer_message = Organizer(user=contact, message=message_text, when_added=datetime.now(), category=1)
-                    organizer_message.save()
-
 comment_was_posted.connect(user_commented)
 
-#Send email to users who have edited chapter when other user has edited the same chapter
-def revision_on_revision(sender, **kwargs):
-    revision = kwargs.get('instance')
-
-#Send new chapters to everybody that have subscribe (no registration is required)
-def email_when_chapter(sender, **kwargs):
-    chapter = kwargs.get('instance')
-    created = kwargs.get('created')
-    if created and chapter.visible:
-        for user in Contact.objects.all():
-            if user.subscriber==True:
-                if chapter.author.first_name and chapter.author.last_name:
-                    author = chapter.author.first_name+' '+chapter.author.last_name
-                else:
-                    author = chapter.author.username
-                message = "[%s](http://%s%s) by %s: \"%s\"" %(chapter.title,
-                                                                           Site.objects.get_current(),
-                                                                           chapter.get_absolute_url(),
-                                                                           author,
-                                                                           truncate_words(chapter.summary,20))
-                organizer_message = Organizer(user=user, message=message, when_added=datetime.now(), category=4)
-                organizer_message.save()
-post_save.connect(email_when_chapter, sender=Chapter)
 #--------------------------------EMAILCONTACTS----------------------------------#
 
 #Email-contacts created when user is saved

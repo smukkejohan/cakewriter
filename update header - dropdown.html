@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Titel</title>
+
+<style type="text/css"> 
+#nav{
+    font-family: Verdana;
+    font-size: 12px;
+	float:left;
+	width:100%;
+	list-style:none;
+	margin-bottom:10px;
+}
+#nav li{
+	float:left;
+	margin-right:10px;
+	position:relative;
+	display:block;
+}
+#nav a#updates{
+	display:block;
+	padding:5px;
+	color:#000;
+	background:#CCC;
+	text-decoration:none;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+}
+#nav a#updates:hover{
+	background:#eeeeee;
+}
+
+#nav li:hover a#updates{
+	background:#EEE;
+}
+#nav ul{
+	list-style:none;
+	position:absolute;
+	left:-99999px;
+	opacity:0;
+	-webkit-transition:0.25s linear opacity;
+	margin:0px;
+	padding:0px;
+	width:300px;
+	border:1px solid #333;
+}
+#nav ul li{
+	border-bottom-color: #eeeeee;
+	float:none;
+	margin:0px;
+	display:block;
+	padding:5px;
+	color: #464646;
+	background:white;
+	text-decoration:none;
+	border-bottom:solid 1px;
+	min-height:50px;
+}
+#nav li:hover ul{ 
+	left:0px; 
+	opacity:1;
+}
+#nav li:hover{
+	background-color: #f1f1f1;
+}
+#nav ul li a{
+	color: #c35a39;
+}
+#nav ul li a:hover{
+	text-decoration: none;
+	color: white;
+	background-color: #e78e4c;
+}
+</style>
+
+</head>
+<body>
+<ul id="nav">
+	<li>
+		<a id="updates" href="#">Updates</a>
+
+		<ul>
+			<li>This is some text <a href="#">Jordan has commented on the same chapter as you</a></li>
+			<li>Another example <a href="#">with a link</a> and to much text to be shown, so it will reach the limit of what the "li" is capable of. But that is no problem because it will expand</li>
+
+		</ul>
+	</li>
+</ul>
+</body>
+</html>

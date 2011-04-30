@@ -14,7 +14,7 @@ from django.core import serializers
 from django.contrib.contenttypes.models import ContentType
 from simplewiki.models import Article
 from djangoratings.models import Vote
-
+from usermessage.models import UserMessage
 def api_get_chapters(request):
     chapters = Chapter.objects.all()
     
@@ -53,7 +53,7 @@ def all_chapters(request):
     )
  
     
-def chapter(request, chapter_id): 
+def chapter(request, chapter_id):
     chapters = Chapter.objects.filter(visible=True)
     chapter = get_object_or_404(Chapter, pk=chapter_id)
     chapter_type = ContentType.objects.get_for_model(chapter)
@@ -73,7 +73,14 @@ def chapter(request, chapter_id):
         score = chapter.rating.score
     else:
         score = chapter.rating.score / chapter.rating.votes
-    
+    if request.GET and not request.user.is_anonymous():
+        if 'usermessage' in request.GET:
+            usermessage_id = int(request.GET['usermessage'])
+            try:
+                usermessage = UserMessage.objects.get(pk=usermessage_id, user=request.user)
+                usermessage.delete()
+            except:
+                error = "Notification could not be deleted"
     return render_to_response(
         'book/chapter.html', {'related_wiki': related_wiki, 'chapter': chapter, 'chapters': chapters, 'options': CHAPTER_RATING_OPTIONS, 'score': str(score), 'rating_on_chapter':vote},
         context_instance = RequestContext(request)

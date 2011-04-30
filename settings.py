@@ -43,6 +43,7 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     'pages.context_processors.random_rolemodel',
+    'usermessage.context_processor.usermessage',
     'emencia.django.newsletter.context_processors.media',
 )
 
@@ -110,6 +111,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.markup',
     'django.contrib.flatpages',
+    'django.contrib.humanize',
     'djangoratings',
     'book',
     'accounts',
@@ -126,6 +128,7 @@ INSTALLED_APPS = (
     #'django_evolution',
     #'mailer',
     'html_mailer',
+    'usermessage',
     #'quiz',
 )
 

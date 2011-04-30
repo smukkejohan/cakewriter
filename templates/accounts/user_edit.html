@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}edit profile{% endblock %}
+{% block sideheader %}Edit profile{% endblock %}
+
+{% block contentview %}
+<div id="content_overview">
+{% for user in users %}
+<p><a href="{% url user-overview username=user.username %}">{{ user.username }}</a> <span class="new">{{ user.get_profile.score }}</span></p>
+{% endfor %}
+</div>                                     
+{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}</h1>
+<form action="" enctype="multipart/form-data" method="post">
+{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+<input type="submit" value="Submit" />
+</form>
+{% endblock %}
+
+{% block context %}
+{% endblock %}

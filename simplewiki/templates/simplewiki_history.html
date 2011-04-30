@@ -21,7 +21,7 @@
 </table>
         {% for revision in wiki_history %}
         <div class="trigger">
-            <table width="650px">
+            <table width="650px" class="activity">
             <tr style="border-top: 1px" {%cycle '' 'class="dark"'%}>
                 <td width="150px">
                     <input  type="radio" name="revision" id="{{ revision.id }}" value="{{ revision.id }}"{%ifequal wiki_article.current_revision.id revision.id%} checked{%endifequal%} />

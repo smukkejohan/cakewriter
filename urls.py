@@ -11,11 +11,11 @@ urlpatterns = patterns('',
     
     (r'^book/', include('cakewriter.book.urls')),
     
-    #(r'^u/', include('accounts.urls')),
+    (r'^users/', include('accounts.urls')),
     
     (r'^accounts/', include('registration.urls')),
     
-     (r'^rolemodels/$', include('pages.urls')),
+    (r'^rolemodels/$', include('pages.urls')),
     
     (r'^c/', include('django.contrib.comments.urls')),
     
@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     (r'^tinymce/', include('tinymce.urls')),
     (r'^newsletters/', include('emencia.django.newsletter.urls')),
     (r'^subscribe/$', 'views.subscribe_resent_chapters'),
+    (r'^usermessage/', include('usermessage.urls')),
     #(r'^quiz/', include('quiz.urls'))
 )
 

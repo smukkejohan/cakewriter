@@ -11,7 +11,7 @@ class ScoreLogInline(admin.TabularInline):
 class ProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('user', 'score', 'level')
+            'fields': ('user', 'score', 'level','www','facebook','twitter','blog','firm','photo')
         }),
     )
     list_display = ('user', 'score', 'level')
