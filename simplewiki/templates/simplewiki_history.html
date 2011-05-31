@@ -12,9 +12,10 @@
 {% csrf_token %}
 <table id="wiki_history_table" width="650px">
     <thead>
-        <tr>
+        <tr class="left_align">
+            <th width="30px"></th>
             <th width="150px" id="revision">Revision</th>
-            <th width="250px" id="comment">Comment</th>
+            <th width="220px" id="comment">Comment</th>
             <th width="250px" id="modified">Modified</th>
         </tr>
     </thead>
@@ -23,6 +24,7 @@
         <div class="trigger">
             <table width="650px" class="activity">
             <tr style="border-top: 1px" {%cycle '' 'class="dark"'%}>
+                <td width="30px" class="history_plus">+</td>
                 <td width="150px">
                     <input  type="radio" name="revision" id="{{ revision.id }}" value="{{ revision.id }}"{%ifequal wiki_article.current_revision.id revision.id%} checked{%endifequal%} />
                     <label for="{{ revision.id }}">
@@ -34,14 +36,14 @@
                         {% endif %}
                     </label>
                 </td>
-                <td width="250px">{% if revision.revision_text %}{{ revision.revision_text}}{% else %}<i>None</i>{% endif %}</td>
+                <td width="220px">{% if revision.revision_text %}{{ revision.revision_text}}{% else %}<i>None</i>{% endif %}</td>
                 <td width="250px">{{ revision.get_user}} <i>{{ revision.revision_date|date}} {{ revision.revision_date|time}}</i>
                 </td>
             </tr>
             </table>
         </div>
            
-            <div class="toggle_container">
+            <div class="toggle_container t650">
             <table width="650px">
             <tr>
                 <td class="diff">{{ revision.get_diff|markdown|safe }}</td>

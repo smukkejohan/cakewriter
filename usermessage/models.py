@@ -19,6 +19,8 @@ CATEGORY = (
     ('3', 'New comment on your revision'),
     ('4', 'New chapters'),
 )
+class StandardUserMessage(models.Model):
+    content = models.TextField()
 
 class UserMessage(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)

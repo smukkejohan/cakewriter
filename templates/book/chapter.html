@@ -64,7 +64,7 @@
         <div class="comment_text alpha">
             <div class="comment_header">
             <span class="float_left comment_score" style="margin-right:5px;">By </span>
-            <h3 class="title float_left"> {{ comment.user_name }}</h3>
+            <a href="/users/username/{{comment.user.username}}/"><h3 class="title float_left"> {{ comment.user_name }}</h3></a>
             <span class="float_left comment_score">who has <b>{{comment.user.get_profile.score}} Bi-winning points.</b></span>
             <div class="vote">
             <div class="options">

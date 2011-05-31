@@ -78,7 +78,7 @@
         <ul id="info" class="float_left">
         	<li>
                 {% ifequal usermessages.count 0 %}{%else%}<span id="notifications-count">{{ usermessages.count }}</span>{% endifequal %}
-        		<a class="infobuttons" title="Notifications" href="#"></a>
+        		<a class="infobuttons" title="Notifications" href="#" onclick="return false"></a>
         
         		<ul>
         		    <li id="notifications-top">Notifications</li>

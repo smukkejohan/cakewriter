@@ -6,7 +6,7 @@
 {% block contentview %}
 <div id="content_overview">
 {% for user in users %}
-<p><a href="{% url user-overview username=user.username %}">{{ user.username }}</a> <span class="new">{% if user.get_profile.score %}{{ user.get_profile.score }}{% else %}0{% endif %} points</span></p>
+<p><a href="{% url user-overview username=user.user.username %}">{% if user.user.first_name %}{{ user.user.first_name }} {{ user.user.last_name }}{% else %}{{ user.user.username }}{% endif %}</a> <span class="new">{{ user.score }} points</span></p>
 {% endfor %}
 </div>                                     
 {% endblock %}
@@ -45,7 +45,7 @@
     <hr />
     <h1>Activity</h1>
     {% if usercomments %}
-    <div class="trigger activity"><h3 class="float_left">Comments posted</h3><h3 class="float_right">{{ usercomments.count }}</h3><div class="clear"></div></div>
+    <div class="trigger activity"><h3 class="float_left">+ Comments posted</h3><h3 class="float_right">{{ usercomments.count }}</h3><div class="clear"></div></div>
     <div class="toggle_container">
     {% for comment in usercomments %}
     {{comment.user}} has posted a comment on <a href="{{comment.content_object.get_absolute_url}}">{{comment.content_object.title}}</a> starting with: "{{comment.comment|truncatewords:8}}"<br />
@@ -54,28 +54,28 @@
     {% endif %}
     
     {% if userchapters %}
-    <div class="trigger activity"><h3 class="float_left">Chapters created</h3><h3 class="float_right">{{ userchapters.count }}</h3><div class="clear"></div></div>
+    <div class="trigger activity"><h3 class="float_left">+ Chapters created</h3><h3 class="float_right">{{ userchapters.count }}</h3><div class="clear"></div></div>
     <div class="toggle_container">
     {% for chapter in userchapters %}
-    {{chapter.author}} has written the chapter: <a href="{{chapter.get_absolute_url}}">{{chapter.title}}</a><br />
+    <a href="{{chapter.get_absolute_url}}">{{chapter.title}}</a><br />
     {% endfor %}
     </div>
     {% endif %}
     
     {% if userratings %}
-    <div class="trigger activity"><h3 class="float_left">Chapters rated</h3><h3 class="float_right">{{ userratings.count }}</h3><div class="clear"></div></div>
+    <div class="trigger activity"><h3 class="float_left">+ Chapters rated</h3><h3 class="float_right">{{ userratings.count }}</h3><div class="clear"></div></div>
     <div class="toggle_container">
     {% for ratings in userratings %}
-    {{ratings.user}} has given <a href="{{ratings.content_object.get_absolute_url}}">{{ratings.content_object.title}}</a> {{ ratings.score }} stars<br />
+    <a href="{{ratings.content_object.get_absolute_url}}">{{ratings.content_object.title}}</a> {{ ratings.score }} stars<br />
     {% endfor %}
     </div>
     {% endif %}
     
     {% if userrevisions %}
-    <div class="trigger activity"><h3 class="float_left">Chapters rated</h3><h3 class="float_right">{{ userrevisions.count }}</h3><div class="clear"></div></div>
+    <div class="trigger activity"><h3 class="float_left">+ Chapters edited</h3><h3 class="float_right">{{ userrevisions.count }}</h3><div class="clear"></div></div>
     <div class="toggle_container">
     {% for revision in userrevisions %}
-    {{revision.user}} has edited <a href="{{revision.article.get_absolute_url}}">{{revision.article.title}}</a>. {{ revision.counter|ordinal }} revision<br />
+    <a href="{{revision.article.get_absolute_url}}">{{revision.article.title}}</a>. {{ revision.counter|ordinal }} revision<br />
     {% endfor %}
     </div>
     {% endif %}

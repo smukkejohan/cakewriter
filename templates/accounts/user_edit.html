@@ -5,7 +5,7 @@
 {% block contentview %}
 <div id="content_overview">
 {% for user in users %}
-<p><a href="{% url user-overview username=user.username %}">{{ user.username }}</a> <span class="new">{{ user.get_profile.score }}</span></p>
+<p><a href="{% url user-overview username=user.user.username %}">{{ user.user.username }}</a> <span class="new">{{ user.score }} points</span></p>
 {% endfor %}
 </div>                                     
 {% endblock %}

@@ -12,7 +12,14 @@ from simplewiki.models import Revision
 from djangoratings.models import Vote
 @login_required
 def user(request, username):
-    users = User.objects.all().order_by('username')
+    users_ori = User.objects.all()
+    for user in users_ori:
+        try:
+            profile = user.get_profile()
+        except ObjectDoesNotExist:
+            profile = Profile(user=user)
+            profile.save()
+    users = Profile.objects.all().order_by('-score')
     user = None
     editable = False
     usercomments = None
@@ -61,7 +68,14 @@ def edit_profile(request):
         profile = Profile(user=request.user)
         profile.save()
     user = request.user
-    users = User.objects.all().order_by("username")
+    users_ori = User.objects.all()
+    for user in users_ori:
+        try:
+            profile = user.get_profile()
+        except ObjectDoesNotExist:
+            profile = Profile(user=user)
+            profile.save()
+    users = Profile.objects.all().order_by('-score')
     if request.method == 'POST':
         form = ProfileUserForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():

@@ -112,25 +112,27 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.flatpages',
     'django.contrib.humanize',
-    'djangoratings',
     'book',
     'accounts',
-    'voting',
     'registration',
     'captcha',
     'simplewiki',
     'pages',
     'tinymce',
-    'tagging',
     'emencia.django.newsletter',
     'extemail',
+    'html_mailer',
+    'usermessage',
+    'tagging',
+    'voting',
+    'djangoratings',
     #'south',
     #'django_evolution',
     #'mailer',
-    'html_mailer',
-    'usermessage',
     #'quiz',
 )
+HAYSTACK_SITECONF = 'search_sites'
+HAYSTACK_SEARCH_ENGINE = 'simple'
 
 FEEDBACK_CHOICES = (
         ('bug', 'Bug'),
