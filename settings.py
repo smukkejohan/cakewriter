@@ -4,7 +4,10 @@ import os.path, sys, platform
 import logging
 
 PROJECT_ROOT = os.path.dirname(__file__)
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static/uploads')
+
 DEVELOPMENT_MODE = (platform.node() != "tango")
 
 ADMIN_MEDIA_PREFIX = '/media/'
@@ -29,7 +32,8 @@ if DEVELOPMENT_MODE:
     
 else:
     DEBUG = False
-    MEDIA_URL = 'http://m.winning-without-losing.com/'
+    MEDIA_URL = 'http://m.winning-without-losing.com/uploads/'
+    STATIC_URL = 'http://m.winning-without-losing.com/'
     ADMIN_MEDIA_PREFIX = MEDIA_URL + 'admin/'
 
 
@@ -48,7 +52,7 @@ TEMPLATE_CONTEXT_PROCESSORS =(
 )
 
 ADMINS = (
-    ('Thomas Pethick', 'info@tmpproductions.dk'),
+    ('Johan Bichel Lindegaard', 'sysadmin@tango.johan.cc'),
 )
 MANAGERS = ADMINS
 
