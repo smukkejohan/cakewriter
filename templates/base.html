@@ -5,11 +5,11 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-language" content="da" />
-    <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="{{ MEDIA_URL }}css/960.css" type="text/css" media="screen, projection" />
+    <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/960.css" type="text/css" media="screen, projection" />
     <!-- Main CSS -->
-    <link rel="stylesheet" type="text/css" media="all" href="{{ MEDIA_URL }}css/screen.css" />
-    <link type='text/css' href='{{ MEDIA_URL }}/feedback/css/basic.css' rel='stylesheet' media='screen' />
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/screen.css" />
+    <link type='text/css' href='{{ STATIC_URL }}/feedback/css/basic.css' rel='stylesheet' media='screen' />
 
     {% block css %}{% endblock %}
     
@@ -58,7 +58,7 @@
     <div id="header" class="middel">
     <div id="header_inner">
     <div id="header_inner_inner">
-        <a href="/"><img src="{{ MEDIA_URL }}img/logo.jpg" alt="logo" id="sitelogo" width="338" height="49" /></a>
+        <a href="/"><img src="{{ STATIC_URL }}img/logo.jpg" alt="logo" id="sitelogo" width="338" height="49" /></a>
         <div id="navbar">
                 <a href="/about/">About</a> |
                 <a href="/howitworks/">How it works</a> |
@@ -152,7 +152,7 @@
     </div>
 
 </div>
-<div id="feedback"><a href="https://spreadsheets.google.com/viewform?hl=en&formkey=dFZ3akJxNlhGN2k1NERmR3cwUVBlNVE6MQ#gid=0" class="basic"><img src="{{ MEDIA_URL }}img/feedback.jpg" width="30" height="100" /></a></div>
+<div id="feedback"><a href="https://spreadsheets.google.com/viewform?hl=en&formkey=dFZ3akJxNlhGN2k1NERmR3cwUVBlNVE6MQ#gid=0" class="basic"><img src="{{ STATIC_URL }}img/feedback.jpg" width="30" height="100" /></a></div>
 <div id="basic-modal-content">
 <iframe src="https://spreadsheets.google.com/viewform?hl=en&formkey=dFZ3akJxNlhGN2k1NERmR3cwUVBlNVE6MQ#gid=0" width="760" height="639" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
 </div>
@@ -160,12 +160,12 @@
     <img src='img/basic/x.png' alt='' />
 </div>
 
-<script src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js" type="text/javascript"></script>
-<script src="{{ MEDIA_URL }}js/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
-<script src="{{ MEDIA_URL }}js/jquery.ui.stars.min.js" type="text/javascript"></script>
-<script src="{{ MEDIA_URL }}js/base.js" type="text/javascript"></script>
-<script type='text/javascript' src='{{ MEDIA_URL }}feedback/js/jquery.simplemodal.js'></script>
-<script type='text/javascript' src='{{ MEDIA_URL }}feedback/js/basic.js'></script>
+<script src="{{ STATIC_URL }}js/jquery-1.4.2.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/jquery.ui.stars.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/base.js" type="text/javascript"></script>
+<script type='text/javascript' src='{{ STATIC_URL }}feedback/js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='{{ STATIC_URL }}feedback/js/basic.js'></script>
 
 
 </body>

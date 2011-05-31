@@ -17,7 +17,7 @@
 <table cellpadding="20px" width="650px">
 <tr valign="top">
     <td width="180px">
-        <img src="{%if profile.get_profile.photo.url_150x150 %}{{profile.get_profile.photo.url_150x150}}{%else%}{{MEDIA_URL}}img/rolemodel.jpg{%endif%}" />
+        <img src="{%if profile.get_profile.photo.url_150x150 %}{{profile.get_profile.photo.url_150x150}}{%else%}{{ STATIC_URL }}img/rolemodel.jpg{%endif%}" />
     </td>
     <td width="200px">
         <h1>{{profile.username}}</h1><br />
