@@ -1,8 +1,11 @@
 import os
 import sys
+import site
 
-sys.path.append('/home/wwl/srv')
-sys.path.append('/home/wwl/srv/cakewriter')
+site.addsitedir('/home/tmpethick/.virtualenvs/cakewriter/lib/python2.7/site-packages')
+
+sys.path.append('/home/tmpethick/srv')
+sys.path.append('/home/tmpethick/srv/cakewriter')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'cakewriter.settings'
 
