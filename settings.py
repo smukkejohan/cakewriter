@@ -34,7 +34,7 @@ else:
     DEBUG = False
     MEDIA_URL = 'http://m.winning-without-losing.com/uploads/'
     STATIC_URL = 'http://m.winning-without-losing.com/'
-    ADMIN_MEDIA_PREFIX = MEDIA_URL + 'admin/'
+    ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 
 
