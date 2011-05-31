@@ -135,8 +135,6 @@ INSTALLED_APPS = (
     #'mailer',
     #'quiz',
 )
-HAYSTACK_SITECONF = 'search_sites'
-HAYSTACK_SEARCH_ENGINE = 'simple'
 
 FEEDBACK_CHOICES = (
         ('bug', 'Bug'),
