@@ -151,6 +151,7 @@ RATINGS_VOTES_PER_IP = 3
 DEFAULT_FROM_EMAIL = 'noreply@winning-without-losing.com'
 EMAIL_SUBJECT_PREFIX = ''
 
+FILE_UPLOAD_PERMISSIONS = 0644
 
 CHAPTER_RATING_OPTIONS = (
     ('1', 'Not good'),
