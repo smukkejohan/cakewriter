@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/960.css" type="text/css" media="screen, projection" />
     <!-- Main CSS -->
     <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/screen.css" />
-    <link type='text/css' href='{{ STATIC_URL }}/feedback/css/basic.css' rel='stylesheet' media='screen' />
+    <link type='text/css' href='{{ STATIC_URL }}feedback/css/basic.css' rel='stylesheet' media='screen' />
 
     {% block css %}{% endblock %}
     
@@ -164,6 +164,58 @@
 <script src="{{ STATIC_URL }}js/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}js/jquery.ui.stars.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}js/base.js" type="text/javascript"></script>
+<script type="text/javascript"> 
+$(function() {
+     
+    $(".vote-up, .vote-down").click(function() {
+        var self = $(this);
+        var comment = self.parents(".comment");
+        var uid = comment.attr("id").substr(1);
+        var action;
+             
+        if (self.hasClass('vote-on')) { action = 'clear'; }
+        else if (self.hasClass('vote-up')) { action = 'up'; }    
+        else { action = 'down'; }
+        
+        $.post('/book/comment/' + uid + '/vote/' + action,{csrfmiddlewaretoken: '{{ csrf_token }}'}, function(data) {
+            if(data.success == true){
+                comment.find(".vote-score").html(data.score.score);
+                if(action == 'clear') {
+                    self.removeClass("vote-on");
+                } else {
+                    self.siblings(".vote-on").removeClass("vote-on");
+                    self.addClass("vote-on");
+                }
+            } else {
+                if (data.error_message == "Not authenticated."){}
+            }
+        }, "json");               
+    });
+});
+
+
+$(function() {	
+            $("#avg").children().not(":input").hide();
+            $("#rating-widget").children().not("select").hide();	
+           
+            $caption = $("<span/>");
+
+            $("#avg").stars({captionEl: $caption});
+            $("#rating-widget").stars({
+                inputType: "select",
+            	cancelShow: false,
+                captionEl: $caption,
+                callback: function(ui, type, value){
+                    $.post($("#rating-widget").attr("action"), {score: value, csrfmiddlewaretoken: '{{ csrf_token }}'
+}, function(data){
+                    
+                    });
+                }
+            });
+               $caption.appendTo("#rating-widget");
+
+});
+</script>
 <script type='text/javascript' src='{{ STATIC_URL }}feedback/js/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='{{ STATIC_URL }}feedback/js/basic.js'></script>
 

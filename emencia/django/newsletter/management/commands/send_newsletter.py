@@ -1,6 +1,8 @@
 """Command for sending the newsletter"""
+from django.core.management import setup_environ
+import settings
+setup_environ(settings)
 from django.core.management.base import NoArgsCommand
-
 from emencia.django.newsletter.mailer import Mailer
 from emencia.django.newsletter.models import Newsletter
 
