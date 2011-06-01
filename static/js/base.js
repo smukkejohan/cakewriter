@@ -1,3 +1,80 @@
+$.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                     break;
+                 }
+             }
+         }
+         return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     } 
+});
+
+
+$(function() {
+     
+    $(".vote-up, .vote-down").click(function() {
+        var self = $(this);
+        var comment = self.parents(".comment");
+        var uid = comment.attr("id").substr(1);
+        var action;
+             
+        if (self.hasClass('vote-on')) { action = 'clear'; }
+        else if (self.hasClass('vote-up')) { action = 'up'; }    
+        else { action = 'down'; }
+        
+        $.post('/book/comment/' + uid + '/vote/' + action, function(data) {
+            if(data.success == true){
+                comment.find(".vote-score").html(data.score.score);
+                if(action == 'clear') {
+                    self.removeClass("vote-on");
+                } else {
+                    self.siblings(".vote-on").removeClass("vote-on");
+                    self.addClass("vote-on");
+                }
+            } else {
+                if (data.error_message == "Not authenticated."){}
+            }
+        }, "json");               
+    });
+});
+
+
+$(function() {	
+            $("#avg").children().not(":input").hide();
+            $("#rating-widget").children().not("select").hide();	
+           
+            $caption = $("<span/>");
+
+            $("#avg").stars({captionEl: $caption});
+            $("#rating-widget").stars({
+                inputType: "select",
+            	cancelShow: false,
+                captionEl: $caption,
+                callback: function(ui, type, value){
+                    $.post($("#rating-widget").attr("action"), {score: value
+}, function(data){
+                    
+                    });
+                }
+            });
+               $caption.appendTo("#rating-widget");
+
+});
+
+
 $(document).ready(function() {
   function filterPath(string) {
   return string
