@@ -1,6 +1,0 @@
-*.pyc
-*~
-*.db
-.DS_Store
-*.swp
-settings_local.py

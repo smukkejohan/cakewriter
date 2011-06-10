@@ -147,11 +147,23 @@ body {
 #profile-login{
     text-transform:uppercase;
 }
-#user-score{
+#animation{
     font-size: 14px;
     color: #df0003;
+    position: relative;
+    text-align: left;
+    right:0px;
+    top:0px;
+    text-shadow: 0px 0px 0px #000;
+    float:left;
+    z-index:1;
 }
 
+#user-score{
+    width:85px;
+    height:17px;
+    margin-right:0px;
+}
 /***********    Banner   **********/
 #all_banner{
     height:40px;
@@ -686,7 +698,6 @@ input:focus, textarea:focus{
 	-webkit-box-shadow:0px 0px 1px #ccc;
     -moz-box-shadow:0px 0px 1px #ccc;
 	box-shadow:0px 0px 1px #ccc;
-
 }
 #info a.infobuttons:hover, #info li:hover a.infobuttons{
     background-image: url(../img/notification-logo-hover.jpg);

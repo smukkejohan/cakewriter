@@ -68,13 +68,17 @@
         </div>
         <div id="profile">
             {% if user.is_authenticated %}
-                <span id="user-score">
+                <div id="user-score" class="float_right">
+                <div id="animation">
+                
                 {% if user.get_profile %}
-                        {{ user.get_profile.score }}
+                        <span id="score_int">{{ user.get_profile.score }}</span>
                     {% else %}
-                        0
-                    {% endif %} 
-                    points</span>
+                        <span id="score_int">0</span>
+                    {% endif %}
+                    points
+                </div>
+                </div>
         <ul id="info" class="float_left">
         	<li>
                 {% ifequal usermessages.count 0 %}{%else%}<span id="notifications-count">{{ usermessages.count }}</span>{% endifequal %}
@@ -92,10 +96,10 @@
         		</ul>
         	</li>
         </ul>
-            <span id="profile-login" class="float_left">
+            <div id="profile-login" class="float_left">
                 <a href="{% url user-overview username=user.username %}">{{ user.username }}</a><br />
                 <a href="{% url auth_logout %}">log out</a>
-            </span>
+            </div>
             {% else %}
             <ul id="profile-login">
                 <li><p><a href="{% url auth_login %}?next={% ifequal request.path "/accounts/logout/" %}{% else %}{{ request.path }}{% endifequal %}">Log in</a></p></li>
@@ -166,7 +170,8 @@
 <script src="{{ STATIC_URL }}js/base.js" type="text/javascript"></script>
 <script type='text/javascript' src='{{ STATIC_URL }}feedback/js/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='{{ STATIC_URL }}feedback/js/basic.js'></script>
-
-
+<script src="{{ STATIC_URL }}js/jquery.color.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.animate-textshadow.js"></script>
+{% block scripts %}{% endblock %}
 </body>
 </html>
