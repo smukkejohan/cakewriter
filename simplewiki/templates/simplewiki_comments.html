@@ -40,7 +40,7 @@
 
 {% if user.is_authenticated %}
     {% get_comment_form for chapter as form %}
-    <form action="{% comment_form_target %}" method="post">
+    <form action="{% comment_form_target %}" method="post" onsubmit="update_point_session()">
         {% csrf_token %}
         <input name="next" type="hidden" value="{% url wiki_discussion wiki_article.get_url %}" />
         {% for field in form %}

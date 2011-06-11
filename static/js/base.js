@@ -76,7 +76,8 @@ $(function() {
                             function(){$( "#animation" )
                             .animate({color:"#df0003", fontSize: "14px",textShadow: "#df0003 0px 0px 0px;"},500);});
                         }
-                    });
+                    }
+                    );
                 }
                 
             });
@@ -84,6 +85,19 @@ $(function() {
 
 });
 
+function update_point_session(){
+    $.ajax({
+        type: 'POST',
+        url: '/update_point_session/',  
+        data: {session: true},
+        async: false
+    });
+    /*$.post('/update_point_session/', 
+           {session: true},
+           function(data){}
+    );*/
+    return true;
+}
 
 $(document).ready(function() {
   function filterPath(string) {

@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     (r'^newsletters/', include('emencia.django.newsletter.urls')),
     (r'^subscribe/$', 'views.subscribe_resent_chapters'),
     (r'^usermessage/', include('usermessage.urls')),
+    (r'^update_point_session/$', 'views.update_point_session')
     #(r'^quiz/', include('quiz.urls'))
 )
 

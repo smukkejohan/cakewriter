@@ -10,7 +10,7 @@
 {{ wiki_form.media }}
 {% endblock %}
 {% block wiki_body %}
-<form method="POST" id="wiki_revision">
+<form method="POST" id="wiki_revision" onsubmit="update_point_session()">
 {% csrf_token %}
 	<table id="wiki_revision_table">
 	{{ wiki_form }}

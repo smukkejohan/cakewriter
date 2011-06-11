@@ -5,7 +5,7 @@
 {% block content %}
 {{ form.media }}
 <div id="content_alone">
-<form action="" method="post">
+<form action="" method="post" onsubmit="update_point_session()">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />

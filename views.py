@@ -4,7 +4,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from book.models import Chapter
 from pages.models import Frontpage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
+
 from datetime import datetime
 
 from emencia.django.newsletter.models import Contact
@@ -75,3 +76,14 @@ def subscribe_resent_chapters(request):
         'email_error.html', {'errors': errors, 'email': email, 'older_side': older_side},
         context_instance = RequestContext(request)
         )
+
+def update_point_session(request):
+    if not request.is_ajax() or not request.method=='POST':
+        return HttpResponseNotAllowed(['POST'])
+    if request.POST.get('session'):
+        request.session['point'] = True
+        return HttpResponse('created')
+    if request.POST.get('session_del'):
+        del request.session['point']
+        return HttpResponse('deleted')
+    return HttpResponse('ok')

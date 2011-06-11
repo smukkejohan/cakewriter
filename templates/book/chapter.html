@@ -90,11 +90,9 @@
 
   <h2 class="section-title">What do you think about this chapter?</h2>
 <div id="comment-form">
-
-
 {% if user.is_authenticated %}
     {% get_comment_form for chapter as form %}
-    <form action="{% comment_form_target %}" method="post">
+    <form action="{% comment_form_target %}" method="post" onsubmit=" return update_point_session()">
         {% csrf_token %}
         <input name="next" type="hidden" value="{% url book.views.chapter chapter.pk %}" />
         {% for field in form %}
@@ -111,7 +109,7 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
-        <input class="submit-post" name="post" type="submit" value="Share your feedback" />
+        <input class="submit-post" name="post" type="submit" value="Share your feedback"/>
     </form>
 {% else %}
     <p>
