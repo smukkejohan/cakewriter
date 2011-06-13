@@ -50,3 +50,18 @@ class Chapter(models.Model):
     def get_absolute_url(self):
         return ('chapter', [str(self.id)])
     
+from django.contrib.syndication.views import Feed
+
+class LatestChapterFeed(Feed):
+    title = "Latest chapters on Winning Without Losing"
+    link = "/rss/latest/"
+    description = "A collaborative book project to discover how to be an ultra successful entrepreneur while living a happy and balanced life"
+
+    def items(self):
+        return Chapter.objects.order_by('-pub_date')[:5]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.summary

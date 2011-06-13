@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-
+from book.models import LatestChapterFeed
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -27,7 +27,8 @@ urlpatterns = patterns('',
     (r'^newsletters/', include('emencia.django.newsletter.urls')),
     (r'^subscribe/$', 'views.subscribe_resent_chapters'),
     (r'^usermessage/', include('usermessage.urls')),
-    (r'^update_point_session/$', 'views.update_point_session')
+    (r'^update_point_session/$', 'views.update_point_session'),
+    (r'^rss/latest/$', LatestChapterFeed())
     #(r'^quiz/', include('quiz.urls'))
 )
 
