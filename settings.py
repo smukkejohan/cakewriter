@@ -54,7 +54,8 @@ TEMPLATE_CONTEXT_PROCESSORS =(
 )
 
 ADMINS = (
-    ('Johan Bichel Lindegaard', 'sysadmin@tango.johan.cc'),
+    ('Johan Bichel Lindegaard', 'sysadmin@johan.cc'), 
+    ('Thomas Michaelsen Pethick', 'tmpethick@gmail.com'),
 )
 MANAGERS = ADMINS
 
@@ -80,9 +81,6 @@ USE_I18N = True
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
 USE_L10N = True
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = ')dtk*18jea%+khj_6s)j_x8^nd6jat=^h4xta&sh8hkxxue8sv'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
