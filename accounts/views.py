@@ -71,10 +71,10 @@ def edit_profile(request):
     users_ori = User.objects.all()
     for user_ori in users_ori:
         try:
-            profile = user_ori.get_profile()
+            profile_ori = user_ori.get_profile()
         except ObjectDoesNotExist:
-            profile = Profile(user=user_ori)
-            profile.save()
+            profile_ori = Profile(user=user_ori)
+            profile_ori.save()
     users = Profile.objects.all().order_by('-score')
     if request.method == 'POST':
         form = ProfileUserForm(request.POST, request.FILES, instance=profile)
