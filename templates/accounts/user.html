@@ -31,12 +31,16 @@
 </tr >
     
 <tr valign="top">
-    <td colspan="3">
+    <td colspan="2">
     <h3>Websites</h3>
     <p>Facebook: {% if profile.get_profile.facebook %}{{profile.get_profile.facebook|urlize}}{%else%}None{%endif%}</p>
     <p>Twitter: {% if profile.get_profile.twitter %}{{profile.get_profile.twitter|urlize}}{%else%}None{%endif%}</p>
     <p>www: {% if profile.get_profile.www %}{{profile.get_profile.www|urlize}}{%else%}None{%endif%}</p>
     <p>Blog: {% if profile.get_profile.blog %}{{profile.get_profile.blog|urlize}}{%else%}None{%endif%}</p>
+    </td>
+    <td colspan="1">
+    <h3>Bio</h3>
+    {% if profile.get_profile.bio %}{{profile.get_profile.bio|linebreaks}}{%else%}None{%endif%}
     </td>
 </tr>
 {% if activity %}

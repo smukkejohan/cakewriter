@@ -11,7 +11,8 @@ class ProfileForm(forms.Form):
     twitter = forms.URLField(required=False)
     www = forms.URLField(required=False)
     blog = forms.URLField(required=False)
-
+    bio = forms.CharField(required=False)
+    
 class ProfileUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileUserForm, self).__init__(*args, **kwargs)
@@ -27,7 +28,7 @@ class ProfileUserForm(forms.ModelForm):
     class Meta:
       model = Profile
       exclude = ('user','score','level')
-      fields = ('first_name','last_name','photo','firm','facebook','twitter','www','blog')
+      fields = ('first_name','last_name','photo','firm','facebook','twitter','www','blog','bio')
     
     def save(self, *args, **kwargs):
       """

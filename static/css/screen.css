@@ -403,7 +403,7 @@ h1 a, h2 a, h3 a {}
 }
 
 .chapter_thumbnail{
-    margin:5px 10px 0px 0px;
+    margin:15px 10px 0px 0px;
     border: none!important;
     padding: none!important;
 }

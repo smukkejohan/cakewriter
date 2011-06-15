@@ -42,7 +42,8 @@ class Profile(models.Model):
     blog = models.URLField(blank=True, null=True)
     firm = models.CharField(max_length=100,blank=True, null=True)
     photo = ImageWithThumbsField(upload_to=get_profile_path, blank=True, null=True,sizes=((150,150),))
-            
+    bio = models.TextField(blank=True, null=True)
+    
     def save(self, force_insert=False, force_update=False, *args, **kwarg):
         if not self.score:
             self.score = 0    
