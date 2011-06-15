@@ -54,7 +54,7 @@ from django.contrib.syndication.views import Feed
 
 class LatestChapterFeed(Feed):
     title = "Latest chapters on Winning Without Losing"
-    link = "/rss/latest/"
+    link = "/"
     description = "A collaborative book project to discover how to be an ultra successful entrepreneur while living a happy and balanced life"
 
     def items(self):
@@ -65,3 +65,12 @@ class LatestChapterFeed(Feed):
 
     def item_description(self, item):
         return item.summary
+        
+    def item_author_name(self, item):
+        return item.author
+        
+    def item_author_link(self, item):
+        return '/users/username/%s' % item.author.username
+    
+    def item_pubdate(self, item):
+        return item.pub_date
