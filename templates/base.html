@@ -59,13 +59,32 @@
     <div id="header_inner">
     <div id="header_inner_inner">
         <a href="/"><img src="{{ STATIC_URL }}img/logo.jpg" alt="logo" id="sitelogo" width="338" height="49" /></a>
-        <div id="navbar">
-                <a href="/about/">About</a> |
-                <a href="/howitworks/">How it works</a> |
-                <a href="/book/">Read Rate & Edit</a> |
-                <a href="/rolemodels/">Role Models</a><!-- |
-                <a href="/authors/">Authors</a>-->
-        </div>
+        <ul id="nav">
+            <li><a>About</a>
+                <ul>
+                    <li><a href="/about/">The Concept</a></li>
+                    <li><a href="/team/">The Team</a></li>
+                </ul>
+            </li>
+            <li><a>How it Works</a>
+                <ul>
+                    <li><a href="/howitworks/">Steps to get started</a></li>
+                    <li><a href="/Howitworks/themethod/">The Method</a></li>
+                </ul>
+            </li>
+            <li><a>Read Rate & Edit</a>
+                <ul>
+                    <li><a href="/book/">Chapters</a></li>
+                    <li><a href="{% url user_chapter %}">Create your own chapter</a></li>
+                </ul>            
+            </li>
+            <li><a>Our Community</a>
+                <ul>
+                    <li><a href="/rolemodels/">Role Models</a></li>
+                    <li><a href="/account/">Our Community</a></li>
+                </ul>  
+            </li>
+        </ul>
         <div id="profile">
             {% if user.is_authenticated %}
                 <div id="user-score" class="float_right">

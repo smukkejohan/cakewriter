@@ -127,12 +127,114 @@ body {
     float:left;
     border:none;
 }
-#navbar{
-    float:left;
-    margin:18px 0px 0px 70px;
-    width:390px;
 
+/*******NAVIGATIONBAR*********/
+#nav {
+    float:left;
+    margin:14px 0px 0px 60px;
+    line-height: 100%;
+    width:400px;
+    padding: 0px;
 }
+#nav li {
+    margin: 0 0px;
+    padding: 0 0 4px;
+    float: left;
+    position: relative;
+    list-style: none;
+}
+/* main level link */
+#nav a {
+    text-decoration: none;
+    display: block;
+    padding:  8px 5px;
+    margin: 0;
+    border-bottom: solid 3px #fff;
+    cursor: pointer;
+}
+#nav a:hover{
+    text-decoration: none;
+}
+/* main level link hover */
+#nav .current a, #nav li:hover > a {
+    border-bottom: solid 3px #16aad7;
+}
+/* sub levels link hover */
+#nav ul li:hover a, #nav li:hover li a {
+    background: none;
+    border: none;
+    color: #666;
+}
+#nav ul a:hover {
+    background: #0399d4 !important; /* for non-css3 browsers */
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#01A3D4', endColorstr='#0186ba'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#01A3D4), to(#0186ba)) !important; /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #01A3D4,  #0186ba) !important; /* for firefox 3.6+ */
+
+    color: #fff !important;
+}
+/* level 2 list */
+#nav ul {
+    text-transform: none;
+    background: #FFF; /* for non-css3 browsers */
+    display: none;
+    margin: 0;
+    padding: 0;
+    width: 185px;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-bottom-left-radius: 10px;
+    -moz-border-radius-bottomright: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    -webkit-box-shadow: 0 14px 15px rgba(0, 0, 0, .6);
+    -moz-box-shadow: 0 14px 15px rgba(0, 0, 0, .6);
+    box-shadow: 0 14px 15px rgba(0, 0, 0, .6);
+}
+/* dropdown */
+#nav li:hover > ul {
+    display: block;
+}
+#nav ul li {
+    float: none;
+    margin: 0;
+    padding: 0;
+}
+#nav ul a {
+    font-weight: normal;
+}
+/* rounded corners for last child */
+
+#nav ul li:last-child > a {
+    -webkit-border-bottom-left-radius: 9px;
+    -moz-border-radius-bottomleft: 9px;
+    -webkit-border-bottom-right-radius: 9px;
+    -moz-border-radius-bottomright: 9px;
+}
+/* clearfix */
+#nav:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+#nav {
+    display: inline-block;
+}
+html[xmlns] #nav {
+    display: block;
+}
+* html #nav {
+    height: 1%;
+}
+
+/*******NAVIGATIONBAR ENDS*********/
+
 #profile ul{
 	list-style-type: none;
 }
