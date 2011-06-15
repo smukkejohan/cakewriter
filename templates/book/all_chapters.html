@@ -33,6 +33,7 @@
                 </div>
     
                 <div class="clear"></div>
+                {% if chapter.picture %}<img src="{{ chapter.picture.url_68x68 }}" class="float_left chapter_thumbnail"/>{% endif %}
                 <div class="summary">
                     {{ chapter.summary_html|safe }}  
                 </div>

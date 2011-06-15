@@ -26,7 +26,7 @@
     </td>
     <td align="right" width="150px">
         Bi-winning points:<br /><h1>{% if profile.get_profile.score %}{{profile.get_profile.score}}{%else%}0{%endif%}</h1>
-        {% if editable %}<a class="button" href="/users/edit/">Edit</a>{% endif %}
+        {% if editable %}<a class="button" href="{% url edit_profile %}">Edit</a>{% endif %}
     </td>
 </tr >
     

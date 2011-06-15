@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     
     (r'^book/', include('cakewriter.book.urls')),
     
-    (r'^users/', include('accounts.urls')),
+    (r'^', include('accounts.urls')),
     
     (r'^accounts/', include('registration.urls')),
     

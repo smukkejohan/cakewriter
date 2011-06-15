@@ -80,9 +80,13 @@ def edit_profile(request):
         form = ProfileUserForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/users/username/'+request.user.username+'/')
+            return HttpResponseRedirect('/users/'+request.user.username+'/')
         else:
           form = ProfileUserForm(request.POST, request.FILES, instance=profile)  
     else:
         form = ProfileUserForm(instance=profile)
     return render_to_response('accounts/user_edit.html', {'form': form,'users':users,'user':user},context_instance = RequestContext(request))
+
+@login_required
+def account(request):
+    return HttpResponseRedirect('/users/'+request.user.username+'/')

@@ -154,11 +154,12 @@ from datetime import datetime
 def user_chapter(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
-            form = UserChapter(request.POST)
+            form = UserChapter(request.POST, request.FILES)
             if form.is_valid():
                 title = form.cleaned_data['title']
                 summary_html = form.cleaned_data['summary']
                 body_html = form.cleaned_data['content']
+                photo = form.cleaned_data['photo']
                 
                 highest_index = Chapter.objects.aggregate(Max('index'))
                 index = highest_index['index__max']+1
@@ -178,13 +179,15 @@ def user_chapter(request):
                                        index=index,
                                        author=request.user,
                                        user_created=True,
-                                       visible=False)
+                                       visible=False,
+                                       picture=photo)
                 user_chapter.save()
                 return HttpResponseRedirect('/book/user_chapter/thanks/')
             else:
                 data = {'title':request.POST['title'],
                         'summary':request.POST['summary'],
-                        'content':request.POST['content']}
+                        'content':request.POST['content'],
+                        'photo':request.FILES['photo']}
                 form = UserChapter(data)
                 return render_to_response('book/user_chapter.html', 
                                         {'form': form,},

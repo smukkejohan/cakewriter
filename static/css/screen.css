@@ -397,6 +397,16 @@ h1 a, h2 a, h3 a {}
     padding-top:10px;
 }
 
+.helptext{
+    font-size: 11px;
+    color: #999;
+}
+
+.chapter_thumbnail{
+    margin:5px 10px 0px 0px;
+    border: none!important;
+    padding: none!important;
+}
 /* chapter full */
 
 /* comments */

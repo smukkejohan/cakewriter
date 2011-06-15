@@ -22,7 +22,7 @@ class Chapter(models.Model):
     author = models.ForeignKey(User)
     user_created = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
-    picture = ImageWithThumbsField(upload_to="chapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),))
+    picture = ImageWithThumbsField(upload_to="chapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),(68,68)))
 
     class Meta:
         ordering = ['-index']
@@ -70,7 +70,7 @@ class LatestChapterFeed(Feed):
         return item.author
         
     def item_author_link(self, item):
-        return '/users/username/%s' % item.author.username
+        return '/users/%s' % item.author.username
     
     def item_pubdate(self, item):
         return item.pub_date
