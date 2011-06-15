@@ -131,9 +131,9 @@ body {
 /*******NAVIGATIONBAR*********/
 #nav {
     float:left;
-    margin:14px 0px 0px 60px;
+    margin:14px 0px 0px 50px;
     line-height: 100%;
-    width:400px;
+    width:410px;
     padding: 0px;
 }
 #nav li {
@@ -166,7 +166,7 @@ body {
     color: #666;
 }
 #nav ul a:hover {
-    background: #0399d4 !important; /* for non-css3 browsers */
+    background: #01A3D4 !important; /* for non-css3 browsers */
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#01A3D4', endColorstr='#0186ba'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#01A3D4), to(#0186ba)) !important; /* for webkit browsers */
     background: -moz-linear-gradient(top,  #01A3D4,  #0186ba) !important; /* for firefox 3.6+ */
