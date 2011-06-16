@@ -150,7 +150,7 @@ body {
     padding:  8px 5px;
     margin: 0;
     border-bottom: solid 3px #fff;
-    cursor: pointer;
+    cursor:default;
 }
 #nav a:hover{
     text-decoration: none;
