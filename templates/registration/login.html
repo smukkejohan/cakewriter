@@ -28,8 +28,11 @@
 </form>
 <br />
 <p>
-<a href="/accounts/register?next={{ next }}">Want to join?</a> <br />
 <a href="{% url auth_password_reset %}">I forgot my password.</a> 
 </p>
+
+<hr />
+<h1>Not registered yet?</h1>
+<a class="button" href="/accounts/register?next={{ next }}">Join</a>
 {% endblock %}
 

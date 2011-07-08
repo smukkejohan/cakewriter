@@ -2,7 +2,7 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from book.models import Chapter
+from book.models import Chapter, UserChapter
 from djangoratings.views import AddRatingFromModel
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson as json
@@ -147,39 +147,31 @@ def rate_chapter(request, chapter_id, score = None):
         
 
 ##score = chapter.rating.get_rating(request.user, request.META['REMOTE_ADDR'])  
-from book.forms import UserChapter
+from book.forms import UserChapterForm
 from html2text import html2text
 from django.db.models import Max
 from datetime import datetime
 def user_chapter(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
-            form = UserChapter(request.POST, request.FILES)
+            form = UserChapterForm(request.POST, request.FILES)
             if form.is_valid():
                 title = form.cleaned_data['title']
                 summary_html = form.cleaned_data['summary']
-                body_html = form.cleaned_data['content']
+                content = form.cleaned_data['content']
                 photo = form.cleaned_data['photo']
                 
                 highest_index = Chapter.objects.aggregate(Max('index'))
                 index = highest_index['index__max']+1
-                '''
-                if highest_index['index__max'] < 1000:
-                    index = 1000
-                else:
-                    index = highest_index['index__max']+1
-                '''
-                user_chapter = Chapter(title=title,
+                
+                user_chapter = UserChapter(title=title,
                                        summary=html2text(summary_html),
                                        summary_html=summary_html,
-                                       body=html2text(body_html),
-                                       body_html=body_html,
-                                       mod_date=datetime.now(),
+                                       body=html2text(content),
+                                       body_html=content,
                                        pub_date=datetime.now(),
                                        index=index,
                                        author=request.user,
-                                       user_created=True,
-                                       visible=False,
                                        picture=photo)
                 user_chapter.save()
                 return HttpResponseRedirect('/book/user_chapter/thanks/')
@@ -188,12 +180,12 @@ def user_chapter(request):
                         'summary':request.POST['summary'],
                         'content':request.POST['content'],
                         'photo':request.FILES['photo']}
-                form = UserChapter(data)
+                form = UserChapterForm(data)
                 return render_to_response('book/user_chapter.html', 
                                         {'form': form,},
                                         context_instance = RequestContext(request))
         else:
-            form = UserChapter()
+            form = UserChapterForm()
     
         return render_to_response('book/user_chapter.html', 
                                 {'form': form,},

@@ -57,6 +57,7 @@ CTYPE_CHOICES = (
         ('comment', 'user submitted feedback to a chapter'),
         ('wikicomment', 'user submitted feedbact to a wikichapter'),
         ('editedarticle', 'user edited an article'),
+        ('createdchapter','user created a chapter'),
     )
     
 class ScoreLog(models.Model):
@@ -88,7 +89,6 @@ def update_score(sender, **kwargs):
     logs = ScoreLog.objects.filter(profile=profile)
     profile.score = logs.aggregate(Sum('points'))['points__sum']
     profile.save()
-      
 post_save.connect(update_score, sender=ScoreLog)
 post_delete.connect(update_score, sender=ScoreLog)
 
@@ -297,3 +297,20 @@ def create_contact(sender, **kwargs):
         new_mailing.subscribers.add(*subscribers)
         new_mailing.save()    
 post_save.connect(create_contact, sender=User)
+
+def create_chapter(sender, **kwargs):
+    chapter = kwargs.get('instance')
+    created = kwargs.get('created')
+    if created:
+        try:
+            p = chapter.author.get_profile()
+        except ObjectDoesNotExist:
+            p = Profile(user=chapter.author)
+            p.save()
+        log = ScoreLog(chapter=chapter, 
+                    profile=p, 
+                    description='user created a chapter', 
+                    points=10, 
+                    ctype="createdchapter")
+        log.save()
+signals.post_save.connect(create_chapter, sender=Chapter)

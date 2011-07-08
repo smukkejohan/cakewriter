@@ -491,7 +491,7 @@ h1 a, h2 a, h3 a {}
 .chapter .body, .chapter .summary, #flatpage-content p {text-align: justify;}
 
 /* chapter teaser */
-.title {}
+.teaser .title {font-size: 24px}
 .chapter.teaser .title a {color: #2E3436;}
 
 .chapter.teaser {
@@ -560,6 +560,7 @@ h1 a, h2 a, h3 a {}
     width:140px;
     height:100px;
     margin-top:30px;
+    float:left;
 }
 #edit_button{
     background-image: url(../img/edit.png);
@@ -614,7 +615,16 @@ h1 a, h2 a, h3 a {}
  
 /* Rating */
 #rating {
-  height: 20px;  width:80px;}
+  height: 20px;  width:80px;
+}
+#rating-after{
+    margin-top:10px;
+    float:left;
+    width:120px;
+}
+#rating-after hr{
+    margin-bottom:5px;
+}
 .ui-stars-star,
 .ui-stars-cancel {
   float: left;

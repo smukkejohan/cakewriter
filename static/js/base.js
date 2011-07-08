@@ -66,6 +66,7 @@ $(function() {
                 callback: function(ui, type, value){
                     $.post($("#rating-widget").attr("action"), {score: value}, 
                     function(data){
+                        $('#rating-after').show('slow');
                         if (!(data=="Vote changed.")){
                             var oldHTML = document.getElementById('score_int').innerHTML;
                             var oldNumber = parseInt(oldHTML);
@@ -100,6 +101,7 @@ function update_point_session(){
 }
 
 $(document).ready(function() {
+  $('#rating-after').hide();
   function filterPath(string) {
   return string
     .replace(/^\//,'')

@@ -1,3 +1,4 @@
+# coding: utf-8
 from django.db import models
 from django.contrib.auth.models import User
 from emencia.django.newsletter.models import Contact 
@@ -12,7 +13,10 @@ from django.db.models import Sum
 from markdown import markdown
 from django.contrib.sites.models import Site
 import os
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.sites.models import Site
+
 CATEGORY = (
     ('1', 'New comment on your comment'),
     ('2', 'New revision on your revision'),
@@ -38,9 +42,9 @@ class UserMessage(models.Model):
 
 #--------------------------------AUTOEMAIL----------------------------------#
 def user_commented(sender, **kwargs):
+    from accounts.models import Profile
     request = kwargs.get('request')
     comment = kwargs.get('comment')
-    
     try:
         p = request.user.get_profile()
     except ObjectDoesNotExist:
@@ -84,6 +88,13 @@ def user_commented(sender, **kwargs):
                                                                                                  truncate_words(comment.comment,8))
                 organizer_message.content = content
                 organizer_message.save()
+                #email instantly
+                email_message = 'Hi %s, a comment was posted on the same chapter as you have commented:\n\n%s'%(organizer_message.user,organizer_message.content)
+                msg = EmailMultiAlternatives('Winning Without Losing: One have commented on the same chapter as you', email_message, 'noreply@winning-without-losing.com', [organizer_message.contact.email])
+                email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hi %s, a comment was posted on the same chapter as you have commented:<br /><br />\n%s\n<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (organizer_message.user,markdown(organizer_message.content),Site.objects.get_current())
+                msg.attach_alternative(email_html_message, "text/html")
+                msg.send()
+
 comment_was_posted.connect(user_commented)
 
 #Send email to users who have edited chapter when other user has edited the same chapter
@@ -106,6 +117,7 @@ def revision_on_revision(sender, **kwargs):
                     except ObjectDoesNotExist:
                         userrevision = None
                     if userrevision:
+                        #Check if person is the author
                         if userrevision.counter==1:
                             content_mail = "%s with %s points has edit your chapter: [%s](http://%s%s)" % (revision.revision_user,
                                                                                                         revision.revision_user.get_profile().score,
@@ -129,6 +141,13 @@ def revision_on_revision(sender, **kwargs):
                                                                                                         )
                             organizer_message.content = content
                             organizer_message.save()
+                            
+                            #email instantly
+                            email_message = 'Hi %s, your chapter have been edited:\n\n%s'%(organizer_message.user,organizer_message.content)
+                            msg = EmailMultiAlternatives('Winning Without Losing: Your chapter have been edited', email_message, 'noreply@winning-without-losing.com', [organizer_message.contact.email])
+                            email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hi %s, your chapter have been edited:<br /><br />\n%s\n<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (organizer_message.user,markdown(organizer_message.content),Site.objects.get_current())
+                            msg.attach_alternative(email_html_message, "text/html")
+                            msg.send()
                         else:
                             content_mail = "%s with %s points has edit the same chapter as you: [%s](http://%s%s)" % (revision.revision_user,
                                                                                                         revision.revision_user.get_profile().score,
@@ -152,6 +171,13 @@ def revision_on_revision(sender, **kwargs):
                                                                                                         )
                             organizer_message.content = content
                             organizer_message.save()
+                            
+                            #email instantly
+                            email_message = 'Hi %s, a chapter you have edited have been edited:\n\n%s'%(organizer_message.user,organizer_message.content)
+                            msg = EmailMultiAlternatives('Winning Without Losing: chapter edited', email_message, 'noreply@winning-without-losing.com', [organizer_message.contact.email])
+                            email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hi %s, a chapter you have edited have been edited:<br /><br />\n%s\n<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (organizer_message.user,markdown(organizer_message.content),Site.objects.get_current())
+                            msg.attach_alternative(email_html_message, "text/html")
+                            msg.send()
 
 post_save.connect(revision_on_revision, sender=Revision)
 #Send new chapters to everybody that have subscribe (no registration is required)
@@ -182,3 +208,36 @@ def email_when_chapter(sender, **kwargs):
                                                                            truncate_words(chapter.summary,20))
                 organizer_message.save()
 post_save.connect(email_when_chapter, sender=Chapter)
+
+from accounts.models import Profile
+#for points
+def profile_points_10(sender, **kwargs):
+    profile = kwargs.get('instance')
+    created = kwargs.get('created')
+    profile_score = profile.score
+    try:
+        contact = Contact.objects.get(email=profile.user.email, subscriber=True)
+    except:
+        contact = None
+    if created:
+        if profile_score>=10 and contact:
+            #email instantly
+            email_message = 'Hurrah %s!\n\n You have exceeded 10 points and will now be credited in the book! Congratulation!' % profile.user
+            msg = EmailMultiAlternatives('Winning Without Losing: exceeded 10 point!', email_message, 'noreply@winning-without-losing.com', [profile.user.email])
+            email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hurra %s!<br /><br /> You have exceeded 10 points and will now be credited in the book! Congratulation!<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (profile.user,Site.objects.get_current())
+            msg.attach_alternative(email_html_message, "text/html")
+            msg.send()
+    else:
+        try:
+            old_profile = Profile.objects.get(pk=profile.pk)
+            old_profile_score = old_profile.score
+        except:
+            old_profile_score = 0
+        if old_profile_score<10 and profile_score>=10 and contact:
+            #email instantly
+            email_message = 'Hurrah %s!\n\n You have exceeded 10 points and will now be credited in the book! Congratulation!' % profile.user
+            msg = EmailMultiAlternatives('Winning Without Losing: exceeded 10 point!', email_message, 'noreply@winning-without-losing.com', [profile.user.email])
+            email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hurra %s!<br /><br /> You have exceeded 10 points and will now be credited in the book! Congratulation!<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (profile.user,Site.objects.get_current())
+            msg.attach_alternative(email_html_message, "text/html")
+            msg.send()
+pre_save.connect(profile_points_10, sender=Profile)

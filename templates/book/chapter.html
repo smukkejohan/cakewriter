@@ -122,14 +122,6 @@
 <div class="float_right">
 <div id="share_box">
     <h3>Your rating</h3>
-    {% if user.is_anonymous %}
-            Please 
-            <a href="{% url auth_login %}?next={{ request.path }}#rating">log in</a>
-             or 
-            <a href="{% url registration_register %}?next={{ request.path }}#rating">register</a>
-             to vote
-        {% else %}
-        <br/>
             <div id="rating">      
                 <form id="rating-widget" action="{% url rate-chapter chapter.id %}" method="post">
                     {% csrf_token %}
@@ -138,11 +130,21 @@
                     {% for value, label in options %}             
                         <option value="{{ value }}" {% ifequal value rating_on_chapter|slugify %}selected="selected"{% endifequal %}>{{ label }}</option>
                     {% endfor %}
-                    </select>          
+                    </select>
                     <input type="submit" value="Rate it!" />
                 </form>
+                {% if user.is_anonymous %}
+                <div id="rating-after">
+                <hr />
+                <span class="helptext">You rating is important, it will determine if this chapter is included in the final collaborative book!</span>
+                <hr />
+                <a href="{% url auth_login %}?next={{ request.path }}#rating">log in</a>
+                or 
+                <a href="{% url registration_register %}?next={{ request.path }}#rating">register</a> (it's easy!)
+                to rate
+                </div>
+                {% endif %}
             </div>
-       {% endif %}
        <div id="share_buttons">
        <iframe src="http://www.facebook.com/plugins/like.php?href={{"http://winning-without-loosing.com"|urlencode}}{{ chapter.get_absolute_url|urlencode }}&amp;layout=box_count&amp;show_faces=true&amp;width=40&amp;action=like&amp;font&amp;colorscheme=light&amp;height=65&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:65px;" allowTransparency="true"></iframe>
 

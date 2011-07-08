@@ -49,7 +49,30 @@ class Chapter(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('chapter', [str(self.id)])
+
+class UserChapter(models.Model):
+    title = models.CharField('title', max_length=60)
+    summary = models.TextField('summary', help_text="A short summary of the chapter.")
+    summary_html = models.TextField(blank=True, null=True)
+    body = models.TextField("body", help_text="You can use markdown formatting. Start with h2 '##' headers as the title is rendered as h1 '#'.")
+    body_html = models.TextField(blank=True, null=True)
+    pub_date = models.DateTimeField(default=datetime.now)
+    index = models.IntegerField(help_text="The chapters position in the book. The higher the later.")
+    author = models.ForeignKey(User)
+    picture = ImageWithThumbsField(upload_to="userchapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),(68,68)))
+
+    class Meta:
+        ordering = ['-index']
+        get_latest_by = 'pub_date'
     
+    def __unicode__(self):
+        return self.title
+        
+    def save(self, *args, **kwargs):             
+        self.body_html = markdown(self.body)
+        self.summary_html = markdown(self.summary)
+        super(UserChapter, self).save(*args, **kwargs)
+
 from django.contrib.syndication.views import Feed
 
 class LatestChapterFeed(Feed):

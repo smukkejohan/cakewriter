@@ -44,6 +44,11 @@ def organize_all():
     from markdown import markdown
     from django.contrib.sites.models import Site
     from usermessage.models import UserMessage, StandardUserMessage
+    from djangoratings.models import Vote, Score
+    from django.contrib.contenttypes.models import ContentType
+    from django.db.models import Avg
+    from django.utils.http import urlencode
+    from book.models import Chapter
     now = datetime.now()
     contacts = Contact.objects.all()
     for contact in contacts:
@@ -61,6 +66,54 @@ def organize_all():
             new_chapter_count = 0
             #Only for users
             if contact.content_object:
+                user = contact.content_object
+                date = datetime.today() - timedelta(days=7)
+                
+                contenttype = ContentType.objects.get_for_model(Chapter)
+                
+                chapters = Chapter.objects.filter(author=user)
+                if chapters:
+                    message+= """###Ratings of your chapters\nThe feedback your chapters receive, determine if they are included in the final collaborative book.\n\nHere is the feedback you got on your chapters:\n\n"""
+                    for chapter in chapters:
+                        message+="####%s\n\n" % chapter.title
+                        try:
+                            chapter_rating = Score.objects.get(content_type=contenttype,object_id=chapter.pk)
+                            votes = chapter_rating.votes
+                            score = chapter_rating.score
+                        except:
+                            chapter_rating = None
+                            votes = 0
+                            score = 0
+                        
+                        weekly_votes = Vote.objects.filter(content_type=contenttype,object_id=chapter.pk,date_changed__gt=date)
+                        if weekly_votes:
+                            weekly_rating_times = weekly_votes.count()
+                            weekly_average_rating = int(weekly_votes.aggregate(Avg('score'))['score__avg'])
+                        else:
+                            weekly_votes = 0
+                            weekly_rating_times = 0
+                            weekly_average_rating = 0
+                        if votes==1:
+                            time = ''
+                        else:
+                            time = 's'
+                        if weekly_votes==1:
+                            weekly_time = ''
+                        else:
+                            weekly_time = 's'
+                        message+=  """Your chapter was rated %s time%s within 1 week with an average rating of %s out of 5.<br />\nIt have been rated %s time%s since it was published with an average rating of %s out of 5.\n\n""" % (weekly_rating_times,
+                                           weekly_time,
+                                           weekly_average_rating,
+                                           votes,
+                                           time,
+                                           score)
+                        full_url = 'http://'+str(Site.objects.get_current())+chapter.get_absolute_url()
+                        full_url_urlencode = urlencode({'e':full_url})[2:]
+                        message+= '[Share on Facebook](http://www.facebook.com/sharer.php?u=%s&t=%s)<br />\n' % (full_url_urlencode,"Have+a+look+at+my+chapter+on+Winning+Without+Losing")
+                        message+= '[Share this chapter on twitter](http://twitter.com/home?status=%s %s)<br />\n' % ("Have a look at my chapter on Winning+Without+Losing:",full_url)
+                        message+= 'Share the link to this chapter on your blog or send it via email: %s\n\n' % full_url
+                    message+='\n\n'
+                
                 if now - contact.content_object.last_login>timedelta(7) and now - contact.content_object.last_login<timedelta(13):
                     message+="We haven't seen you for a while on Winning-Without-Losing. New chapters have been added, go check them out here: [Click here](http://%s)\n\n" % Site.objects.get_current()
                     inactive_count+=1
@@ -101,7 +154,7 @@ def organize_all():
                 message="Hi %s, here is an update on what happened on Winning Without Losing this week.%s" % (contact.first_name, message)
                 message+="&nbsp;\n\nThat's all for today... But the quest for a better entrepreneurial life keeps on!\n\n&nbsp;\n\nWinning Without Losing\n\nwww.winning-without-losing.com\n\n<img src=\"http://m.winning-without-losing.com/img/logo.jpg\" />\n\n\nif you want to unsubscribe from this weekly update [click here](http://%s/newsletters/mailing/unsubscribe/)" % Site.objects.get_current()
                 #create html message with style
-                html_start = '<div style="width:100%; height:100%; margin:0px; background-color:#d3d8dd;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="margin:50px 50px 0px 50px; color:#565454;">'
+                html_start = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8dd;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">'
                 html_end = '</div></div></div></div></div>'
                 message_html = html_start+markdown(message)+html_end
                 #create message
