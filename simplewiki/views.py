@@ -13,11 +13,20 @@ from django.conf import settings
 from pages.models import Editpage
 from django.contrib.comments.models import Comment
 from book.models import Chapter
+from usermessage.models import UserMessage
 
 from models import *
 from settings import *
 
 def view(request, wiki_url):
+    if request.GET and not request.user.is_anonymous():
+        if 'usermessage' in request.GET:
+            usermessage_id = int(request.GET['usermessage'])
+            try:
+                usermessage = UserMessage.objects.get(pk=usermessage_id, user=request.user)
+                usermessage.delete()
+            except:
+                error = "Notification could not be deleted"
     chapters = Chapter.objects.filter(visible=True)
     (article, path, err) = fetch_from_url(request, wiki_url)
     if err:
@@ -34,6 +43,14 @@ def view(request, wiki_url):
     return render_to_response('simplewiki_view.html', c)
 
 def discussion(request, wiki_url):
+    if request.GET and not request.user.is_anonymous():
+        if 'usermessage' in request.GET:
+            usermessage_id = int(request.GET['usermessage'])
+            try:
+                usermessage = UserMessage.objects.get(pk=usermessage_id, user=request.user)
+                usermessage.delete()
+            except:
+                error = "Notification could not be deleted"
     chapters = Chapter.objects.filter(visible=True)
     chapter = get_object_or_404(Article, slug=wiki_url)
     (article, path, err) = fetch_from_url(request, wiki_url)

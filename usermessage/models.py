@@ -208,7 +208,7 @@ def email_when_chapter(sender, **kwargs):
                                                                            truncate_words(chapter.summary,20))
                 organizer_message.save()
 post_save.connect(email_when_chapter, sender=Chapter)
-
+'''
 from accounts.models import Profile
 #for points
 def profile_points_10(sender, **kwargs):
@@ -241,3 +241,4 @@ def profile_points_10(sender, **kwargs):
             msg.attach_alternative(email_html_message, "text/html")
             msg.send()
 pre_save.connect(profile_points_10, sender=Profile)
+'''
