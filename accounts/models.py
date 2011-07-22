@@ -13,7 +13,6 @@ from simplewiki.models import Article
 import djangoratings.models
 import voting.models
 from html_mailer.models import Message
-from usermessage.models import UserMessage
 from django.db.models import Sum
 from emencia.django.newsletter.models import Contact
 from markdown import markdown

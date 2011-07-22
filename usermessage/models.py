@@ -1,4 +1,5 @@
 # coding: utf-8
+from accounts.models import Profile
 from django.db import models
 from django.contrib.auth.models import User
 from emencia.django.newsletter.models import Contact 
@@ -42,7 +43,6 @@ class UserMessage(models.Model):
 
 #--------------------------------AUTOEMAIL----------------------------------#
 def user_commented(sender, **kwargs):
-    from accounts.models import Profile
     request = kwargs.get('request')
     comment = kwargs.get('comment')
     try:
@@ -208,8 +208,8 @@ def email_when_chapter(sender, **kwargs):
                                                                            truncate_words(chapter.summary,20))
                 organizer_message.save()
 post_save.connect(email_when_chapter, sender=Chapter)
+
 '''
-from accounts.models import Profile
 #for points
 def profile_points_10(sender, **kwargs):
     profile = kwargs.get('instance')
