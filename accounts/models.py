@@ -256,6 +256,7 @@ from django.db.models import signals
 from emencia.django.newsletter.models import Contact
 from emencia.django.newsletter.models import MailingList
 
+#create contact when user is created
 def create_contact(sender, **kwargs):
     user = kwargs.get('instance')
     created = kwargs.get('created')
@@ -294,7 +295,7 @@ def create_contact(sender, **kwargs):
                                       description='Mailinglist with all users')
         new_mailing.save()
         new_mailing.subscribers.add(*subscribers)
-        new_mailing.save()    
+        new_mailing.save()  
 post_save.connect(create_contact, sender=User)
 
 def create_chapter(sender, **kwargs):

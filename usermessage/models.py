@@ -17,6 +17,7 @@ import os
 from django.db.models.signals import post_save, pre_save
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.sites.models import Site
+from registration.signals import user_registered
 
 CATEGORY = (
     ('1', 'New comment on your comment'),
@@ -209,7 +210,7 @@ def email_when_chapter(sender, **kwargs):
                 organizer_message.save()
 post_save.connect(email_when_chapter, sender=Chapter)
 
-'''
+
 #for points
 def profile_points_10(sender, **kwargs):
     profile = kwargs.get('instance')
@@ -222,9 +223,41 @@ def profile_points_10(sender, **kwargs):
     if created:
         if profile_score>=10 and contact:
             #email instantly
-            email_message = 'Hurrah %s!\n\n You have exceeded 10 points and will now be credited in the book! Congratulation!' % profile.user
-            msg = EmailMultiAlternatives('Winning Without Losing: exceeded 10 point!', email_message, 'noreply@winning-without-losing.com', [profile.user.email])
-            email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hurra %s!<br /><br /> You have exceeded 10 points and will now be credited in the book! Congratulation!<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (profile.user,Site.objects.get_current())
+            email_message = '''
+Hi %s! 
+
+Congratulations, you got 15 bi-winning points! You are now officially part of the project and will be credited as a co-creator of our first book!
+
+Now, remember to fill out your profile form, so we know exactly who to give credit to. You can also link it to your website or Facebook account to make it easier for people who like what you write to contact you.
+
+And be sure that we will send you a copy of the book, wherever you are!
+
+Have a nice day!
+
+The Winning Without Losing team.
+www.winning-without-losing.com
+''' % profile.user
+            msg = EmailMultiAlternatives('Winning Without Losing: exceeded 15 point!', email_message, 'noreply@winning-without-losing.com', [profile.user.email])
+            email_html_message = '''
+<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">
+
+<p>Hi %s!</p>
+
+<p>Congratulations, you got 15 bi-winning points! You are now officially part of the project and will be credited as a co-creator of our first book!</p>
+
+<p>Now, remember to fill out your <a href="http://%s/account/edit/">profile form</a>, so we know exactly who to give credit to. You can also link it to your website or Facebook account to make it easier for people who like what you write to contact you.</p>
+
+<p>And be sure that we will send you a copy of the book, wherever you are!</p>
+
+<p>Have a nice day!</p>
+
+<p>The Winning Without Losing team</p>
+<p>www.winning-without-losing.com</p>
+<img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p>
+
+</div></div></div></div></div>
+''' % (profile.user,Site.objects.get_current(),Site.objects.get_current())
+            
             msg.attach_alternative(email_html_message, "text/html")
             msg.send()
     else:
@@ -235,10 +268,100 @@ def profile_points_10(sender, **kwargs):
             old_profile_score = 0
         if old_profile_score<10 and profile_score>=10 and contact:
             #email instantly
-            email_message = 'Hurrah %s!\n\n You have exceeded 10 points and will now be credited in the book! Congratulation!' % profile.user
-            msg = EmailMultiAlternatives('Winning Without Losing: exceeded 10 point!', email_message, 'noreply@winning-without-losing.com', [profile.user.email])
-            email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hurra %s!<br /><br /> You have exceeded 10 points and will now be credited in the book! Congratulation!<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (profile.user,Site.objects.get_current())
+            email_message = '''
+Hi %s! 
+
+Congratulations, you got 15 bi-winning points! You are now officially part of the project and will be credited as a co-creator of our first book!
+
+Now, remember to fill out your profile form, so we know exactly who to give credit to. You can also link it to your website or Facebook account to make it easier for people who like what you write to contact you.
+
+And be sure that we will send you a copy of the book, wherever you are!
+
+Have a nice day!
+
+The Winning Without Losing team.
+www.winning-without-losing.com
+''' % profile.user
+            msg = EmailMultiAlternatives('Winning Without Losing: exceeded 15 point!', email_message, 'noreply@winning-without-losing.com', [profile.user.email])
+            email_html_message = '''
+<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">
+
+<p>Hi %s!</p>
+
+<p>Congratulations, you got 15 bi-winning points! You are now officially part of the project and will be credited as a co-creator of our first book!</p>
+
+<p>Now, remember to fill out your <a href="http://%s/account/edit/">profile form</a>, so we know exactly who to give credit to. You can also link it to your website or Facebook account to make it easier for people who like what you write to contact you.</p>
+
+<p>And be sure that we will send you a copy of the book, wherever you are!</p>
+
+<p>Have a nice day!</p>
+
+<p>The Winning Without Losing team</p>
+<p>www.winning-without-losing.com</p>
+<img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p>
+
+</div></div></div></div></div>
+''' % (profile.user,Site.objects.get_current(),Site.objects.get_current())
             msg.attach_alternative(email_html_message, "text/html")
             msg.send()
 pre_save.connect(profile_points_10, sender=Profile)
-'''
+
+#Email send when people registre
+def registration_mail(sender, **kwargs):
+    request = kwargs.get('request')
+    user = kwargs.get('user')
+    email_message = '''
+Welcome to Winning Without Losing, %s! Thank you for joining!
+
+It is a collaborative book project, so it is important to give us feedback: your participation will determine which authors and chapters are going to be included in the final book!
+If you want to learn a bit more about how chapters and authors get selected, you can check our “How It Works” section! 
+
+You will be granted bi-winning points according on your activity on the website:
+20 points if you submit a new chapter;
+10 points is you edit a chapter;
+3 points if you comment a chapter;
+1 point if you rate a chapter;
+
+Every active participant will be credited in the book as a co-creator. You just need to obtain 15 points for this!
+
+You can visit http://%s/book/ to read, rate, comment and edit chapters.
+
+Have a nice day!
+
+The Winning Without Losing team.
+www.winning-without-losing.com
+
+if you want to unsubscribe from these update visit: http://%s/newsletters/mailing/unsubscribe/
+''' % (user,Site.objects.get_current(),Site.objects.get_current())
+    msg = EmailMultiAlternatives('Winning Without Losing: thank you for joining!', email_message, 'noreply@winning-without-losing.com', [user.email])
+    email_html_message = '''
+<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">
+
+<p>Welcome to Winning Without Losing, %s! Thank you for joining!</p>
+
+<p>It is a collaborative book project, so it is important to give us feedback: your participation will determine which authors and chapters are going to be included in the final book!
+If you want to learn a bit more about how chapters and authors get selected, you can check our “How It Works” section!</p>
+
+<p>You will be granted bi-winning points according on your activity on the website:</p>
+<ul>
+<li>20 points if you submit a new chapter;</li>
+<li>10 points is you edit a chapter;</li>
+<li>3 points if you comment a chapter;</li>
+<li>1 point if you rate a chapter;</li>
+</ul>
+<p>Every active participant will be credited in the book as a co-creator. You just need to obtain 15 points for this!</p>
+
+<p>You can go <a href="http://%s/book/">here</a> to read, rate, comment and edit chapters.</p>
+
+<p>Have a nice day!</p>
+
+<p>The Winning Without Losing team</p>
+<p>www.winning-without-losing.com</p>
+<img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p>
+
+</div></div></div></div></div>
+''' % (user,Site.objects.get_current(),Site.objects.get_current())
+    msg.attach_alternative(email_html_message, "text/html")
+    msg.send()    
+    
+user_registered.connect(registration_mail)
