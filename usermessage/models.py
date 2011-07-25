@@ -212,7 +212,7 @@ post_save.connect(email_when_chapter, sender=Chapter)
 
 
 #for points
-def profile_points_10(sender, **kwargs):
+def profile_points_15(sender, **kwargs):
     profile = kwargs.get('instance')
     created = kwargs.get('created')
     profile_score = profile.score
@@ -221,7 +221,7 @@ def profile_points_10(sender, **kwargs):
     except:
         contact = None
     if created:
-        if profile_score>=10 and contact:
+        if profile_score>=15 and contact:
             #email instantly
             email_message = '''
 Hi %s! 
@@ -266,7 +266,7 @@ www.winning-without-losing.com
             old_profile_score = old_profile.score
         except:
             old_profile_score = 0
-        if old_profile_score<10 and profile_score>=10 and contact:
+        if old_profile_score<15 and profile_score>=15 and contact:
             #email instantly
             email_message = '''
 Hi %s! 
@@ -304,7 +304,7 @@ www.winning-without-losing.com
 ''' % (profile.user,Site.objects.get_current(),Site.objects.get_current())
             msg.attach_alternative(email_html_message, "text/html")
             msg.send()
-pre_save.connect(profile_points_10, sender=Profile)
+pre_save.connect(profile_points_15, sender=Profile)
 
 #Email send when people registre
 def registration_mail(sender, **kwargs):
