@@ -27,7 +27,7 @@ def view(request, wiki_url):
                 usermessage.delete()
             except:
                 error = "Notification could not be deleted"
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     (article, path, err) = fetch_from_url(request, wiki_url)
     if err:
         return err
@@ -51,7 +51,7 @@ def discussion(request, wiki_url):
                 usermessage.delete()
             except:
                 error = "Notification could not be deleted"
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     chapter = get_object_or_404(Article, slug=wiki_url)
     (article, path, err) = fetch_from_url(request, wiki_url)
     if err:
@@ -66,7 +66,7 @@ def discussion(request, wiki_url):
 
 def root_redirect(request):
     editpage = Editpage.objects.all()
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     try:
         root = Article.get_root()
     except:
@@ -147,7 +147,7 @@ def create(request, wiki_url):
     return render_to_response('simplewiki_create.html', c)
 
 def edit(request, wiki_url):
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     (article, path, err) = fetch_from_url(request, wiki_url)
     if err:
         return err
@@ -189,7 +189,7 @@ def edit(request, wiki_url):
     return render_to_response('simplewiki_edit.html', c)
 
 def history(request, wiki_url, page=1):
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     (article, path, err) = fetch_from_url(request, wiki_url)
     if err:
         return err
@@ -360,7 +360,7 @@ def encode_err(request, url):
     
 def not_found(request, wiki_url):
     """Generate a NOT FOUND message for some URL"""
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     return render_to_response('simplewiki_error.html',
                               RequestContext(request, {'wiki_err_notfound': True,
                                                        'wiki_url': wiki_url,

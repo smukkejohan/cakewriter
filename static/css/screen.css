@@ -422,13 +422,7 @@ a#home_banner_button:active span {
     background: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#FFF));
     background: -moz-linear-gradient(top,  #F9F9F9,  #FFF);
 }
-.new{
-    font-size: 11px;
-    color: #3cc628;
-    /*color: #df1c1e;
-    float:right;
-    padding-right:4px;*/
-}
+
 #sidebar{
     width:320px;
     float:left;
@@ -508,6 +502,46 @@ h1 a, h2 a, h3 a {}
     margin:15px 10px 0px 0px;
     border: none!important;
     padding: none!important;
+}
+
+#content_overview ul{
+    list-style: none;
+    padding: 0px 10px 0px 0px;
+}
+
+#content_overview li{
+    position: relative;
+    padding: 8px 0px;
+}
+
+#content_overview li a{
+    display: block;
+    width:115px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.new{
+    font-size: 11px;
+    color: #3cc628;
+    float: right;
+    position: absolute;
+    top:16px;
+    right:0px;
+}
+
+.chapter_rating{
+    font-size: 12px;
+    background:url(../images/jquery.ui.stars.gif) 0 -48px no-repeat;
+    width: 16px;
+    height: 12px;
+    display: block;
+    overflow: visible;
+    text-align: center;
+    padding-top:3px;
+    position: absolute;
+    top:0px;
+    right:0px;
 }
 /* chapter full */
 
