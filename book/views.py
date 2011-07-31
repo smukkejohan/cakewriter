@@ -47,7 +47,7 @@ def api_get_comments_for_chapter(request, chapter_id):
     
 
 def all_chapters(request): 
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     return render_to_response(
         'book/all_chapters.html', {'chapters': chapters,'options': CHAPTER_RATING_OPTIONS},
         context_instance = RequestContext(request)
@@ -55,7 +55,7 @@ def all_chapters(request):
  
     
 def chapter(request, chapter_id):
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score"}).order_by('-r')
     chapter = get_object_or_404(Chapter, pk=chapter_id)
     chapter_type = ContentType.objects.get_for_model(chapter)
     try:
