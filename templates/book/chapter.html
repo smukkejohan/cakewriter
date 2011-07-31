@@ -31,8 +31,8 @@
        Date: {{ chapter.pub_date }}
      </p>
      <p class="author meta float_right">
-    By {% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}
-    {% else %}{{ chapter.author.username }}{% endif %}
+    By <a href="{% url user-overview username=chapter.author.username %}">{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}
+    {% else %}{{ chapter.author.username }}{% endif %}</a>
      </p>
      <div class="clear"></div>
     <div class="body">

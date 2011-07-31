@@ -15,6 +15,7 @@ from django.contrib.contenttypes.models import ContentType
 from simplewiki.models import Article
 from djangoratings.models import Vote
 from usermessage.models import UserMessage
+
 def api_get_chapters(request):
     chapters = Chapter.objects.all()
     
@@ -46,7 +47,7 @@ def api_get_comments_for_chapter(request, chapter_id):
     
 
 def all_chapters(request): 
-    chapters = Chapter.objects.filter(visible=True)
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
     return render_to_response(
         'book/all_chapters.html', {'chapters': chapters,'options': CHAPTER_RATING_OPTIONS},
         context_instance = RequestContext(request)
@@ -54,7 +55,7 @@ def all_chapters(request):
  
     
 def chapter(request, chapter_id):
-    chapters = Chapter.objects.filter(visible=True)
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score",'v':"rating_votes"}).order_by('-r','-v')
     chapter = get_object_or_404(Chapter, pk=chapter_id)
     chapter_type = ContentType.objects.get_for_model(chapter)
     try:

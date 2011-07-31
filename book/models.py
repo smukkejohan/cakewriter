@@ -23,7 +23,7 @@ class Chapter(models.Model):
     user_created = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
     picture = ImageWithThumbsField(upload_to="chapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),(68,68)))
-
+            
     class Meta:
         ordering = ['-index']
         get_latest_by = 'pub_date'
@@ -45,7 +45,7 @@ class Chapter(models.Model):
     def get_votes_on_chapter(self):
         chapter_type = ContentType.objects.get_for_model(self)
         return Vote.objects.filter(object_id=self.pk, content_type=chapter_type)
-    
+        
     @models.permalink
     def get_absolute_url(self):
         return ('chapter', [str(self.id)])

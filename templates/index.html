@@ -38,7 +38,7 @@
                 <h3 class="title">
                     <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h3>                                  
                 <div class="author meta float_left">
-                    {{ chapter.pub_date|timesince }} old | By: <i>{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}{% else %}{{ chapter.author.username }}{% endif %}</i> who has {{ chapter.author.get_profile.score }} points
+                    {{ chapter.pub_date|timesince }} old | By: <a href="{% url user-overview username=chapter.author.username %}"><i>{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}{% else %}{{ chapter.author.username }}{% endif %}</i></a> who has {{ chapter.author.get_profile.score }} points
                 </div>
                 
                 <div class="author meta float_right">
