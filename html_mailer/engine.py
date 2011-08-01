@@ -118,7 +118,7 @@ def organize_all():
                     message+="We haven't seen you for a while on Winning-Without-Losing. New chapters have been added, go check them out here: [Click here](http://%s)\n\n" % Site.objects.get_current()
                     inactive_count+=1
                 if c_r:
-                    message+= '###New comment on one of your chapter revisions\n'
+                    message+= '###New comment on one of your chapter\n'
                 for mails in c_r:
                     message+='%s\n\n' % mails.content_mail
                     mails.delete()

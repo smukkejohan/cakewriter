@@ -22,7 +22,7 @@ from registration.signals import user_registered
 CATEGORY = (
     ('1', 'New comment on your comment'),
     ('2', 'New revision on your revision'),
-    ('3', 'New comment on your revision'),
+    ('3', 'New comment on your chapter'),
     ('4', 'New chapters'),
 )
 class StandardUserMessage(models.Model):
@@ -51,9 +51,49 @@ def user_commented(sender, **kwargs):
     except ObjectDoesNotExist:
         p = Profile(user=request.user)
         p.save()
-    #Email send when someone has commented in a thread where another user has commented
+    
     contentpk = comment.object_pk
     contenttype = comment.content_type
+    
+    #Email author when comment posted on authors chapter
+    try:
+        chapter_author=comment.content_object.author
+    except:
+        chapter_author=comment.content_object.created_by
+    
+    try:
+        author_contact = Contact.objects.get(email=chapter_author.email)
+    except:
+        author_contact = None
+    if not chapter_author==comment.user and author_contact:
+        content_mail = "%s with %s points has commented on your chapter: [%s](http://%s%s#c%s), saying: \"%s\"" % (comment.user,
+                                                                                         comment.user.get_profile().score,
+                                                                                         comment.content_object.title,
+                                                                                         Site.objects.get_current(),
+                                                                                         comment.content_object.get_absolute_url(),
+                                                                                         comment.id,
+                                                                                         truncate_words(comment.comment,8))
+        
+        organizer_message = UserMessage(contact=author_contact, user=chapter_author,content_mail=content_mail, creation_date=datetime.now(), category=3)
+        organizer_message.save()
+        
+        content = "%s with %s points has commented on your chapter: [%s](http://%s%s?usermessage=%s#c%s), saying: \"%s\"" % (comment.user,
+                                                                                         comment.user.get_profile().score,
+                                                                                         comment.content_object.title,
+                                                                                         Site.objects.get_current(),
+                                                                                         comment.content_object.get_absolute_url(),
+                                                                                         organizer_message.id,
+                                                                                         comment.id, 
+                                                                                         truncate_words(comment.comment,8))
+        organizer_message.content = content
+        organizer_message.save()
+        #email instantly
+        email_message = 'Hi %s, a comment was posted on your chapter:\n\n%s'%(organizer_message.user,organizer_message.content)
+        msg = EmailMultiAlternatives('Winning Without Losing: comment on your chapter', email_message, 'noreply@winning-without-losing.com', [organizer_message.contact.email])
+        email_html_message = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8d;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">Hi %s, a comment was posted on your chapter:<br /><br />\n%s\n<br /><p>Winning Without Losing</p><p>www.winning-without-losing.com</p><img src="http://m.winning-without-losing.com/img/logo.jpg" /><p>if you want to unsubscribe from these update <a href="http://%s/newsletters/mailing/unsubscribe/">click here</a></p></div></div></div></div></div>' % (organizer_message.user,markdown(organizer_message.content),Site.objects.get_current())
+        msg.attach_alternative(email_html_message, "text/html")
+        msg.send()
+    #Email send when someone has commented in a thread where another user has commented
     users = User.objects.all()
     for user in users:
         try:
@@ -181,6 +221,7 @@ def revision_on_revision(sender, **kwargs):
                             msg.send()
 
 post_save.connect(revision_on_revision, sender=Revision)
+
 #Send new chapters to everybody that have subscribe (no registration is required)
 def email_when_chapter(sender, **kwargs):
     chapter = kwargs.get('instance')
