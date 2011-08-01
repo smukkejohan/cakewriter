@@ -8,6 +8,7 @@ from markdown import markdown
 from djangoratings.fields import RatingField
 from djangoratings.models import Vote
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import post_save
 
 class Chapter(models.Model):
     title = models.CharField('title', max_length=90)
@@ -72,6 +73,23 @@ class UserChapter(models.Model):
         self.body_html = markdown(self.body)
         self.summary_html = markdown(self.summary)
         super(UserChapter, self).save(*args, **kwargs)
+
+
+
+
+def email_when_user_chapter(sender, **kwargs):
+    userchapter = kwargs.get('instance')
+    created = kwargs.get('created')
+    if created:
+        from django.core.mail import send_mail
+        
+        message = 'A new user chapter have been created on Winning Without Losing. Check it out on http://winning-without-losing.com/admin/book/userchapter/%s/' % userchapter.pk
+        send_mail('New user chapter on Winning Without Losing', message, 'no reply@winning-without-losing.com',
+            ['lp@rainmaking.dk'], fail_silently=True)
+post_save.connect(email_when_user_chapter, sender=UserChapter)
+
+
+
 
 from django.contrib.syndication.views import Feed
 

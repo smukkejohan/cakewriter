@@ -194,7 +194,7 @@ def user_chapter(request):
     else:
        return HttpResponseRedirect('/accounts/login/?next=/book/user_chapter/') 
 def user_chapter_thanks(request):
-    chapters = Chapter.objects.filter(visible=True)
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     return render_to_response('book/user_chapter_thanks.html',
                                 {'chapters': chapters,},
                                 context_instance = RequestContext(request))
