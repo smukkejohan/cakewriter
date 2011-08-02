@@ -24,7 +24,8 @@ class Chapter(models.Model):
     user_created = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
     picture = ImageWithThumbsField(upload_to="chapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),(68,68)))
-            
+    picture_description = models.CharField('picture description', max_length=255,blank=True, null=True)
+    
     class Meta:
         ordering = ['-index']
         get_latest_by = 'pub_date'
@@ -61,6 +62,7 @@ class UserChapter(models.Model):
     index = models.IntegerField(help_text="The chapters position in the book. The higher the later.")
     author = models.ForeignKey(User)
     picture = ImageWithThumbsField(upload_to="userchapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),(68,68)))
+    picture_description = models.CharField('picture description', max_length=255,blank=True, null=True)
 
     class Meta:
         ordering = ['-index']

@@ -36,7 +36,10 @@
      </p>
      <div class="clear"></div>
     <div class="body">
-        {% if chapter.picture %}<img src="{{ chapter.picture.url_500x100000 }}" />{% endif %}
+        {% if chapter.picture %}
+            <img src="{{ chapter.picture.url_500x100000 }}" />
+            <p class="helptext">{{ chapter.picture_description }}</p>
+        {% endif %}
         {{ chapter.body_html|safe }} 
        
     </div>   
