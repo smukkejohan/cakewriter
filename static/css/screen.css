@@ -806,6 +806,17 @@ input:focus, textarea:focus{
     border: 1px solid #c5c5c5;
     outline: none;
 }
+
+/* Edit and create chapter */
+#createchapter{
+    position:absolute;
+    left:-99999px;
+}
+
+#javascript_error{
+    
+}
+
 /* Feedback */
 #feedback{
     position: fixed;

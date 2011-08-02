@@ -5,7 +5,12 @@
 {% block content %}
 {{ form.media }}
 <div id="content_alone">
-<form action="" method="post" enctype="multipart/form-data">
+<div id="javascript_error">
+<h2>You do not have javascript enable.</h2>
+<p>Javascript is required to edit and create chapters. Please enable javascript.</p>
+</div>
+
+<form id="createchapter" action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />
