@@ -104,6 +104,7 @@ $(document).ready(function() {
   $('#rating-after').hide();
   $('#createchapter').css({'left':'0px','position':'static'});
   $('#javascript_error').css({'left':'-99999px','position':'absolute'});
+
   function filterPath(string) {
   return string
     .replace(/^\//,'')

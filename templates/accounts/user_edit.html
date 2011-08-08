@@ -4,9 +4,11 @@
 
 {% block contentview %}
 <div id="content_overview">
+<ul>
 {% for user in users %}
-<p><a href="{% url user-overview username=user.user.username %}">{{ user.user.username }}</a> <span class="new">{{ user.score }} points</span></p>
+<li><a href="{% url user-overview username=user.user.username %}">{{ user.user.username }}</a> <span class="new">{{ user.score }} points</span></li>
 {% endfor %}
+</ul>
 </div>                                     
 {% endblock %}
 

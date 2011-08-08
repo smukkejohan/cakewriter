@@ -79,7 +79,8 @@ def organize_all():
                         try:
                             chapter_rating = Score.objects.get(content_type=contenttype,object_id=chapter.pk)
                             votes = chapter_rating.votes
-                            score = chapter_rating.score
+                            score = chapter_rating.score/chapter_rating.votes
+                            score = round(score*2)/2
                         except:
                             chapter_rating = None
                             votes = 0
