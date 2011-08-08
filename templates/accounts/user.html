@@ -7,7 +7,7 @@
 <div id="content_overview">
 <ul>
 {% for user in users %}
-<li><a href="{% url user-overview username=user.user.username %}">{% if user.user.first_name %}{{ user.user.first_name }} {{ user.user.last_name }}{% else %}{{ user.user.username }}{% endif %}</a> <span class="new">{{ user.score }} points</span></li>
+<li><a href="{% url user-overview username=user.user.username %}">{% if user.user.first_name %}{{ user.user.first_name }} {{ user.user.last_name }}{% else %}{{ user.user.username }}{% endif %}</a> <span class="profile_score">{{ user.score }} points</span></li>
 {% endfor %}
 </ul>
 </div>                                     

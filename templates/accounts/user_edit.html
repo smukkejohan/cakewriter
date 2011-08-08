@@ -6,7 +6,7 @@
 <div id="content_overview">
 <ul>
 {% for user in users %}
-<li><a href="{% url user-overview username=user.user.username %}">{{ user.user.username }}</a> <span class="new">{{ user.score }} points</span></li>
+<li><a href="{% url user-overview username=user.user.username %}">{{ user.user.username }}</a> <span class="profile_score">{{ user.score }} points</span></li>
 {% endfor %}
 </ul>
 </div>                                     
