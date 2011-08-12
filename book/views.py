@@ -55,7 +55,7 @@ def all_chapters(request):
  
     
 def chapter(request, chapter_id):
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': "rating_score"}).order_by('-r')
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
     chapter = get_object_or_404(Chapter, pk=chapter_id)
     chapter_type = ContentType.objects.get_for_model(chapter)
     try:
