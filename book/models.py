@@ -19,7 +19,7 @@ class Chapter(models.Model):
     mod_date = models.DateTimeField(default=datetime.now)
     pub_date = models.DateTimeField(default=datetime.now)
     index = models.IntegerField(help_text="The chapters position in the book. The higher the later.")
-    rating = RatingField(range=5, can_change_vote = True, allow_anonymous = False)
+    rating = RatingField(range=5, weight=1, can_change_vote = True, allow_anonymous = False)
     author = models.ForeignKey(User)
     user_created = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
