@@ -3,7 +3,7 @@
         <h3>Subscribe to new chapters</h3>
         <form action="/subscribe/" method="post">
         {% csrf_token %}
-        <input type="text" name="email" value="" />
+        <input type="text" name="email" value="" style="width:120px;"/>
         <input type="hidden" name="next" value="{{ request.get_full_path }}" />
         <input type="submit" value="subscribe" />
         </form>
