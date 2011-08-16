@@ -533,7 +533,7 @@ h1 a, h2 a, h3 a {}
 }
 
 .read{
-    right:-999999px;
+    display: none;
 }
 
 .profile_score{
