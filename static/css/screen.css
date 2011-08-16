@@ -532,6 +532,10 @@ h1 a, h2 a, h3 a {}
     right:0px;
 }
 
+.read{
+    right:-999999px;
+}
+
 .profile_score{
     font-size: 11px;
     color: #3cc628;

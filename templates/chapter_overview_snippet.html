@@ -18,10 +18,7 @@
         <li>
         <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a> 
         <div class="chapter_rating">{{ chapter.get_score }}</div>
-
-        {% for votes in chapter.get_votes_on_chapter %}
-            {% ifequal votes.user user %}<span class="new">read</span>{% endifequal %}
-        {% endfor %}
+        <span class="new {% for votes in chapter.get_votes_on_chapter %}{% ifequal votes.user user %}read{% endifequal %}{% endfor %}">unread</span>
         </li>
         {% endfor %} 
         </ul>
