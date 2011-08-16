@@ -85,8 +85,8 @@ def email_when_user_chapter(sender, **kwargs):
     if created:
         from django.core.mail import send_mail
         
-        message = 'A new user chapter have been created on Winning Without Losing. Check it out on http://winning-without-losing.com/admin/book/userchapter/%s/' % userchapter.pk
-        send_mail('New user chapter on Winning Without Losing', message, 'no reply@winning-without-losing.com',
+        message = '%s have created a user chapter have been created on Winning Without Losing. Check it out on http://winning-without-losing.com/admin/book/userchapter/%s/' % (userchapter.author, userchapter.pk)
+        send_mail('New user chapter on Winning Without Losing', message, 'noreply@winning-without-losing.com',
             ['lp@rainmaking.dk'], fail_silently=True)
 post_save.connect(email_when_user_chapter, sender=UserChapter)
 
