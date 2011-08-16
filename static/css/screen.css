@@ -665,12 +665,12 @@ h1 a, h2 a, h3 a {}
 #rating {
   height: 20px;  width:80px;
 }
-#rating-after{
+#rating-after-container{
     margin-top:10px;
     float:left;
     width:120px;
 }
-#rating-after hr{
+#rating-after-container hr{
     margin-bottom:5px;
 }
 .ui-stars-star,

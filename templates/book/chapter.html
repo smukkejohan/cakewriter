@@ -136,17 +136,21 @@
                     </select>
                     <input type="submit" value="Rate it!" />
                 </form>
-                {% if user.is_anonymous %}
-                <div id="rating-after">
+                
+                <div id="rating-after-container">
                 <hr />
                 <span class="helptext">You rating is important, it will determine if this chapter is included in the final collaborative book!</span>
                 <hr />
+                {% if user.is_anonymous %}
+                <div id="rating-after">
                 <a href="{% url auth_login %}?next={{ request.path }}#rating">log in</a>
                 or 
                 <a href="{% url registration_register %}?next={{ request.path }}#rating">register</a> (it's easy!)
                 to rate
                 </div>
                 {% endif %}
+                </div>
+                
             </div>
        <div id="share_buttons">
        <iframe src="http://www.facebook.com/plugins/like.php?href={{"http://winning-without-loosing.com"|urlencode}}{{ chapter.get_absolute_url|urlencode }}&amp;layout=box_count&amp;show_faces=true&amp;width=40&amp;action=like&amp;font&amp;colorscheme=light&amp;height=65&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:65px;" allowTransparency="true"></iframe>
