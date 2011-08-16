@@ -47,7 +47,7 @@ def api_get_comments_for_chapter(request, chapter_id):
     
 
 def all_chapters(request): 
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
+    chapters = Chapter.objects.filter(visible=True).order_by('-pub_date')
     return render_to_response(
         'book/all_chapters.html', {'chapters': chapters,'options': CHAPTER_RATING_OPTIONS},
         context_instance = RequestContext(request)
@@ -55,7 +55,7 @@ def all_chapters(request):
  
     
 def chapter(request, chapter_id):
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
+    chapters = Chapter.objects.filter(visible=True).order_by('-pub_date')
     chapter = get_object_or_404(Chapter, pk=chapter_id)
     chapter_type = ContentType.objects.get_for_model(chapter)
     try:
@@ -194,7 +194,7 @@ def user_chapter(request):
     else:
        return HttpResponseRedirect('/accounts/login/?next=/book/user_chapter/') 
 def user_chapter_thanks(request):
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
+    chapters = Chapter.objects.filter(visible=True).order_by('-pub_date')
     return render_to_response('book/user_chapter_thanks.html',
                                 {'chapters': chapters,},
                                 context_instance = RequestContext(request))
