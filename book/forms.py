@@ -9,4 +9,4 @@ class UserChapterForm(forms.Form):
     summary = forms.CharField(widget=TinyMCE(attrs={'cols': 100, 'rows': 10}), initial='Write a brief summary to present your chapter')
     content = forms.CharField(widget=TinyMCE(attrs={'cols': 100, 'rows': 50}), initial='Give us a hand... in no more than 600 words!')
     photo = forms.ImageField(required=False, help_text='<br />Upload a photo to go with your chapter')
-    picture_description = forms.CharField()
+    picture_description = forms.CharField(required=False)
