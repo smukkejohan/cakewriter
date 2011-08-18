@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load comments %}
 {% load voting_tags %}
+{% load random_chapter_message %}
 {% block title %}{{ chapter.title }}{% endblock %}
 {% block sideheader %}Chapter{% endblock %}
 
@@ -10,7 +11,7 @@
 
 {% block content %}
 {% if chapter.visible %}
-<div class="chapter clearfix">
+<div class="chapter clearfix" id="chapter">
     <div id="chapter_header">
         <h1 id="chapter_title" class="float_left">{{ chapter.title }}</h1>
         
@@ -50,7 +51,15 @@
   
      
 </div>
-
+<div id="message">
+{% any %}
+<h3>Remember to rate!</h3>Liked this chapter? Rate it and help us choosing if it’ll be in the final version of the book!
+<h3>Rate!</h3>Rate this chapter and 10 other chapters and we will credit you in the printed  version of the book!
+<h3>Be credited!</h3>Want to take part and be credited in the book? Help us choosing its content: rate 10 chapters and you’ll be credited as a co-creator!
+<h3>Read, rate and comment!</h3>Want to receive your own copy of the final book? Read, rate and comment and collect 50 bi-winning points to receive your own copy of book!
+<h3>Remember to Comment!</h3>Anything {% any %}to comment?|to add?{% endany %} Comment this chapter and receive 3 bi-winning points! 15 points and you’ll be credited in the final version of the book as a co-creator!
+{% endany %}
+</div>
 
 <div id="comments">
 
