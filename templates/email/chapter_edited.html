@@ -1,0 +1,9 @@
+{% include "email/email_top.html" %}
+Hi {{ organizer_message.user }}!<br /><br />
+Congratulations! Your chapter {{ organizer_message.chapter.title }} has been edited by {{ organizer_message.actor }}!<br />
+This contributes to improve your chapter and helps you getting a better ranking for it! You can check what has been changed <a href="{{ organizer_message.hyperlink_usermessage }}">here</a>, and tell us what you think about it.<br />
+Remember that feedback such as ratings, comments, and editions can help you create some buzz around your chapter, and increase your chances to have your text in the final version of the book!<br />
+Best luck for being selected.<br /><br />
+
+
+{% include "email/email_bottom.html" %}

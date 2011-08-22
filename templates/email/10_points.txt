@@ -1,0 +1,11 @@
+Hi {{ user }}! 
+
+Congratulations, you got 10 bi-winning points! You are now officially part of the project and will be credited as a co-creator in our first book!
+
+Now, remember to fill out your profile form (http://winning-without-losing.com/account/), so we know exactly who to give credit to. You can also link it to your website or Facebook and Twitter accounts to make it easier for people who like what you write to contact you.
+
+And if you reach 50 points, be sure that we will send you a copy of the book, wherever you are!
+
+Have a nice day!
+
+The Winning Without Losing team.

@@ -1,0 +1,5 @@
+Hi {{ organizer_message.user }}!
+Your chapter {{ organizer_message.chapter.title }} has been commented by {{ organizer_message.actor }}! Want to check it out and post a reply? Here is the link: {{ organizer_message.hyperlink_usermessage }}
+Comments will help you getting valuable feedback from users, and help you create some buzz around them and get a better ranking! 
+Have a very nice day!
+The Winning Without Losing Team.

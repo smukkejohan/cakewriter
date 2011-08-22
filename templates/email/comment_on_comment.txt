@@ -1,0 +1,5 @@
+Hi {{ organizer_message.user }}!
+{{ organizer_message.actor }} just commented on the same chapter as you: {{ organizer_message.chapter.title }}! Want to check it out and post a reply? Here is the link: {{ organizer_message.hyperlink_usermessage }}
+Remember that commenting and giving likes and dislikes on people’s comments also increases your bi-winning score! You will be credited as a co-creator if you collect 10 bi-winning points, and we will send you a copy if you reach a 50 points score!
+Have a very nice day,
+The Winning Without Losing Team.

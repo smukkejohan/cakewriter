@@ -1,0 +1,16 @@
+Welcome to Winning Without Losing, {{ user }}! Thank you for joining!
+
+It is a collaborative book project, so you are the one deciding which chapters are going to be included in its printed version.  Every active participant will be credited in the book as a co-creator; rate 10 chapters and you’re in! And if you collect 50 of them, we will send you your own copy of the book!
+
+You will be granted bi-winning points according on your activity on the website:
+    20 points if you submit a new chapter;
+    10 points is you edit a chapter;
+    3 points if you comment a chapter;
+    1 point if you rate a chapter.
+
+You can go here (www.winning-without-losing.com/book/) to read, rate, comment and edit chapters. And if you want to learn a bit more about how chapters and authors get selected, you can check our “How It Works” section here: www.winning-without-losing.com/howitworks/ 
+
+
+Have a nice day!
+
+The Winning Without Losing team.

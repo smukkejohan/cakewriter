@@ -1,0 +1,6 @@
+Hi {{ organizer_message.user }}!
+
+A chapter ({{ organizer_message.chapter.title }}) edited by you have just been edited by {{ organizer_message.actor }}.
+You can check what has been changed here ({{ organizer_message.hyperlink_usermessage }}) and tell us what you think about it.
+
+The Winning Without Losing Team
