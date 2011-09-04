@@ -1,4 +1,9 @@
+{% extends 'base.html' %}
 {% load comments i18n %}
+
+{% block title %}Post a comment{% endblock %}
+
+{% block content %}
 {% if user.is_authenticated %}
    <form action="{% comment_form_target %}" method="post">
         {% csrf_token %}
@@ -22,3 +27,4 @@
 {% else %}
     Log in or register to comment!
 {% endif %}
+{% endblock %}

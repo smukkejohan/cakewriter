@@ -34,6 +34,7 @@ def html2list(x, b=0):
 			else: cur += c
 	output.append(cur)
 	return filter(lambda x: x is not '', output)
+
 class ShouldHaveExactlyOneRootSlug(Exception):
     pass
 
@@ -311,7 +312,6 @@ class Revision(models.Model):
         s = difflib.SequenceMatcher(None, a, b)
     	for e in s.get_opcodes():
     		if e[0] == "replace":
-
     			out.append('<del>'+''.join(a[e[1]:e[2]]) + '</del><ins>'+''.join(b[e[3]:e[4]])+"</ins>")
     		elif e[0] == "delete":
     			out.append('<del class="diff">'+ ''.join(a[e[1]:e[2]]) + "</del>")

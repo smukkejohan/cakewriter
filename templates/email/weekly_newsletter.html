@@ -1,0 +1,10 @@
+{% include "email/email_top.html" %}
+Hi <a href="http://winning-without-losing.com/account">{{ user }}</a>! Here is an update of what happened this week on WWL!<br />
+
+<!-- <h3>Status</h3> -->
+
+<h3>Feedback and ratings on your chapters:</h3>
+<i>The feedback your chapters receive will determine if they’ll be selected in the final version of the book!</i><br />
+<h4>{{ chapter.title }}</h4>
+Your chapter has obtained an average rating of {{ chapter.rating.get_rating|floatformat }} out of 5 and is now number {{ chapter.get_number }} out of {{ chapters.count }} chapters! 
+{% include "email/email_bottom.html" %}

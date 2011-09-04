@@ -14,7 +14,6 @@
 <div class="chapter clearfix" id="chapter">
     <div id="chapter_header">
         <h1 id="chapter_title" class="float_left">{{ chapter.title }}</h1>
-        
         <div id="chapter_info">
             <div id="rating_average"class="float_left">
                 {{ chapter.rating.votes }} {% ifequal chapter.rating.votes 1 %}vote{%else%}votes{%endifequal%}<br />

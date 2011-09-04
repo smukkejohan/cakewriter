@@ -47,7 +47,14 @@ class Chapter(models.Model):
     def get_votes_on_chapter(self):
         chapter_type = ContentType.objects.get_for_model(self)
         return Vote.objects.filter(object_id=self.pk, content_type=chapter_type)
-        
+    
+    def get_number(self):
+        chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
+        i=0
+        for chapter in chapters:
+            i+=1
+            if self==chapter:
+                return i
     @models.permalink
     def get_absolute_url(self):
         return ('chapter', [str(self.id)])

@@ -14,6 +14,7 @@ ADMIN_MEDIA_PREFIX = '/media/'
 
 if DEVELOPMENT_MODE:
     DEBUG = True
+    TEMPLATE_DEBUG = True
     MEDIA_URL = '/m/uploads/'
     STATIC_URL = '/m/'
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
