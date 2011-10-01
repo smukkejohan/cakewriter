@@ -5,6 +5,18 @@ Hi <a href="http://winning-without-losing.com/account">{{ user }}</a>! Here is a
 
 <h3>Feedback and ratings on your chapters:</h3>
 <i>The feedback your chapters receive will determine if they’ll be selected in the final version of the book!</i><br />
-<h4>{{ chapter.title }}</h4>
-Your chapter has obtained an average rating of {{ chapter.rating.get_rating|floatformat }} out of 5 and is now number {{ chapter.get_number }} out of {{ chapters.count }} chapters! 
+{% for chapter in chapters %}
+<h4><a href="http://winning-without-lsoing.com{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h4>
+Your chapter has obtained an average rating of {{ chapter.rating.get_rating|floatformat }} out of 5 and is now number {{ chapter.get_number }} out of {{ chapters.count }} chapters!
+
+Great! So far, it looks like your chapter is going to be in the final book! (if the chapter is in the top 60)
+/ Perfect, looks like a winner! OR Seems like your chapter will be included for sure! (if chapter is in the top 10)
+/ Your chapter hasn’t been rated enough to be included in the final book. Take a look at the comments, maybe there’s something to be improved? (if chapter’s out of the top 60).
+Want more ratings?
+Share your chapter on Facebook!
+Share your chapter on Twitter!
+Share the link to your chapter on your personal blog or email: URL
+ 
+{% endfor %}
+
 {% include "email/email_bottom.html" %}

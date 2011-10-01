@@ -99,10 +99,10 @@ body {
     z-index:7;
     width:100%;    
     background-color: #FFF;
-    -moz-box-shadow: 0px 3px 10px #000;
-	-webkit-box-shadow: 0px 3px 10px #000;
-	box-shadow: 0px 3px 10px #000;
-	-o-box-shadow: 0px 3px 10px #000;
+    -moz-box-shadow: 0px 3px 10px #999;
+	-webkit-box-shadow: 0px 3px 10px #999;
+	box-shadow: 0px 3px 10px #999;
+	-o-box-shadow: 0px 3px 10px #999;
 }
 #header_ieshadow{
     z-index:1;
@@ -112,7 +112,7 @@ body {
     width:100%;
     zoom: 1;
     filter:
-        progid:DXImageTransform.Microsoft.Shadow(color=#515151,direction=180,strength=10);
+        progid:DXImageTransform.Microsoft.Shadow(color=#999,direction=180,strength=10);
 }
 
 #header_inner_inner{
@@ -146,7 +146,7 @@ body {
     list-style: none;
 }
 /* main level link */
-#nav a {
+#nav a, #nav a:link {
     text-decoration: none;
     display: block;
     padding:  8px 5px;
@@ -186,15 +186,15 @@ body {
     position: absolute;
     top: 35px;
     left: 0;
-    -webkit-border-bottom-right-radius: 10px;
-    -webkit-border-bottom-left-radius: 10px;
-    -moz-border-radius-bottomright: 10px;
-    -moz-border-radius-bottomleft: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    -webkit-box-shadow: 0 14px 15px rgba(0, 0, 0, .6);
-    -moz-box-shadow: 0 14px 15px rgba(0, 0, 0, .6);
-    box-shadow: 0 14px 15px rgba(0, 0, 0, .6);
+    -webkit-border-bottom-right-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, .3);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, .3);
 }
 /* dropdown */
 #nav li:hover > ul {
@@ -211,10 +211,10 @@ body {
 /* rounded corners for last child */
 
 #nav ul li:last-child > a {
-    -webkit-border-bottom-left-radius: 9px;
-    -moz-border-radius-bottomleft: 9px;
-    -webkit-border-bottom-right-radius: 9px;
-    -moz-border-radius-bottomright: 9px;
+    -webkit-border-bottom-left-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    -moz-border-radius-bottomright: 4px;
 }
 /* clearfix */
 #nav:after {
@@ -279,6 +279,10 @@ html[xmlns] #nav {
     background-repeat: no-repeat;
     background-color:#01a3d4;
 }
+#home_banner, #all_header_container{
+    text-shadow: 0px -1px 0px #999;
+}
+
 #home_banner{
     height:385px;
     padding-left: 55px;

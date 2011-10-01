@@ -28,6 +28,7 @@ def index(request):
 def subscribe_resent_chapters(request):
     errors = []
     email = None
+    older_side = None
     if 'email' in request.POST:
         email = request.POST['email']
     if 'next' in request.POST:
@@ -83,7 +84,7 @@ def update_point_session(request):
     if request.POST.get('session'):
         request.session['point'] = True
         return HttpResponse('created')
-    if request.POST.get('session_del'):
+    if request.POST.get('session_del') and request.session['point']:
         del request.session['point']
         return HttpResponse('deleted')
     return HttpResponse('ok')
