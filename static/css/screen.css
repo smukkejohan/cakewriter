@@ -302,17 +302,20 @@ html[xmlns] #nav {
 #all_header_container{
     display: block;
     background-color:#01a3d4;
-    height:120px;
     width:100%;
 }
 #all_header_banner{
     background-color:#01a3d4;
-    padding:30px 10px 60px 50px;
+    padding:30px 10px 0px 50px;
     color:#FFF;
     margin:0px auto;
     width:900px;
-    height:30px;
     line-height: 30px;
+}
+#all_header_banner_bottom{
+    display:block; 
+    height:60px; 
+    width:100%;
 }
 #home_banner h1{
     font-style: normal;
