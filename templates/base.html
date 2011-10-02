@@ -11,6 +11,9 @@
     <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/screen.css" />
     <link type='text/css' href='{{ STATIC_URL }}feedback/css/basic.css' rel='stylesheet' media='screen' />
 
+    <!--[if lte IE 8]>
+            <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" />
+    <![endif]-->
     {% block css %}{% endblock %}
     
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/latest/" />
@@ -134,7 +137,7 @@
     </div>
     </div>    
     </div>
-    <!--[if IE]>
+    <!--[if lte IE 8]>
     <div id="header_ieshadow">
     </div>
     <![endif]-->

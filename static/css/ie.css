@@ -1,0 +1,44 @@
+#header_ieshadow{
+    z-index:1;
+    background: #FFF;
+    position: fixed;
+    height: 1px;
+    width:100%;
+    zoom: 1;
+    filter:
+        progid:DXImageTransform.Microsoft.Shadow(color=#999,direction=180,strength=10);
+}
+
+#nav ul{
+    border-left:1px solid #ECECEC;
+    border-bottom:2px solid #ECECEC;
+    border-right:1px solid #ECECEC;
+}
+
+
+.button, input[type='submit']{
+    border: 1px solid #999;
+    border-bottom: 2px solid #707070;
+    
+    background-color: #F2F1EF; 
+    padding: 5px 10px 6px;
+    text-decoration: none;
+    color: black;
+    margin:30px 5px 20px 0px;
+    cursor: pointer;
+}
+.button:hover,input[type="submit"]:hover, input[type="submit"]:focus{
+    text-decoration: none;
+    outline: none; 
+    
+    border: 1px solid #007ea4;
+    border-bottom:2px solid #004A61;
+    background-color: #01A3D4;
+    color: white;
+    text-shadow: 0px -1px 0px black;
+
+}
+.button:active,input[type="submit"]:active{
+    border: 1px solid #007ea4;
+    border-top:2px solid #004A61;
+}
