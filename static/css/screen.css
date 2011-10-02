@@ -761,19 +761,46 @@ h1 a, h2 a, h3 a {}
 .button_container{
     height:100px;
 }
-.button{
-    background-color: #f6f6f6;
-    display: inline-block;
-    padding: 5px 10px 6px;
-    color: #888888;
-    text-decoration: none;
-    font-weight: bold;
+.button, input[type='submit']{
     line-height: 1;
+    display: inline-block;
+    
+    border-top: 1px solid #fff;
+    box-shadow: 0px -1px 0px #999;
+    -moz-box-shadow: 0px -1px 0px #999;
+    -webkit-box-shadow: 0px -1px 0px #999;
+   
+    background-image: -webkit-gradient(linear,left top,left bottom,from(rgba(255, 255, 255, 0.15)),to(rgba(0, 0, 0, 0.15)));
+    background-image: -moz-linear-gradient(top,rgba(255, 255, 255, 0.15),rgba(0, 0, 0, 0.15));
+    
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    border: 1px solid #dcdcdc;
-    cursor: pointer;
+    
+    background-color: #F2F1EF; 
+    padding: 5px 10px 6px;
+    text-decoration: none;
+    color: black;
+    text-shadow: 0px 1px 0px white;
     margin:30px 5px 20px 0px;
+    cursor: pointer;
+}
+.button:hover,input[type="submit"]:hover, input[type="submit"]:focus{
+    text-decoration: none;
+    box-shadow: 0px -1px 0px #004960;
+    -moz-box-shadow: 0px -1px 0px #004960;
+    -webkit-box-shadow: 0px -1px 0px #004960;
+
+    border-top: 1px solid #00c3ff;
+    background-color: #01A3D4;
+    color: white;
+    text-shadow: 0px -1px 0px black;
+
+}
+.button:active,input[type="submit"]:active{
+    box-shadow: inset 0px 0px 4px black, 0px -1px 0px #004960;
+    -moz-box-shadow:inset 0px 0px 4px black, 0px -1px 0px #004960;
+    -webkit-box-shadow:  inset 0px 0px 4px black, 0px -1px 0px #004960;
+    border-top: 1px solid rgba(0,0,0,1);
 }
 #create_chapter_button{
     line-height: 1;
@@ -804,12 +831,6 @@ h1 a, h2 a, h3 a {}
 #create_chapter_button:active{
     background-color: #df0003;
 }
-.button:hover{
-    color: #656565;
-    border: 1px solid #c5c5c5;
-}
-.button:active{
-}
 
 
 table#wiki_revision_table th{
@@ -822,12 +843,14 @@ table#wiki_revision_table th{
 #wiki_revision_table textarea{
     height:500px;
 }
+/*
 input[type="submit"]:hover{
     text-decoration: underline;
     color: #656565;
     border: 1px solid #c5c5c5;
     cursor: pointer;
 }
+
 input, textarea{
     background: #f6f6f6;
     display: inline-block;
@@ -840,18 +863,46 @@ input, textarea{
     border: 1px solid #dcdcdc;
     margin-bottom:10px;
 }
+*/
+input[type="submit"]{
+    border-left:none;
+    border-right:none;
+    border-bottom:none;
+}
+
 input[type="hidden"]{
     display: none;
 }
-input{
-    font-weight: bold;
-}
-textarea{
-    font-weight: none;
-}
+
+/*
 input:focus, textarea:focus{
     color: #656565;
     border: 1px solid #c5c5c5;
+    outline: none;
+}
+*/
+
+input, textarea{
+    display: inline-block;
+    padding: 5px 10px 6px;
+    color: #7c7c7c;
+    text-decoration: none;
+    line-height: 1;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: 1px solid #dcdcdc;
+    margin-bottom:10px;
+
+    border:1px solid #999;
+    -webkit-box-shadow: inset 0px 1px 3px #ccc;
+    box-shadow: inset 0px 1px 3px #ccc;
+    -moz-box-shadow: inset 0px 1px 3px #ccc;
+}
+input:focus, textarea:focus{
+    border:1px solid #999;
+    -webkit-box-shadow: 0px 0px 6px #ccc;
+    -moz-box-shadow: 0px 0px 6px #ccc;
+    box-shadow: 0px 0px 6px #ccc;
     outline: none;
 }
 
