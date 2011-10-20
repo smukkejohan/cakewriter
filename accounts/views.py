@@ -10,29 +10,20 @@ from django.contrib.comments.models import Comment
 from book.models import Chapter
 from simplewiki.models import Revision
 from djangoratings.models import Vote
+
 @login_required
 def user(request, username):
-    users_ori = User.objects.all()
-    for user in users_ori:
-        try:
-            profile = user.get_profile()
-        except ObjectDoesNotExist:
-            profile = Profile(user=user)
-            profile.save()
     users = Profile.objects.all().order_by('-score')
-    user = None
-    editable = False
-    usercomments = None
-    userchapters = None
-    userrevisions = None
-    userratings = None
-    activity = False
+    #The user that is being viewed
     try:
         user = User.objects.get(username=username)
     except:
-        pass
+        user = None
+    #if the user being viewed is the same as the on logged on then give him permission to edit
     if user==request.user:
         editable = True
+    else:
+        editable = False   
     if user:
         #create profile if none
         try:
@@ -40,25 +31,36 @@ def user(request, username):
         except ObjectDoesNotExist:
             profile = Profile(user=user)
             profile.save()
-        #Comments
         usercomments = Comment.objects.filter(user=user).order_by('content_type')
         userchapters = Chapter.objects.filter(author=user, visible=True)
         userrevisions = Revision.objects.filter(revision_user=user).exclude(counter=1)
         userratings = Vote.objects.filter(user=user)
         if (usercomments or userchapters or userrevisions or userratings): activity=True
-    return render_to_response('accounts/user.html', 
-                                {'editable': editable,
-                                'profile': user,
-                                'users':users, 
-                                'username':username,
-                                'usercomments':usercomments,
-                                'userchapters':userchapters,
-                                'userrevisions':userrevisions,
-                                'userratings':userratings,
-                                'activity':activity,
-                                },
-                                context_instance = RequestContext(request)
-    )
+        else: activity = False
+        return render_to_response('accounts/user.html', 
+                                    {'editable': editable,
+                                    'profile': user,
+                                    'users':users, 
+                                    'username':username,
+                                    'usercomments':usercomments,
+                                    'userchapters':userchapters,
+                                    'userrevisions':userrevisions,
+                                    'userratings':userratings,
+                                    'activity':activity,
+                                    },
+                                    context_instance = RequestContext(request)
+                                 )
+    else:
+        activity = False
+        return render_to_response('accounts/user.html', 
+                        {'editable': editable,
+                        'profile': user,
+                        'users':users, 
+                        'username':username,
+                        'activity':activity,
+                        },
+                        context_instance = RequestContext(request)
+                     )
 
 @login_required
 def edit_profile(request):
@@ -68,13 +70,6 @@ def edit_profile(request):
         profile = Profile(user=request.user)
         profile.save()
     user = request.user
-    users_ori = User.objects.all()
-    for user_ori in users_ori:
-        try:
-            profile_ori = user_ori.get_profile()
-        except ObjectDoesNotExist:
-            profile_ori = Profile(user=user_ori)
-            profile_ori.save()
     users = Profile.objects.all().order_by('-score')
     if request.method == 'POST':
         form = ProfileUserForm(request.POST, request.FILES, instance=profile)

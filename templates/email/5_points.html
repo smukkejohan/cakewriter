@@ -1,4 +1,5 @@
-{% include "email/email_top.html" %}
+{% extends 'email/email_base.html' %}
+{% block content %}
 Hi {{ user }}!<br /><br /> 
 
 Congratulations, you collected 5 Bi-Winning Points! You’re only halfway to becoming a co-creator and be credited in the hard copy version of the book! Your feedback is really important, as you decide which authors are going to be credited in the book.<br /><br />
@@ -6,4 +7,4 @@ Congratulations, you collected 5 Bi-Winning Points! You’re only halfway to bec
 Did you also know that you can edit the chapters to improve them and become a co-authors? Each edition gives you 10 Bi-Winning points, so share your feedback!<br /><br />
 
 Have a nice day!<br /><br />
-{% include "email/email_bottom.html" %}
+{% endblock %}

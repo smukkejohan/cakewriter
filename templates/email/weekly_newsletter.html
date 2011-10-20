@@ -1,22 +1,118 @@
-{% include "email/email_top.html" %}
-Hi <a href="http://winning-without-losing.com/account">{{ user }}</a>! Here is an update of what happened this week on WWL!<br />
+{% extends 'email/email_base.html' %}
+{% load chapter_rank %}
+{% load random_chapter_message %}
+{% load markup %}
 
-<!-- <h3>Status</h3> -->
+{% block content %}
+Hi {% if user %}<a href="http://winning-without-losing.com/account">{{ user }}</a>{% else %}{{ contact.first_name }}{% endif %}! Here is an update of what happened this week on WWL!<br />
 
+{% if user %}
+
+<h3>Status</h3>
+<p>
+<i>Your bi-winning score determines if you are credited in the final book. Get 10 points and you’ll be credited in the final book as a co-creator. Obtain 50 of these, and you’ll receive your own copy of the book!
+On the {% now "jS o\f F" %}, you have:</i>
+<ul>
+<li>Submitted {{ submitted_chapters.count }} chapter{{ submitted_chapters.count|pluralize }};</li>
+<li>Edited {{ edited_chapters.count }} chapter{{ edited_chapters.count|pluralize }};</li>
+<li>Commented {{ commented_chapters.count }} time{{ commented_chapters.count|pluralize }} chapter{{ commented_chapters.count|pluralize }};</li>
+<li>Rated {{ rated_chapters.count }} chapter{{ rated_chapters.count|pluralize }}.</li>
+<li>Voted {{ given_positive_votes_on_comments.count }} comment{{ given_positive_votes_on_comments.count|pluralize }} up.</li>
+<li>{{ received_positive_votes_on_comments.count }} positive vote{{ received_positive_votes_on_comments.count|pluralize }} on comment{{ received_positive_votes_on_comments.count|pluralize }}.</li>
+<li>{{ received_negative_votes_on_comments.count }} negative vote{{ received_negative_votes_on_comments.count|pluralize }} on comment{{ received_negative_votes_on_comments.count|pluralize }}.</li>
+</ul>
+That gives you {{ user.get_profile.score }} bi-winning points! 
+{% if user.get_profile.score <= 5 %}Want more?{% endif %}
+{% if user.get_profile.score >= 20 and user.get_profile.score < 50 %}Not bad!{% endif %}
+{% if user.get_profile.score >= 50 %}Super sweet!{% endif %}
+</p>
+
+
+{% if submitted_chapters %}
 <h3>Feedback and ratings on your chapters:</h3>
 <i>The feedback your chapters receive will determine if they’ll be selected in the final version of the book!</i><br />
-{% for chapter in chapters %}
-<h4><a href="http://winning-without-lsoing.com{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h4>
-Your chapter has obtained an average rating of {{ chapter.rating.get_rating|floatformat }} out of 5 and is now number {{ chapter.get_number }} out of {{ chapters.count }} chapters!
+{% for chapter in submitted_chapters %}
+<h4><a href="http://winning-without-losing.com{{ chapter.get_absolute_url }}">{{ chapter.title }}</a></h4>
+<p>
+{% get_chapter_rank chapter as chapter_rank %}
+Your chapter has obtained an average rating of {{ chapter.rating.get_rating|floatformat }} out of 5 and is now number {{ chapter_rank }} out of {{ chapters.count }} chapters! 
+{% if chapter_rank <= 60 and chapter_rank > 10 %}
+Great! So far, it looks like your chapter is going to be in the final book!
+{% else %}{% if chapter_rank <= 10 %}
+{% any %}Perfect, looks like a winner!|Seems like your chapter will be included for sure!{% endany %}
+{% else %}{% if chapter_rank > 60 %}
+Your chapter hasn’t been rated enough to be included in the final book. Take a look at the comments, maybe there’s something to be improved?
+{% endif %}{% endif %}{% endif %}
+<p/>
+<i>Want more ratings?</i><br />
+<a href="http://www.facebook.com/sharer.php?u={{ "http://winning-without-losing.com"|urlencode }}{{ chapter.get_absolute_url|urlencode }}&t=Have+a+look+at+my+chapter+on+Winning+Without+Losing">Share your chapter on Facebook!</a><br/>
+<a href="http://twitter.com/home?status=Have a look at my chapter on Winning Without Losing: http://winning-without-losing.com{{ chapter.get_absolute_url }}">Share your chapter on Twitter!</a><br/>
+Share the link to your chapter on your personal blog or email: <i>http://winning-without-losing.com{{ chapter.get_absolute_url }}</i>
+{% endfor %}
+{% endif %}
 
-Great! So far, it looks like your chapter is going to be in the final book! (if the chapter is in the top 60)
-/ Perfect, looks like a winner! OR Seems like your chapter will be included for sure! (if chapter is in the top 10)
-/ Your chapter hasn’t been rated enough to be included in the final book. Take a look at the comments, maybe there’s something to be improved? (if chapter’s out of the top 60).
-Want more ratings?
-Share your chapter on Facebook!
-Share your chapter on Twitter!
-Share the link to your chapter on your personal blog or email: URL
- 
+
+{% if comments_on_revisions %}
+<h3>New comment on your chapter</h3>
+<p><i>Get inspired by the comments and improve your chapter!</i></p>
+{% for comment_on_revision in comments_on_revisions %}
+{{ comment_on_revision.content_mail|markdown }}
+{% endfor %}
+{% endif %}
+
+
+{% if comments_on_comments %}
+<h3>New comments where you have commented</h3>
+<p><i>Rating and commenting on chapters will increase your bi-winning score. Each comment gives you 3 points and each “like” on your comments gives you 1 point. Collect 10 points and you will be credited in the final book as a co-creator. Collect 50 points and we will send you a free copy of the book!</i></p>
+{% for comment_on_comment in comments_on_comments %}
+{{ comment_on_comment.content_mail|markdown }}
+{% endfor %}
+{% endif %}
+
+
+{% endif %}
+
+
+{% if new_chapters %}
+{% with new_chapters.count as new_chapters_count %}
+{% if new_chapters_count > 1 %}
+<h3>New chapters have been submitted!</h3>
+{% else %}
+<h3>A new chapter has been submitted!</h3>
+{% endif %}
+
+{% for new_chapter in new_chapters %}
+<h4><a href="http://winning-without-losing.com{{ new_chapter.chapter.get_absolute_url }}">{{ new_chapter.chapter.title }}</a></h4>
+<p>by {{ new_chapter.chapter.author }} with {{ new_chapter.chapter.author.get_profile.score }} points: “{{ new_chapter.chapter.summary|truncatewords:20 }}”.</p>
 {% endfor %}
 
-{% include "email/email_bottom.html" %}
+<p>
+{% if new_chapters_count > 1 %}
+What do you think about them? Are they good enough to be in the book? Remember to rate them and comment them to help us decide! The more you comment and rate, the more your chances are that you’ll be credited in the final book! 
+{% else %}
+What do you think about it? Is it good enough to be in the book? Remember to rate it and comment it to help us decide! The more you comment and rate, the more your chances are that you’ll be credited in the final book! 
+{% endif %}
+</p>
+
+{% endwith %}
+{% endif %}
+
+{% if staff_usermessages %}
+<h3>Changes on the website!</h3>
+{% for staff_usermessage in staff_usermessages %}
+<p>{{ staff_usermessage.content }}</p>
+{% endfor %}
+{% endif %}
+
+<br /><br /><br />
+<p>
+{% any %}
+That’s all for today, but the life for a better entrepreneurial life lives on!
+That’s all for today, but we’ll come back, muwhahhahahaha!
+That’s all for today, but they’ll be more soon!
+That’s all for today, but we’ll keep on winning without losing!
+That’s all for today, but that was bi-winning for sure!
+{% endany %}
+</p>
+
+{% endblock %}

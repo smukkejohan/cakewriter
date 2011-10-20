@@ -37,136 +37,101 @@ def prioritize():
 
 
 def organize_all():
-    #Check if user have been active within a week
     from emencia.django.newsletter.models import Contact
     from django.contrib.auth.models import User 
-    from datetime import datetime, timedelta
-    from markdown import markdown
-    from django.contrib.sites.models import Site
     from usermessage.models import UserMessage, StandardUserMessage
     from djangoratings.models import Vote, Score
-    from django.contrib.contenttypes.models import ContentType
-    from django.db.models import Avg
-    from django.utils.http import urlencode
     from book.models import Chapter
-    now = datetime.now()
+    from django.template import Context
+    from django.template.loader import get_template
+    from accounts.models import ScoreLog, Profile
+    from simplewiki.models import Revision
+    from django.contrib.comments.models import Comment
+    from django.core.exceptions import ObjectDoesNotExist
+    from BeautifulSoup import BeautifulSoup
+    
     contacts = Contact.objects.all()
+    staff_usermessages = weeklymessages = StandardUserMessage.objects.all()
+    
     for contact in contacts:
-        if contact.subscriber==True:    
-            message = ''
-            c_c = UserMessage.objects.filter(contact=contact, category=1)
-            r_r = UserMessage.objects.filter(contact=contact, category=2)
-            c_r = UserMessage.objects.filter(contact=contact, category=3)
-            nc = UserMessage.objects.filter(contact=contact, category=4)
-            #count how many of each
-            inactive_count = 0
-            c_r_count = 0
-            r_r_count = 0
-            c_c_count = 0
-            new_chapter_count = 0
+        if contact.subscriber==True:
+            comments_on_comments = UserMessage.objects.filter(contact=contact, category=1)
+            comments_on_revisions = UserMessage.objects.filter(contact=contact, category=3)
+            new_chapters = UserMessage.objects.filter(contact=contact, category=4)
+            #revisions_on_revisions = UserMessage.objects.filter(contact=contact, category=2)
+
             #Only for users
             if contact.content_object:
                 user = contact.content_object
-                date = datetime.today() - timedelta(days=7)
                 
-                contenttype = ContentType.objects.get_for_model(Chapter)
+                try:
+                    profile = user.get_profile()
+                except ObjectDoesNotExist:
+                    p = Profile(user=user)
+                    p.save()
                 
-                chapters = Chapter.objects.filter(author=user)
-                if chapters:
-                    message+= """###Ratings of your chapters\nThe feedback your chapters receive, determine if they are included in the final collaborative book.\n\nHere is the feedback you got on your chapters:\n\n"""
-                    for chapter in chapters:
-                        message+="####%s\n\n" % chapter.title
-                        try:
-                            chapter_rating = Score.objects.get(content_type=contenttype,object_id=chapter.pk)
-                            votes = chapter_rating.votes
-                            score = chapter_rating.score/chapter_rating.votes
-                            score = round(score*2)/2
-                        except:
-                            chapter_rating = None
-                            votes = 0
-                            score = 0
-                        
-                        weekly_votes = Vote.objects.filter(content_type=contenttype,object_id=chapter.pk,date_changed__gt=date)
-                        if weekly_votes:
-                            weekly_rating_times = weekly_votes.count()
-                            weekly_average_rating = int(weekly_votes.aggregate(Avg('score'))['score__avg'])
-                        else:
-                            weekly_votes = 0
-                            weekly_rating_times = 0
-                            weekly_average_rating = 0
-                        if votes==1:
-                            time = ''
-                        else:
-                            time = 's'
-                        if weekly_votes==1:
-                            weekly_time = ''
-                        else:
-                            weekly_time = 's'
-                        message+=  """Your chapter was rated %s time%s within 1 week with an average rating of %s out of 5.<br />\nIt have been rated %s time%s since it was published with an average rating of %s out of 5.\n\n""" % (weekly_rating_times,
-                                           weekly_time,
-                                           weekly_average_rating,
-                                           votes,
-                                           time,
-                                           score)
-                        full_url = 'http://'+str(Site.objects.get_current())+chapter.get_absolute_url()
-                        full_url_urlencode = urlencode({'e':full_url})[2:]
-                        message+= '[Share on Facebook](http://www.facebook.com/sharer.php?u=%s&t=%s)<br />\n' % (full_url_urlencode,"Have+a+look+at+my+chapter+on+Winning+Without+Losing")
-                        message+= '[Share this chapter on twitter](http://twitter.com/home?status=%s %s)<br />\n' % ("Have a look at my chapter on Winning+Without+Losing:",full_url)
-                        message+= 'Share the link to this chapter on your blog or send it via email: %s\n\n' % full_url
-                    message+='\n\n'
+                submitted_chapters  = Chapter.objects.filter(author=user)
+                edited_chapters     = Revision.objects.filter(revision_user=user).exclude(counter=1)
+                commented_chapters  = Comment.objects.filter(user=user).order_by('content_type')
                 
-                if now - contact.content_object.last_login>timedelta(7) and now - contact.content_object.last_login<timedelta(13):
-                    message+="We haven't seen you for a while on Winning-Without-Losing. New chapters have been added, go check them out here: [Click here](http://%s)\n\n" % Site.objects.get_current()
-                    inactive_count+=1
-                if c_r:
-                    message+= '###New comment on one of your chapter\n'
-                for mails in c_r:
-                    message+='%s\n\n' % mails.content_mail
-                    mails.delete()
-                    c_r_count+=1
-                if r_r:
-                    message+= '###New chapter revision of the same chapter you have edited\n'
-                for mails in r_r:
-                    message+='%s\n\n' % mails.content_mail
-                    mails.delete()
-                    r_r_count+=1
-                if c_c:
-                    message+= '###New comment where you have commented\n'
-                for mails in c_c:
-                    message+='%s\n\n' % mails.content_mail
-                    mails.delete()
-                    c_c_count+=1
-            #New chapters for all subscribers
-            if nc:
-                message+= '###New chapters have been submitted!\n'
-            for mails in nc:
-                message+='%s\n\n' % mails.content_mail
-                mails.delete()
-                new_chapter_count+=1
-            #finish
-            if message !='':
-                message="\n\n&nbsp;\n\n"+message
-                weeklymessages = StandardUserMessage.objects.all()
-                if weeklymessages:
-                    for weeklymessage in weeklymessages:
-                        message= "%s\n%s" % (weeklymessage.content, message)
-                        weeklymessage.delete()
-                    message="\n\n"+message
-                message="Hi %s, here is an update on what happened on Winning Without Losing this week.%s" % (contact.first_name, message)
-                message+="&nbsp;\n\nThat's all for today... But the quest for a better entrepreneurial life keeps on!\n\n&nbsp;\n\nWinning Without Losing\n\nwww.winning-without-losing.com\n\n<img src=\"http://m.winning-without-losing.com/img/logo.jpg\" />\n\n\nif you want to unsubscribe from this weekly update [click here](http://%s/newsletters/mailing/unsubscribe/)" % Site.objects.get_current()
-                #create html message with style
-                html_start = '<div style="width:100%%; height:100%%; margin:0px; background-color:#d3d8dd;"><div style="background-color:#d3d8dd;"><div style="padding:50px 0px 50px 0px;"><div style="margin:0px auto 0px auto; background-color:#FFF; width:600px; padding-bottom:30px;font-family: Helvetica, Verdana, Arial, sans-serif;-moz-box-shadow:  0px 0px 50px 0px #3d3d3d; -webkit-box-shadow: 0px 0px 50px 0px #3d3d3d; box-shadow: 0px 0px 50px 0px #3d3d3d;"><div style="height:50px;background-color:#01a3d4; padding:40px 0px 40px 30px; font-size:20px; font-weight: bold; font-size: 50px; color:#FFF; text-shadow: #000 0px -1px 0px;">Updates from WWL</div><div style="padding:50px 50px 0px 50px; color:#565454;">'
-                html_end = '</div></div></div></div></div>'
-                message_html = html_start+markdown(message)+html_end
-                #create message
-                final_mail = Message(to_address=contact.email,
-                     from_address='noreply@winning-without-losing.com',
-                     subject='Updates from winning-without-losing',
-                     message_text=message,
-                     message_html=message_html)
-                final_mail.save()
-                logging.info("Organizing message to %s with: %s inactive, %s c-r, %s r-r, %s c-c, %s new chapters" % (final_mail.to_address.encode("utf-8"),inactive_count,c_r_count,r_r_count,c_c_count,new_chapter_count))
+                rated_chapters                       = Vote.objects.filter(user=user)
+                given_positive_votes_on_comments     = ScoreLog.objects.filter(profile=profile,points=1,ctype='vote')
+                received_positive_votes_on_comments  = ScoreLog.objects.filter(profile=profile,points=2,ctype='commentvoted')
+                received_negative_votes_on_comments  = ScoreLog.objects.filter(profile=profile,points=-1,ctype='commentvoted')
+            else:
+                user = None
+                
+                submitted_chapters   = None
+                edited_chapters      = None
+                commented_chapters   = None
+                
+                rated_chapters                        = None
+                given_positive_votes_on_comments      = None
+                received_positive_votes_on_comments   = None
+                received_negative_votes_on_comments   = None
+                
+            #create message if any
+            if comments_on_comments or comments_on_revisions or new_chapters or staff_usermessages or user:
+                plaintext = get_template('email/weekly_newsletter.txt')
+                html = get_template('email/weekly_newsletter.html')               
+                                
+                c = Context({   'contact'                               : contact, 
+                                'comments_on_comments'                  : comments_on_comments,
+                                'comments_on_revisions'                 : comments_on_revisions,
+                                'new_chapters'                          : new_chapters,
+                                'staff_usermessages'                    : staff_usermessages,
+                                'user'                                  : user,
+                                'submitted_chapters'                    : submitted_chapters,
+                                'edited_chapters'                       : edited_chapters,
+                                'commented_chapters'                    : commented_chapters,
+                                'rated_chapters'                        : rated_chapters,
+                                'given_positive_votes_on_comments'      : given_positive_votes_on_comments,
+                                'received_positive_votes_on_comments'   : received_positive_votes_on_comments,
+                                'received_negative_votes_on_comments'   : received_negative_votes_on_comments,
+                            })
+                email_plaintext = plaintext.render(c)
+                email_html = html.render(c)
 
+                soup = BeautifulSoup(email_html)
+                for link_markup in soup('a'):
+                    link_markup['style'] = 'color:#16AAD7;'
+                email_html = soup.prettify()
+
+                final_mail = Message(to_address=contact.email,
+                                    from_address='noreply@winning-without-losing.com',
+                                    subject='Updates from winning-without-losing',
+                                    message_text=email_plaintext,
+                                    message_html=email_html
+                                    )
+                final_mail.save()
+                logging.info("Organizing message to %s" % final_mail.to_address.encode("utf-8"))
+                
+                comments_on_comments.delete()
+                comments_on_revisions.delete()
+                new_chapters.delete()
+
+    staff_usermessages.delete()
+    
 def send_all():            
     """
     Send all eligible messages in the queue.

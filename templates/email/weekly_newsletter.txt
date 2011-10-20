@@ -1,0 +1,88 @@
+{% load chapter_rank %}
+{% load random_chapter_message %}
+Hi {% if user %}{{ user }}{% else %}{{ contact.first_name }}{% endif %}! Here is an update of what happened this week on WWL!
+
+{% if user %}
+### Status ###
+Your bi-winning score determines if you are credited in the final book. Get 10 points and you’ll be credited in the final book as a co-creator. Obtain 50 of these, and you’ll receive your own copy of the book!
+On the {% now "jS o\f F" %}, you have:
+    - Submitted {{ submitted_chapters.count }} chapter{{ submitted_chapters.count|pluralize }};
+    - Edited {{ edited_chapters.count }} chapter{{ edited_chapters.count|pluralize }};
+    - Commented {{ commented_chapters.count }} time{{ commented_chapters.count|pluralize }} chapter{{ commented_chapters.count|pluralize }};
+    - Rated {{ rated_chapters.count }} chapter{{ rated_chapters.count|pluralize }}.
+    - Voted {{ given_positive_votes_on_comments.count }} comment{{ given_positive_votes_on_comments.count|pluralize }} up.
+    - {{ received_positive_votes_on_comments.count }} positive vote{{ received_positive_votes_on_comments.count|pluralize }} on comment{{ received_positive_votes_on_comments.count|pluralize }}.
+    - {{ received_negative_votes_on_comments.count }} negative vote{{ received_negative_votes_on_comments.count|pluralize }} on comment{{ received_negative_votes_on_comments.count|pluralize }}.
+
+That gives you {{ user.get_profile.score }} bi-winning points! {% if user.get_profile.score <= 5 %}Want more?{% endif %}{% if user.get_profile.score >= 20 and user.get_profile.score < 50 %}Not bad!{% endif %}{% if user.get_profile.score >= 50 %}Super sweet!{% endif %}
+{% if submitted_chapters %}
+### Feedback and ratings on your chapters ###
+The feedback your chapters receive will determine if they’ll be selected in the final version of the book!
+{% for chapter in submitted_chapters %}
+
+## {{ chapter.title }} ##
+{% get_chapter_rank chapter as chapter_rank %}
+Your chapter has obtained an average rating of {{ chapter.rating.get_rating|floatformat }} out of 5 and is now number {{ chapter_rank }} out of {{ chapters.count }} chapters! 
+{% if chapter_rank <= 60 and chapter_rank > 10 %}
+Great! So far, it looks like your chapter is going to be in the final book!
+{% else %}{% if chapter_rank <= 10 %}
+{% any %}Perfect, looks like a winner!|Seems like your chapter will be included for sure!{% endany %}
+{% else %}{% if chapter_rank > 60 %}
+Your chapter hasn’t been rated enough to be included in the final book. Take a look at the comments, maybe there’s something to be improved?
+{% endif %}{% endif %}{% endif %}
+
+*Want more ratings?*
+Share your chapter on Facebook: http://www.facebook.com/sharer.php?u={{ "http://winning-without-losing.com"|urlencode }}{{ chapter.get_absolute_url|urlencode }}&t=Have+a+look+at+my+chapter+on+Winning+Without+Losing
+Share your chapter on Twitter: http://twitter.com/home?status=http://winning-without-losing.com{{ chapter.get_absolute_url }}
+Share the link to your chapter on your personal blog or email: http://winning-without-losing.com{{ chapter.get_absolute_url }}
+{% endfor %}
+{% endif %}
+
+{% if comments_on_revisions %}
+### New comment on your chapter ###
+Get inspired by the comments and improve your chapter!
+{% for comment_on_revision in comments_on_revisions %}
+{{ comment_on_revision.content_mail }}
+{% endfor %}
+{% endif %}
+{% if comments_on_comments %}
+### New comments where you have commented ###
+Rating and commenting on chapters will increase your bi-winning score. Each comment gives you 3 points and each “like” on your comments gives you 1 point. Collect 10 points and you will be credited in the final book as a co-creator. Collect 50 points and we will send you a free copy of the book!
+{% for comment_on_comment in comments_on_comments %}
+{{ comment_on_comment.content_mail }}
+{% endfor %}{% endif %}{% endif %}
+{% if new_chapters %}
+{% with new_chapters.count as new_chapters_count %}
+{% if new_chapters_count > 1 %}
+### New chapters have been submitted! ###
+{% else %}
+### A new chapter has been submitted! ###
+{% endif %}
+{% for new_chapter in new_chapters %}
+## {{ new_chapter.chapter.title }} ##
+http://winning-without-losing.com{{ new_chapter.chapter.get_absolute_url }}
+by {{ new_chapter.chapter.author }} with {{ new_chapter.chapter.author.get_profile.score }}: “{{ new_chapter.chapter.summary_html|truncatewords:20 }}”.
+{% endfor %}
+{% if new_chapters_count > 1 %}
+What do you think about them? Are they good enough to be in the book? Remember to rate them and comment them to help us decide! The more you comment and rate, the more your chances are that you’ll be credited in the final book! 
+{% else %}
+What do you think about it? Is it good enough to be in the book? Remember to rate it and comment it to help us decide! The more you comment and rate, the more your chances are that you’ll be credited in the final book! 
+{% endif %}{% endwith %{% endif %}
+{% if staff_usermessages %}
+### Changes on the website! ###
+{% for staff_usermessage in staff_usermessages %}
+{{ staff_usermessage }}
+{% endfor %}
+{% endif %}
+{% any %}
+That’s all for today, but the life for a better entrepreneurial life lives on!
+That’s all for today, but we’ll come back, muwhahhahahaha!
+That’s all for today, but they’ll be more soon!
+That’s all for today, but we’ll keep on winning without losing!
+That’s all for today, but that was bi-winning for sure!
+{% endany %}
+
+The Winning Without Losing Team
+www.winning-without-losing.com
+
+If you want to unsubscribe from these update: http://winning-without-losing.com/newsletters/mailing/unsubscribe/

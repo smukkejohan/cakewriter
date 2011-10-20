@@ -1,7 +1,8 @@
+{% extends 'email/email_base.html' %}
 {% load markup %}
-{% include "email/email_top.html" %}
+{% block content %}
 Hi {{ organizer_message.user }}!<br /><br />
 {{ organizer_message.actor }} just commented on the same chapter as you: {{ organizer_message.chapter.title }}! Want to <a href="{{ organizer_message.hyperlink_usermessage }}">check it out</a> and post a reply?<br />
 Remember that commenting and giving likes and dislikes on people’s comments also increases your bi-winning score! You will be credited as a co-creator if you collect 10 bi-winning points, and we will send you a copy if you reach a 50 points score!<br />
 Have a very nice day.<br />
-{% include "email/email_bottom.html" %}
+{% endblock %}

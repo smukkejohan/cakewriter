@@ -55,6 +55,7 @@ class Chapter(models.Model):
             i+=1
             if self==chapter:
                 return i
+    
     @models.permalink
     def get_absolute_url(self):
         return ('chapter', [str(self.id)])
@@ -94,7 +95,7 @@ def email_when_user_chapter(sender, **kwargs):
         
         message = '%s have created a user chapter have been created on Winning Without Losing. Check it out on http://winning-without-losing.com/admin/book/userchapter/%s/' % (userchapter.author, userchapter.pk)
         send_mail('New user chapter on Winning Without Losing', message, 'noreply@winning-without-losing.com',
-            ['lp@rainmaking.dk'], fail_silently=True)
+            [settings.DEFAULT_TO_EMAIL], fail_silently=True)
 post_save.connect(email_when_user_chapter, sender=UserChapter)
 
 
