@@ -67,7 +67,7 @@ by {{ new_chapter.chapter.author }} with {{ new_chapter.chapter.author.get_profi
 What do you think about them? Are they good enough to be in the book? Remember to rate them and comment them to help us decide! The more you comment and rate, the more your chances are that you’ll be credited in the final book! 
 {% else %}
 What do you think about it? Is it good enough to be in the book? Remember to rate it and comment it to help us decide! The more you comment and rate, the more your chances are that you’ll be credited in the final book! 
-{% endif %}{% endwith %{% endif %}
+{% endif %}{% endwith %}{% endif %}
 {% if staff_usermessages %}
 ### Changes on the website! ###
 {% for staff_usermessage in staff_usermessages %}
