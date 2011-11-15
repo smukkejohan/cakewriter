@@ -73,7 +73,7 @@ def user_commented(sender, **kwargs):
         author_contact = None
     if not chapter_author==comment.user and author_contact:
         hyperlink = 'http://%s%s#c%s' %(Site.objects.get_current(),comment.content_object.get_absolute_url(),comment.id)
-        content_mail = "%s with %s points has commented on your chapter: [%s](%s), saying: \"%s\"" % (comment.user,
+        content_mail = "%s with %s points has commented your chapter: [%s](%s), saying: \"%s\"" % (comment.user,
                                                                                          comment.user.get_profile().score,
                                                                                          comment.content_object.title,
                                                                                          hyperlink,
@@ -98,7 +98,7 @@ def user_commented(sender, **kwargs):
                                                                     organizer_message.id,
                                                                     comment.id)
         
-        content = "%s with %s points has commented on your chapter: [%s](%s), saying: \"%s\"" % (comment.user,
+        content = "%s with %s points has commented your chapter: [%s](%s), saying: \"%s\"" % (comment.user,
                                                                                          comment.user.get_profile().score,
                                                                                          comment.content_object.title,
                                                                                          hyperlink_usermessage,
@@ -133,7 +133,7 @@ def user_commented(sender, **kwargs):
                 usercomment = None
             if usercomment and user!=comment.user:
                 hyperlink = 'http://%s%s#c%s' %(Site.objects.get_current(),comment.content_object.get_absolute_url(),comment.id)
-                content_mail = "%s with %s points has commented on the same chapter as you: [%s](%s), saying: \"%s\"" % (comment.user,
+                content_mail = "%s with %s points has commented the same chapter as you: [%s](%s), saying: \"%s\"" % (comment.user,
                                                                                                  comment.user.get_profile().score,
                                                                                                  comment.content_object.title,
                                                                                                  hyperlink,
@@ -158,7 +158,7 @@ def user_commented(sender, **kwargs):
                                                                             organizer_message.id,
                                                                             comment.id)
                 
-                content = "%s with %s points has commented on the same chapter as you: [%s](%s), saying: \"%s\"" % (comment.user,
+                content = "%s with %s points has commented the same chapter as you: [%s](%s), saying: \"%s\"" % (comment.user,
                                                                                                  comment.user.get_profile().score,
                                                                                                  comment.content_object.title,
                                                                                                  hyperlink_usermessage, 
@@ -174,7 +174,7 @@ def user_commented(sender, **kwargs):
                 email_plaintext = plaintext.render(c)
                 email_html = html.render(c)
                 
-                msg = EmailMultiAlternatives('Winning Without Losing: One have commented on the same chapter as you', 
+                msg = EmailMultiAlternatives('Winning Without Losing: Someone has commented the same chapter as you', 
                                             email_plaintext, 'noreply@winning-without-losing.com', 
                                             [organizer_message.contact.email])
                 msg.attach_alternative(email_html, "text/html")

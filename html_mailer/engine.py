@@ -111,12 +111,13 @@ def organize_all():
                             })
                 email_plaintext = plaintext.render(c)
                 email_html = html.render(c)
-
+                
+                #change header and link style
                 soup = BeautifulSoup(email_html)
                 for link_markup in soup('a'):
                     link_markup['style'] = 'color:#16AAD7;'
                 for header_markup in soup('h3'):
-                    header_markup['style'] = 'border-bottom:8px solid #ecebe8;margin-bottom:0px;padding-bottom:5px;'
+                    header_markup['style'] = 'color:black;border-bottom:8px solid #ecebe8;margin-bottom:0px;padding-bottom:5px;'
                 email_html = soup.prettify()
 
                 final_mail = Message(to_address=contact.email,
