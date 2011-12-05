@@ -9,6 +9,8 @@ from djangoratings.fields import RatingField
 from djangoratings.models import Vote
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
+from tagging_autocomplete.models import TagAutocompleteField
+import tagging
 
 class Chapter(models.Model):
     title = models.CharField('title', max_length=90)
@@ -25,6 +27,7 @@ class Chapter(models.Model):
     visible = models.BooleanField(default=True)
     picture = ImageWithThumbsField(upload_to="chapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),(68,68)))
     picture_description = models.CharField('picture description', max_length=255,blank=True, null=True)
+    tags_string = TagAutocompleteField(blank=True, null=True, help_text="Separate tags with commas", default="Untagged")
     
     class Meta:
         ordering = ['-index']
@@ -36,6 +39,8 @@ class Chapter(models.Model):
     def save(self, *args, **kwargs):             
         self.body_html = markdown(self.body)
         self.summary_html = markdown(self.summary)
+        if self.tags_string=="":
+            self.tags_string="Untagged"    
         super(Chapter, self).save(*args, **kwargs)
     
     def get_score(self):
@@ -60,6 +65,11 @@ class Chapter(models.Model):
     def get_absolute_url(self):
         return ('chapter', [str(self.id)])
 
+try:
+    tagging.register(Chapter)
+except tagging.AlreadyRegistered:
+    pass
+
 class UserChapter(models.Model):
     title = models.CharField('title', max_length=60)
     summary = models.TextField('summary', help_text="A short summary of the chapter.")
@@ -71,7 +81,8 @@ class UserChapter(models.Model):
     author = models.ForeignKey(User)
     picture = ImageWithThumbsField(upload_to="userchapter/", blank=True, null=True, help_text="You don't have to worry about the pictures size. It will automatically resize if over 500 px wide",sizes=((500,100000),(68,68)))
     picture_description = models.CharField('picture description', max_length=255,blank=True, null=True)
-
+    tags_string = TagAutocompleteField(blank=True, null=True, help_text="Separate tags with commas", default="Untagged")
+    
     class Meta:
         ordering = ['-index']
         get_latest_by = 'pub_date'
@@ -82,10 +93,14 @@ class UserChapter(models.Model):
     def save(self, *args, **kwargs):             
         self.body_html = markdown(self.body)
         self.summary_html = markdown(self.summary)
+        if self.tags_string=="":
+            self.tags_string="Untagged"
         super(UserChapter, self).save(*args, **kwargs)
 
-
-
+try:
+    tagging.register(UserChapter)
+except tagging.AlreadyRegistered:
+    pass
 
 def email_when_user_chapter(sender, **kwargs):
     userchapter = kwargs.get('instance')

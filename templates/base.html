@@ -1,13 +1,13 @@
 {% load markup %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="da" lang="da" dir="ltr">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-language" content="da" />
+    <meta http-equiv="Content-language" content="en" />
     <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon" />
+    
     <link rel="stylesheet" href="{{ STATIC_URL }}css/960.css" type="text/css" media="screen, projection" />
-    <!-- Main CSS -->
     <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/screen.css" />
     <link type='text/css' href='{{ STATIC_URL }}feedback/css/basic.css' rel='stylesheet' media='screen' />
 
@@ -18,8 +18,11 @@
     
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/latest/" />
     
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />    
+    <script src="{{ STATIC_URL }}js/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
+    
+    <meta name="keywords" content="collaborative, entrepreneur, book project, balanced life" />
+    <meta name="description" content="A collaborative book project to discover how to be an ultra successful entrepreneur while living a happy and balanced life" />    
     <title>{% block title %}Welcome{% endblock %} &middot; Winning without losing</title>
 
     <script type="text/javascript">
@@ -66,6 +69,7 @@
                 <ul>
                     <li><a href="/about/">The Concept</a></li>
                     <li><a href="/team/">The Team</a></li>
+                    <li><a href="/rolemodels/">Role Models</a></li>
                 </ul>
             </li>
             <li><a href="#" onclick="return false">How it Works</a>
@@ -82,11 +86,7 @@
                     <li><a href="{% url user_chapter %}">Create your own chapter</a></li>
                 </ul>            
             </li>
-            <li><a href="#" onclick="return false">Our Community</a>
-                <ul>
-                    <li><a href="/rolemodels/">Role Models</a></li>
-                    <li><a href="/account/">Our Community</a></li>
-                </ul>  
+            <li><a href="{% url users-overview %}" class="own_link">Our Community</a> 
             </li>
         </ul>
         <div id="profile">
@@ -188,15 +188,11 @@
     <img src='img/basic/x.png' alt='' />
 </div>
 
-<script src="{{ STATIC_URL }}js/jquery-1.4.2.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}js/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}js/jquery.ui.stars.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}js/base.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/jquery.ui.stars.min.js" type="text/javascript"></script>
 <script type='text/javascript' src='{{ STATIC_URL }}feedback/js/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='{{ STATIC_URL }}feedback/js/basic.js'></script>
-<script src="{{ STATIC_URL }}js/jquery.color.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.animate-textshadow.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/message.js"></script>
 {% if request.session.point %}
 <script src="{{ STATIC_URL }}js/session-check.js"></script>
 {% endif %}

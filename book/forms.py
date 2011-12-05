@@ -1,5 +1,7 @@
 from django import forms
 from tinymce.widgets import TinyMCE
+from tagging.forms import TagField
+from tagging_autocomplete.widgets import TagAutocomplete
 
 class ConfirmRatingForm(forms.Form):
     score = forms.IntegerField(max_value=5, min_value=0, widget=forms.HiddenInput)
@@ -10,3 +12,4 @@ class UserChapterForm(forms.Form):
     content = forms.CharField(widget=TinyMCE(attrs={'cols': 100, 'rows': 50}), initial='Give us a hand... in no more than 600 words!')
     photo = forms.ImageField(required=False, help_text='<br />Upload a photo to go with your chapter')
     picture_description = forms.CharField(required=False)
+    tags_string = TagField(widget=TagAutocomplete(), help_text="<br />Separate tags with commas", required=False)

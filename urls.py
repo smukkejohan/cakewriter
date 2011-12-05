@@ -28,7 +28,8 @@ urlpatterns = patterns('',
     (r'^subscribe/$', 'views.subscribe_resent_chapters'),
     (r'^usermessage/', include('usermessage.urls')),
     (r'^update_point_session/$', 'views.update_point_session'),
-    (r'^rss/latest/$', LatestChapterFeed())
+    (r'^rss/latest/$', LatestChapterFeed()),
+    (r'^tagging_autocomplete/', include('tagging_autocomplete.urls')),
     #(r'^quiz/', include('quiz.urls'))
 )
 

@@ -28,7 +28,7 @@
         <div class="clear"></div>
     </div>
      <p class="author meta float_left">
-       Date: {{ chapter.pub_date }}
+       Date: {{ chapter.pub_date }} | {% for tag in chapter.tags %}<a href="{% url tagged_chapters tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
      </p>
      <p class="author meta float_right">
     By <a href="{% url user-overview username=chapter.author.username %}">{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}
@@ -40,7 +40,7 @@
             <img src="{{ chapter.picture.url_500x100000 }}" />
             <p class="helptext">{{ chapter.picture_description }}</p>
         {% endif %}
-        {{ chapter.body_html|safe }} 
+        {{ chapter.body_html|safe }}
        
     </div>   
     
@@ -50,7 +50,27 @@
   
      
 </div>
-<div id="message">
+
+{% if related_chapters %}
+<div id="related_chapter_wrap">
+<h2>Related Chapters</h2>
+<ul id="related_chapters">
+{% for chapter in related_chapters %}
+<li>
+<a href="{{ chapter.get_absolute_url }}" title="{{ chapter.summary }}" class="chapter_link">
+    <span class="related_chapter_title">{{ chapter.title }}</span>
+    {% if chapter.picture %}<img src="{{ chapter.picture.url_68x68 }}" class="related_chapter_picture"/>
+    {% else %}<img src="{{ STATIC_URL }}img/related_chapter.jpg" class="related_chapter_picture"/>{% endif %}
+</a>
+    {% for tag in chapter.tags %}<a href="{% url tagged_chapters tag %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+</li>
+{% endfor %}
+<div class="clear"></div>
+</ul>
+</div>
+{% endif %}
+
+<div id="message" onclick="hide_message()">
 {% any %}
 <h3>Remember to rate!</h3>Liked this chapter? Rate it and help us choosing if it’ll be in the final version of the book!
 <h3>Rate!</h3>Rate this chapter and 10 other chapters and we will credit you in the printed  version of the book!
@@ -62,71 +82,75 @@
 
 <div id="comments">
 
-    <h2 class="section-title">Feedback</h2>
-{% get_comment_list for chapter as comment_list %}
-{% for comment in comment_list %}
+    <h2 class="section-title trigger activity" style="margin-top:50px;"><span class="history_plus">+</span> Feedback</h2>
+    <div class="toggle_container">
 
-    {% score_for_object comment as score %}
-    {% vote_by_user user on comment as vote %}
-    <div id="c{{ comment.id }}" class="comment clearfix">        
-            
+        <div id="comment-form comment">
+        {% if user.is_authenticated %}
+            {% get_comment_form for chapter as form %}
+            <form action="{% comment_form_target %}" method="post" onsubmit=" return update_point_session()">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{% url book.views.chapter chapter.pk %}" />
+                {% for field in form %}
+                    {% if field.is_hidden %}
+                        {{ field }}
+                    {% else %}
+                        {% if field.name != "name" and field.name != "email" and field.name != "url" %}
+                            
+                            <p {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+                        
+                            {% if field.errors %}{{ field.errors }}{% endif %}
+                            {{ field }}
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <input class="submit-post" name="post" type="submit" value="Share your feedback"/>
+            </form>
+        {% else %}
+            <p>
+            <a href="/accounts/login/?next={{ request.path }}">Log in</a> or <a href="/accounts/register?next={{ request.path }}">register</a> to comment!
+            </p>
+        {% endif %}
+        </div>
 
-
-        <div class="comment_text alpha">
-            <div class="comment_header">
-            <span class="float_left comment_score" style="margin-right:5px;">By </span>
-            <a href="{% url user-overview username=comment.user.username %}"><h3 class="title float_left"> {{ comment.user_name }}</h3></a>
-            <span class="float_left comment_score">who has <b>{{comment.user.get_profile.score}} Bi-winning points.</b></span>
-            <div class="vote">
-            <div class="options">
-            <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="Vote up (click again to undo)"></span>
-            <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="Vote down (click again to undo)"></span>
-            </div>
-            <div class="status"><span class="vote-score">{{ score.score }}</span></div>                
-            </div> 
-            </div>
-            
-            <div class="content">{{ comment.comment|linebreaks }}</div>
-            <p class="meta">          
-                <span class="submitted">
-                    Submitted {{ comment.submit_date|timesince }} ago
-                </span>
-            </p>          
-        </div>    
-                   
-     </div>
+    {% get_comment_list for chapter as comment_list %}
+    {% for comment in comment_list reversed %}
     
-{% endfor %}
-
-
-  <h2 class="section-title">What do you think about this chapter?</h2>
-<div id="comment-form">
-{% if user.is_authenticated %}
-    {% get_comment_form for chapter as form %}
-    <form action="{% comment_form_target %}" method="post" onsubmit=" return update_point_session()">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{% url book.views.chapter chapter.pk %}" />
-        {% for field in form %}
-            {% if field.is_hidden %}
-                {{ field }}
-            {% else %}
-                {% if field.name != "name" and field.name != "email" and field.name != "url" %}
-                    
-                    <p {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+        {% score_for_object comment as score %}
+        {% vote_by_user user on comment as vote %}
+        <div id="c{{ comment.id }}" class="comment clearfix">        
                 
-                    {% if field.errors %}{{ field.errors }}{% endif %}
-                    {{ field }}
-                    </p>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-        <input class="submit-post" name="post" type="submit" value="Share your feedback"/>
-    </form>
-{% else %}
-    <p>
-    <a href="/accounts/login/?next={{ request.path }}">Log in</a> or <a href="/accounts/register?next={{ request.path }}">register</a> to comment!
-    </p>
-{% endif %}
+    
+    
+            <div class="comment_text alpha">
+                <div class="comment_header">
+                <span class="float_left comment_score" style="margin-right:5px;">By </span>
+                <a href="{% url user-overview username=comment.user.username %}"><h3 class="title float_left"> {{ comment.user_name }}</h3></a>
+                <span class="float_left comment_score">who has <b>{{comment.user.get_profile.score}} Bi-winning points.</b></span>
+                <div class="vote">
+                <div class="options">
+                <span class="vote-up {% if vote and vote.is_upvote %}vote-on{% endif %}" title="Vote up (click again to undo)"></span>
+                <span class="vote-down {% if vote and vote.is_downvote %}vote-on{% endif %}" title="Vote down (click again to undo)"></span>
+                </div>
+                <div class="status"><span class="vote-score">{{ score.score }}</span></div>                
+                </div> 
+                </div>
+                
+                <div class="content">{{ comment.comment|linebreaks }}</div>
+                <p class="meta">          
+                    <span class="submitted">
+                        Submitted {{ comment.submit_date|timesince }} ago
+                    </span>
+                </p>          
+            </div>    
+                       
+         </div>
+        
+    {% endfor %}
+
+
+
 </div>
 
 </div>
@@ -167,6 +191,7 @@
     </div>
     </div>
       </div>
+      </div>
 {% else %}
 <h3>This chapter is not yet ready</h3>
 We are sorry, please wait for the chapter to be finished.
@@ -175,4 +200,9 @@ We are sorry, please wait for the chapter to be finished.
 
 {% block context %}
  
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/message.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/rating.js"></script>
 {% endblock %}

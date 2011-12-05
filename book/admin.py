@@ -6,7 +6,7 @@ from book.models import Chapter, UserChapter
 class ChapterAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'summary', 'body', 'user_created', 'visible', 'picture','picture_description')
+            'fields': ('title', 'summary', 'body', 'user_created', 'visible', 'picture','picture_description','tags_string')
         }),
         ('Meta', {
             'fields': ('author', 'pub_date', 'mod_date', 'index')
@@ -22,7 +22,7 @@ class ChapterAdmin(admin.ModelAdmin):
 class UserChapterAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'summary', 'body', 'picture','picture_description')
+            'fields': ('title', 'summary', 'body', 'picture','picture_description','tags_string')
         }),
         ('Meta', {
             'fields': ('author', 'pub_date', 'index')
@@ -53,7 +53,8 @@ class UserChapterAdmin(admin.ModelAdmin):
                                user_created=True,
                                visible=True,
                                picture=userchapter.picture,
-                               picture_description=userchapter.picture_description)
+                               picture_description=userchapter.picture_description,
+                               tags=userchapter.tags)
             chapter.save()
             userchapter.delete()
             antal+=1

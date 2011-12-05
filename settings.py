@@ -119,10 +119,11 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.flatpages',
     'django.contrib.humanize',
-    'book',
-    'usermessage',
-    'accounts',
+
     'registration',
+    'book',
+    'accounts',
+    'usermessage',
     'captcha',
     'simplewiki',
     'pages',
@@ -133,6 +134,7 @@ INSTALLED_APPS = (
     'tagging',
     'voting',
     'djangoratings',
+    'tagging_autocomplete',
     #'south',
     #'django_evolution',
     #'mailer',
@@ -163,6 +165,11 @@ CHAPTER_RATING_OPTIONS = (
     ('4', 'Very good'),
     ('5', 'Brilliant'),
 )
+
+if DEVELOPMENT_MODE:
+    TAGGING_AUTOCOMPLETE_JS_BASE_URL = 'jquery-autocomplete'
+else:
+    TAGGING_AUTOCOMPLETE_JS_BASE_URL = STATIC_URL+'m/jquery-autocomplete'
 
 try:
     from settings_local import *

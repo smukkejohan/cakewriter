@@ -15,6 +15,9 @@ from django.contrib.contenttypes.models import ContentType
 from simplewiki.models import Article
 from djangoratings.models import Vote
 from usermessage.models import UserMessage
+from tagging.views import tagged_object_list
+from tagging.models import TaggedItem
+import random
 
 def api_get_chapters(request):
     chapters = Chapter.objects.all()
@@ -47,12 +50,17 @@ def api_get_comments_for_chapter(request, chapter_id):
     
 
 def all_chapters(request): 
-    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
+    best_chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')[:5]
+    new_chapters = Chapter.objects.filter(visible=True)[:5]
     return render_to_response(
-        'book/all_chapters.html', {'chapters': chapters,'options': CHAPTER_RATING_OPTIONS},
+        'book/all_chapters.html', {'new_chapters':new_chapters,'best_chapters':best_chapters,'options': CHAPTER_RATING_OPTIONS},
         context_instance = RequestContext(request)
     )
- 
+
+def tagged_chapters(request,tag):
+    chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
+    return tagged_object_list(request, chapters, tag, paginate_by=10,
+                              allow_empty=True, template_object_name='chapters',extra_context={'options':CHAPTER_RATING_OPTIONS})
     
 def chapter(request, chapter_id):
     chapters = Chapter.objects.filter(visible=True).extra(select={'r': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Chapter.rating.range, Chapter.rating.weight)}).order_by('-r')
@@ -70,10 +78,18 @@ def chapter(request, chapter_id):
     except ObjectDoesNotExist:
         related_wiki = None
     
+    try:
+        related_chapters = TaggedItem.objects.get_related(chapter, Chapter)
+        related_chapters = random.sample(related_chapters,5)
+    except:
+        related_chapters = []
+    
     if chapter.rating.score == 0 or chapter.rating.votes == 0:
         score = chapter.rating.score
     else:
         score = chapter.rating.score / chapter.rating.votes
+    
+    #check if any user message should be deleted
     if request.GET and not request.user.is_anonymous():
         if 'usermessage' in request.GET:
             usermessage_id = int(request.GET['usermessage'])
@@ -82,8 +98,10 @@ def chapter(request, chapter_id):
                 usermessage.delete()
             except:
                 error = "Notification could not be deleted"
+    
+    #return
     return render_to_response(
-        'book/chapter.html', {'related_wiki': related_wiki, 'chapter': chapter, 'chapters': chapters, 'options': CHAPTER_RATING_OPTIONS, 'score': str(score), 'rating_on_chapter':vote},
+        'book/chapter.html', {'related_wiki': related_wiki, 'chapter': chapter, 'chapters': chapters, 'options': CHAPTER_RATING_OPTIONS, 'score': str(score), 'rating_on_chapter':vote, 'related_chapters':related_chapters},
         context_instance = RequestContext(request)
     )
 
@@ -161,6 +179,7 @@ def user_chapter(request):
                 summary_html = form.cleaned_data['summary']
                 content = form.cleaned_data['content']
                 photo = form.cleaned_data['photo']
+                tags_string = form.cleaned_data['tags_string']
                 
                 highest_index = Chapter.objects.aggregate(Max('index'))
                 index = highest_index['index__max']+1
@@ -173,14 +192,16 @@ def user_chapter(request):
                                        pub_date=datetime.now(),
                                        index=index,
                                        author=request.user,
-                                       picture=photo)
+                                       picture=photo,
+                                       tags_string=tags_string)
                 user_chapter.save()
                 return HttpResponseRedirect('/book/user_chapter/thanks/')
             else:
                 data = {'title':request.POST['title'],
                         'summary':request.POST['summary'],
                         'content':request.POST['content'],
-                        'photo':request.FILES['photo']}
+                        'photo':request.FILES['photo'],
+                        'tags_string':request.FILES['tags_string']}
                 form = UserChapterForm(data)
                 return render_to_response('book/user_chapter.html', 
                                         {'form': form,},

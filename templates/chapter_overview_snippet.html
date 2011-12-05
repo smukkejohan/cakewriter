@@ -1,3 +1,5 @@
+{% load tagging_tags %}
+
 <div id="content_overview" style="width:170px!important;">
         {% if not user.is_authenticated %}
         <h3>Subscribe to new chapters</h3>
@@ -12,16 +14,19 @@
         <a id="create_chapter_button" href="{% url user_chapter %}">Create chapter</a>
         {% endif %}
         
-        <h3>Chapters</h3>
-        <ul>
-        {% for chapter in chapters %}
-        <li>
-        <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a> 
-        <div class="chapter_rating">{{ chapter.get_score }}</div>
-        {% if user.is_authenticated %}
-        <span class="new {% for votes in chapter.get_votes_on_chapter %}{% ifequal votes.user user %}read{% endifequal %}{% endfor %}">unread</span>
-        {% endif %}
-        </li>
+        <h3>Tags</h3>
+        <ul id="tags">
+        {% tags_for_model book.Chapter as entry_tags with counts %}
+        {% for entry_tag in entry_tags %}
+            <li>
+            
+                <a href="{% url tagged_chapters entry_tag %}">{{ entry_tag }} <span class="tag_count">({{ entry_tag.count }})</span></a>
+                <div class="clear"></div>
+            </li>
         {% endfor %} 
         </ul>
     </div>
+    
+    
+    <div>
+        <a href="/tag/{{ entry_tag }}/">{{ entry_tag }}</a>

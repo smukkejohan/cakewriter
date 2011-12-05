@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{ user.username }}{% endblock %}
+{% block sideheader %}Users{% endblock %}
+
+{% block contentview %}
+<div id="content_overview">
+<ul>
+{% for user in users %}
+<li><a href="{% url user-overview username=user.user.username %}">{% if user.user.first_name %}{{ user.user.first_name }} {{ user.user.last_name }}{% else %}{{ user.user.username }}{% endif %}</a> <span class="profile_score">{{ user.score }} points</span></li>
+{% endfor %}
+</ul>
+</div>                                     
+{% endblock %}
+
+
+{% block content %}
+
+<ul id="related_chapters">
+{% for profile in users_with_picture %}
+<li>
+<a href="{% url user-overview username=profile.user.username %}" class="chapter_link">
+    <span class="related_chapter_title">{% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %}</span>
+    <img src="{{ profile.photo.url_68x68 }}" class="related_chapter_picture"/>
+</a>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+
+{% block context %}
+{% endblock %}

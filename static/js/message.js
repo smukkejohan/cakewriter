@@ -25,3 +25,8 @@ $(document).ready(function(){
      
     });
  });
+
+function hide_message(){
+    $("#message").hide("slide", { direction: "right" }, 500);
+    close=true;
+}

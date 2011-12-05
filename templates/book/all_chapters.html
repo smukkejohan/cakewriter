@@ -9,17 +9,48 @@
 
 {% block content %}
 
-<!--<h1>All chapters</h1>-->
  <div class="chapter-list">
- 
-    {% for chapter in chapters %}
+    <h1>Newest chapters</h1>
+    {% for chapter in new_chapters %}
           
             <div class="chapter teaser">                     
                 <h2 class="title">
                     <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a>
                 </h2>                                  
                 <div class="author meta float_left">
-                    {{ chapter.pub_date|timesince }} old | By <a href="{% url user-overview username=chapter.author.username %}"><i>{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}{% else %}{{ chapter.author.username }}{% endif %}</i></a> who has {{ chapter.author.get_profile.score }} points
+                    {{ chapter.pub_date|timesince }} old | By <a href="{% url user-overview username=chapter.author.username %}"><i>{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}{% else %}{{ chapter.author.username }}{% endif %}</i></a> | tags: {% for tag in chapter.tags %}<a href="/tag/{{ tag }}/">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+                </div>
+                
+                <div class="author meta float_right">
+                    {% for value, label in options %}  
+                    {% if chapter.get_score|slugify >= value %}
+                    <div class="ui-stars-star ui-stars-star-on ui-stars-star-disabled"><a title="">{{value}}</a></div>
+                    {% else %}
+                    <div class="ui-stars-star ui-stars-star-disabled"><a title="">{{value}}</a></div>
+                    {% endif %}
+		            {% endfor %}	
+                </div>
+    
+                <div class="clear"></div>
+                {% if chapter.picture %}<img src="{{ chapter.picture.url_68x68 }}" class="float_left chapter_thumbnail"/>{% endif %}
+                <div class="summary">
+                    {{ chapter.summary_html|safe }}  
+                </div>
+                
+                <a href="{{ chapter.get_absolute_url }}">Read more &hellip;</a>                                 
+            </div>
+            
+                 
+    {% endfor %} 
+    <h1 style="margin-top:50px;">Best chapters</h1>
+    {% for chapter in best_chapters %}
+          
+            <div class="chapter teaser">                     
+                <h2 class="title">
+                    <a href="{{ chapter.get_absolute_url }}">{{ chapter.title }}</a>
+                </h2>                                  
+                <div class="author meta float_left">
+                    {{ chapter.pub_date|timesince }} old | By <a href="{% url user-overview username=chapter.author.username %}"><i>{% if chapter.author.last_name and chapter.author.first_name %}{{ chapter.author.get_full_name }}{% else %}{{ chapter.author.username }}{% endif %}</i></a> | tags: {% for tag in chapter.tags %}<a href="/tag/{{ tag }}/">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
                 </div>
                 
                 <div class="author meta float_right">
@@ -44,7 +75,6 @@
                  
     {% endfor %} 
     
-   <!--<a href="{# all_chapters #}">See all chapters</a>-->
   </div>   
 {% endblock %}
 

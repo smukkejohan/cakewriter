@@ -40,7 +40,7 @@ class Profile(models.Model):
     twitter = models.URLField(blank=True, null=True)
     blog = models.URLField(blank=True, null=True)
     firm = models.CharField(max_length=100,blank=True, null=True)
-    photo = ImageWithThumbsField(upload_to=get_profile_path, blank=True, null=True,sizes=((150,150),))
+    photo = ImageWithThumbsField(upload_to=get_profile_path, blank=True, null=True,sizes=((150,150),(68,68)))
     bio = models.TextField(blank=True, null=True)
     
     def save(self, force_insert=False, force_update=False, *args, **kwarg):

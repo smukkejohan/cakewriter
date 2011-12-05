@@ -11,7 +11,17 @@ from book.models import Chapter
 from simplewiki.models import Revision
 from djangoratings.models import Vote
 
-@login_required
+def users(request):
+    users = Profile.objects.all().order_by('-score')
+    users_with_picture = Profile.objects.exclude(photo="").order_by('?')
+    
+    return render_to_response('accounts/users.html', 
+                                {'users': users,
+                                'users_with_picture': users_with_picture,
+                                },
+                                context_instance = RequestContext(request)
+                             )
+
 def user(request, username):
     users = Profile.objects.all().order_by('-score')
     #The user that is being viewed
