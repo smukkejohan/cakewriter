@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load tablecols %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block sideheader %}Users{% endblock %}
 
@@ -16,16 +17,29 @@
 
 {% block content %}
 
-<ul id="related_chapters">
-{% for profile in users_with_picture %}
-<li>
-<a href="{% url user-overview username=profile.user.username %}" class="chapter_link">
-    <span class="related_chapter_title">{% if profile.user.get_full_name %}{{ profile.user.get_full_name }}{% else %}{{ profile.user.username }}{% endif %}</span>
-    <img src="{{ profile.photo.url_68x68 }}" class="related_chapter_picture"/>
-</a>
-</li>
-{% endfor %}
-</ul>
+
+<table id="users" cellpadding="15px" width="700px">
+    {% for row in users_with_picture|tablecols:3 %}
+        <tr >
+            {% for profile in row %}
+                <td class="user" width="200px">
+                    <a href="{% url user-overview username=profile.user.username %}" class="">
+                        <img src="{{ profile.photo.url_68x68 }}" class=""/>
+                        <span class="username">
+                           {% if profile.user.get_full_name %}
+                               {{ profile.user.get_full_name }}
+                           {% else %}
+                               {{ profile.user.username }}
+                           {% endif %}
+                        </span>
+                    </a>
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+
 {% endblock %}
 
 

@@ -541,7 +541,6 @@ h1 a, h2 a, h3 a {}
 
 #related_chapter_wrap{
     margin-top:50px;
-    
 }
 
 ul#related_chapters{
@@ -569,7 +568,6 @@ ul#related_chapters li span{
     width:68px;
     font-family: Museo700;
     color: #2E3436;
-    overflow:hidden;
 }
 
 ul#related_chapters li a.chapter_link:hover span,ul#related_chapters li a.chapter_link:hover{
@@ -586,9 +584,26 @@ ul#related_chapters img{
 ul#related_chapters li a.tag{
     font-size: 12px;
     font-style: italic;
-    overflow:hidden;
 }
 
+#users img{
+    border:none;
+    float: left;
+    margin-right:10px;
+}
+
+.user{
+
+}
+
+.user .username{
+    font-family: Museo700;
+    color: #2E3436;
+}
+
+.user .username:hover{
+    color: #2E3436;
+}
 
 /* chapter teaser */
 .teaser .title {font-size: 24px}

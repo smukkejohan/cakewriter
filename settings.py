@@ -136,7 +136,6 @@ INSTALLED_APPS = (
     'djangoratings',
     'tagging_autocomplete',
     #'south',
-    #'django_evolution',
     #'mailer',
     #'quiz',
 )
