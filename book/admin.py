@@ -54,7 +54,7 @@ class UserChapterAdmin(admin.ModelAdmin):
                                visible=True,
                                picture=userchapter.picture,
                                picture_description=userchapter.picture_description,
-                               tags=userchapter.tags)
+                               tags_string=userchapter.tags_string)
             chapter.save()
             userchapter.delete()
             antal+=1
