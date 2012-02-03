@@ -45,7 +45,7 @@
             <p class="helptext">{{ chapter.picture_description }}</p>
         {% endif %}
     {% if related_wiki %}
-        {{ related_wiki.current_revision.contents_parsed|safe }}
+        {{ related_wiki.current_revision.contents|safe }}
     {% else %}
         {{ chapter.body_html|safe }}
     {% endif %}
