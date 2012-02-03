@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.db.models import signals
 from django.contrib.auth.models import User
+from html2text import html2text
 from markdown import markdown
 from django import forms
 from django.core.urlresolvers import reverse
@@ -243,7 +244,7 @@ class Revision(models.Model):
                                       blank=True, null=True, related_name='wiki_revision_user')
     revision_date = models.DateTimeField(auto_now_add = True, verbose_name=_('Revision date'))
     contents = models.TextField(verbose_name=_('Contents (Use MarkDown format)'))
-    contents_parsed = models.TextField(editable=False, blank=True, null=True)
+    contents_parsed = models.TextField(editable=True, blank=True, null=True)
     counter = models.IntegerField(verbose_name=_('Revision#'), default=1, editable=False)
     previous_revision = models.ForeignKey('self', blank=True, null=True, editable=True)
     
@@ -274,7 +275,8 @@ class Revision(models.Model):
         # Create pre-parsed contents - no need to parse on-the-fly
         ext = WIKI_MARKDOWN_EXTENSIONS
         ext += ["wikilinks(base_url=%s/)" % reverse('wiki_view', args=('',))]
-        self.contents_parsed = markdown(self.contents,
+        self.contents_parsed = html2text(self.contents)
+        self.contents_parsed = markdown(self.contents_parsed,
                                         extensions=ext,
                                         safe_mode='escape',)
         super(Revision, self).save(*args, **kwargs)
@@ -323,18 +325,18 @@ class Revision(models.Model):
     			raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
     	return ''.join(out)	
     '''
-                
+
     def get_diff(self):
         if self.previous_revision:
             previous = self.previous_revision.contents.splitlines(1)
         else:
             previous = []
-        
+
         # Todo: difflib.HtmlDiff would look pretty for our history pages!
         diff = difflib.unified_diff(previous, self.contents.splitlines(1))
         # let's skip the preamble
         diff.next(); diff.next(); diff.next()
-        
+
         for d in diff:
             yield d
     '''

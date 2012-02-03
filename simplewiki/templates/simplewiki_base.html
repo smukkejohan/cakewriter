@@ -30,7 +30,7 @@
     	    <a class="button" href="{% url wiki_view wiki_article.get_url %}">View</a>
     	    <a class="button" href="{% url wiki_edit wiki_article.get_url %}">Edit</a>
     	    <a class="button" href="{% url wiki_history wiki_article.get_url 1 %}">History</a>
-    	    <a class="button" href="{% url wiki_discussion wiki_article.get_url %}">Discussion</a>
+    	    {% comment %}<a class="button" href="{% url wiki_discussion wiki_article.get_url %}">Discussion</a>{% endcomment %}
     	    </div>
         	{% endif %}
     

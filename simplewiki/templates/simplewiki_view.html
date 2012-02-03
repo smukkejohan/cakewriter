@@ -8,7 +8,7 @@
 {% endblock %}
 {% block wiki_body %}
 <div id="wiki_article">
-	{{ wiki_article.current_revision.contents|safe }}
+	{{ wiki_article.current_revision.contents_parsed|safe }}
 	{{ block.super }}
 </div>
 {% endblock %}

@@ -17,7 +17,7 @@ WIKI_USE_MARKUP_WIDGET = True
 
 # Adds standard django login protection for viewing
 WIKI_REQUIRE_LOGIN_VIEW = getattr(settings, 'SIMPLE_WIKI_REQUIRE_LOGIN_VIEW',
-                                  False)
+                                  True)
 
 # Adds standard django login protection for editing
 WIKI_REQUIRE_LOGIN_EDIT = getattr(settings, 'SIMPLE_WIKI_REQUIRE_LOGIN_EDIT',

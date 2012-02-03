@@ -23,7 +23,11 @@
                 {% endfor %}	
                 </form>		        
             </div>
-            {% if related_wiki %}<a id="edit_button" class="button float_left" title="Edit chapter" href="{{ related_wiki.get_absolute_url }}/_edit/"></a>{% endif %} 
+            {% if related_wiki %}
+                {% ifequal request.user related_wiki.created_by %}
+                <a id="edit_button" class="button float_left" title="Edit chapter" href="{{ related_wiki.get_absolute_url }}/_edit/"></a>
+                {% endifequal %}
+            {% endif %}
         </div>
         <div class="clear"></div>
     </div>
@@ -40,8 +44,11 @@
             <img src="{{ chapter.picture.url_500x100000 }}" />
             <p class="helptext">{{ chapter.picture_description }}</p>
         {% endif %}
+    {% if related_wiki %}
+        {{ related_wiki.current_revision.contents_parsed|safe }}
+    {% else %}
         {{ chapter.body_html|safe }}
-       
+    {% endif %}
     </div>   
     
     <p class="meta">{{ v }}

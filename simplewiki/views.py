@@ -7,7 +7,6 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, Context, loader
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.conf import settings
 from pages.models import Editpage
@@ -417,21 +416,48 @@ def check_permissions(request, article, check_read=False, check_write=False, che
     else:
         return None
 
+
 ####################
 # LOGIN PROTECTION #
 ####################
 
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import available_attrs
+import urlparse
+from simplewiki.views import fetch_from_url
+from functools import wraps
+
+def is_author(user, request, wiki_url):
+    (article, path, err) = fetch_from_url(request, wiki_url)
+    if err:
+        return False
+    if article.created_by == user and user.is_authenticated:
+        return True
+    return False
+
+def author_required(function, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
+
+    def _wrapped_view(request, wiki_url, *args, **kwargs):
+        actual_decorator = user_passes_test(
+            lambda user: is_author(user,request, wiki_url),
+            login_url=login_url,
+            redirect_field_name=redirect_field_name
+        )(function)(request, wiki_url, *args, **kwargs)
+        return actual_decorator
+    return _wrapped_view
+
+
 if WIKI_REQUIRE_LOGIN_VIEW:
-    view            = login_required(view)
-    history         = login_required(history)
-    search_related  = login_required(search_related)
-    wiki_encode_err = login_required(wiki_encode_err)
-    
+    view            = author_required(view)
+    history         = author_required(history)
+    discussion      = author_required(discussion)
+
 if WIKI_REQUIRE_LOGIN_EDIT:
-    create          = login_required(create)
-    edit            = login_required(edit)
-    add_related     = login_required(add_related)
-    remove_related  = login_required(remove_related)
+    create          = author_required(create)
+    edit            = author_required(edit)
+    add_related     = author_required(add_related)
+    remove_related  = author_required(remove_related)
 
 if WIKI_CONTEXT_PREPROCESSORS:
     settings.TEMPLATE_CONTEXT_PROCESSORS = settings.TEMPLATE_CONTEXT_PROCESSORS + WIKI_CONTEXT_PREPROCESSORS
