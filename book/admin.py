@@ -1,40 +1,56 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from django.db import models
 from book.models import Chapter, UserChapter
+from tinymce.widgets import TinyMCE
 
 class ChapterAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'summary', 'body', 'user_created', 'visible', 'picture','picture_description','tags_string')
+            'fields': ('title', 'summary_html', 'body_html', 'user_created', 'visible', 'picture','picture_description','tags_string')
         }),
         ('Meta', {
             'fields': ('author', 'pub_date', 'mod_date', 'index')
          }),
         ('Html version (do not change it)', {
             'classes': ('collapse',),
-            'fields': ('summary_html', 'body_html')
+            'fields': ('summary', 'body')
         }),
     )
     list_display = ('title', 'pub_date', 'mod_date', 'index','visible','user_created')
     list_filter = ['pub_date', 'mod_date']
 
+    formfield_overrides = {
+        models.TextField: {'widget': TinyMCE(attrs={'cols': 80, 'rows': 20}, )},
+        }
+    js = (
+        'js/tiny_mce/tiny_mce.js',
+        )
+
 class UserChapterAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'summary', 'body', 'picture','picture_description','tags_string')
+            'fields': ('title', 'summary_html', 'body_html', 'picture','picture_description','tags_string')
         }),
         ('Meta', {
             'fields': ('author', 'pub_date', 'index')
          }),
         ('Html version (do not change it)', {
             'classes': ('collapse',),
-            'fields': ('summary_html', 'body_html')
+            'fields': ('summary', 'body')
         }),
     )
     list_display = ('title', 'pub_date', 'index')
     list_filter = ['pub_date']
-    
+
+    formfield_overrides = {
+        models.TextField: {'widget': TinyMCE(attrs={'cols': 80, 'rows': 20}, )},
+        }
+    js = (
+        'js/tiny_mce/tiny_mce.js',
+        )
+
     def make_chapter_public(self, request, queryset):
         from django.db.models import Max
         antal=0

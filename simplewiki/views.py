@@ -432,7 +432,9 @@ def is_author(user, request, wiki_url):
     (article, path, err) = fetch_from_url(request, wiki_url)
     if err:
         return False
-    if article.created_by == user and user.is_authenticated:
+    if article.created_by == user and user.is_authenticated and user.is_active:
+        return True
+    elif user.groups.filter(name='Editors') and user.is_authenticated and user.is_active:
         return True
     return False
 

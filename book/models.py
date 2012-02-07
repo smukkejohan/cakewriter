@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from book.utils import sanitizeHtml
 from thumbs import ImageWithThumbsField
 from django.db import models
 from datetime import datetime
@@ -36,9 +37,13 @@ class Chapter(models.Model):
     def __unicode__(self):
         return self.title
         
-    def save(self, *args, **kwargs):             
-        self.body_html = markdown(self.body)
-        self.summary_html = markdown(self.summary)
+    def save(self, *args, **kwargs):
+        self.body = self.body_html
+        self.summary = self.summary_html
+
+        self.body_html = sanitizeHtml(self.body_html)
+        self.summary_html = sanitizeHtml(self.summary_html)
+
         if self.tags_string=="":
             self.tags_string="Untagged"    
         super(Chapter, self).save(*args, **kwargs)
@@ -90,9 +95,12 @@ class UserChapter(models.Model):
     def __unicode__(self):
         return self.title
         
-    def save(self, *args, **kwargs):             
-        self.body_html = markdown(self.body)
-        self.summary_html = markdown(self.summary)
+    def save(self, *args, **kwargs):
+        self.body = self.body_html
+        self.summary = self.summary_html
+
+        self.body_html = sanitizeHtml(self.body_html)
+        self.summary_html = sanitizeHtml(self.summary_html)
         if self.tags_string=="":
             self.tags_string="Untagged"
         super(UserChapter, self).save(*args, **kwargs)

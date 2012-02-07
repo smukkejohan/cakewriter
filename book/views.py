@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson as json
 from django.contrib.sites.models import Site
 from django.contrib.comments.models import Comment
+from book.utils import sanitizeHtml
 from settings import CHAPTER_RATING_OPTIONS
 from django.shortcuts import redirect, get_object_or_404
 from django.core import serializers
@@ -185,10 +186,10 @@ def user_chapter(request):
                 index = highest_index['index__max']+1
                 
                 user_chapter = UserChapter(title=title,
-                                       summary=html2text(summary_html),
-                                       summary_html=summary_html,
-                                       body=html2text(content),
-                                       body_html=content,
+                                       summary=summary_html,
+                                       summary_html=sanitizeHtml(summary_html),
+                                       body=content,
+                                       body_html=sanitizeHtml(content),
                                        pub_date=datetime.now(),
                                        index=index,
                                        author=request.user,

@@ -8,6 +8,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 import difflib, string
 import os
+from book.utils import sanitizeHtml
 from settings import *
 from tinymce.widgets import TinyMCE
 from django.template.defaultfilters import slugify
@@ -275,10 +276,13 @@ class Revision(models.Model):
         # Create pre-parsed contents - no need to parse on-the-fly
         ext = WIKI_MARKDOWN_EXTENSIONS
         ext += ["wikilinks(base_url=%s/)" % reverse('wiki_view', args=('',))]
-        self.contents_parsed = html2text(self.contents)
-        self.contents_parsed = markdown(self.contents_parsed,
-                                        extensions=ext,
-                                        safe_mode='escape',)
+
+        self.contents = sanitizeHtml(self.contents)
+        self.contents_parsed = self.contents
+
+        #self.contents_parsed = markdown(self.contents_parsed,
+        #                                extensions=ext,
+        #                                safe_mode='escape',)
         super(Revision, self).save(*args, **kwargs)
                 
     def delete(self, **kwargs):
@@ -300,8 +304,8 @@ class Revision(models.Model):
                 article.current_revision = r
                 article.save()
         super(Revision, self).delete(**kwargs)
-    
-    
+
+
     def get_diff(self):
         out = []
         b = self.contents
@@ -312,18 +316,18 @@ class Revision(models.Model):
             a = self.contents
             a, b = html2list(a), html2list(b)
         s = difflib.SequenceMatcher(None, a, b)
-    	for e in s.get_opcodes():
-    		if e[0] == "replace":
-    			out.append('<del>'+''.join(a[e[1]:e[2]]) + '</del><ins>'+''.join(b[e[3]:e[4]])+"</ins>")
-    		elif e[0] == "delete":
-    			out.append('<del class="diff">'+ ''.join(a[e[1]:e[2]]) + "</del>")
-    		elif e[0] == "insert":
-    			out.append('<ins class="diff">'+''.join(b[e[3]:e[4]]) + "</ins>")
-    		elif e[0] == "equal":
-    			out.append(''.join(b[e[3]:e[4]]))
-    		else: 
-    			raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
-    	return ''.join(out)	
+        for e in s.get_opcodes():
+            if e[0] == "replace":
+                out.append('<del>'+''.join(a[e[1]:e[2]]) + '</del><ins>'+''.join(b[e[3]:e[4]])+"</ins>")
+            elif e[0] == "delete":
+                out.append('<del class="diff">'+ ''.join(a[e[1]:e[2]]) + "</del>")
+            elif e[0] == "insert":
+                out.append('<ins class="diff">'+''.join(b[e[3]:e[4]]) + "</ins>")
+            elif e[0] == "equal":
+                out.append(''.join(b[e[3]:e[4]]))
+            else:
+                raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
+        return ''.join(out)
     '''
 
     def get_diff(self):
@@ -405,18 +409,12 @@ def create_article(sender, **kwargs):
         revision = Revision(article=article,
                             revision_user=chapter.author,
                             revision_date=datetime.now(),
-                            contents=chapter.body_html,
+                            contents=chapter.body,
                             contents_parsed=chapter.body_html,
                             counter=1)
         revision.save()
-        article_with_rev = Article(pk=article.pk,
-                                title=article.title,
-                                slug=article.slug,
-                                chapter_related=article.chapter_related,
-                                created_by=article.created_by,
-                                created_on=article.created_on,
-                                modified_on=article.modified_on,
-                                parent=article.parent,
-                                current_revision=revision)
-        article_with_rev.save()
+
+        article.current_revision = revision
+        article.save()
+
 signals.post_save.connect(create_article, sender=Chapter)
