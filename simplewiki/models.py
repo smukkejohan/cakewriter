@@ -216,7 +216,7 @@ class ArticleAttachment(models.Model):
 
         return True
 
-    def get_thumb_impl(self, wth, height):
+    def get_thumb_impl(self, width, height):
         """Requires Python Imaging Library (PIL)"""
         
         if not self.get_size():
@@ -244,6 +244,10 @@ class Revision(models.Model):
     revision_user = models.ForeignKey(User, verbose_name=_('Modified by'), 
                                       blank=True, null=True, related_name='wiki_revision_user')
     revision_date = models.DateTimeField(auto_now_add = True, verbose_name=_('Revision date'))
+
+    #for backup before change
+    contents_original = models.TextField(editable=False, blank=True, null=True)
+
     contents = models.TextField(verbose_name=_('Contents (Use MarkDown format)'))
     contents_parsed = models.TextField(editable=True, blank=True, null=True)
     counter = models.IntegerField(verbose_name=_('Revision#'), default=1, editable=False)
@@ -308,26 +312,26 @@ class Revision(models.Model):
 
     def get_diff(self):
         out = []
-        b = self.contents
+        b = self.contents_parsed
         if self.previous_revision:
-            a = self.previous_revision.contents
+            a = self.previous_revision.contents_parsed
             a, b = html2list(a), html2list(b)
         else:
-            a = self.contents
+            a = self.contents_parsed
             a, b = html2list(a), html2list(b)
         s = difflib.SequenceMatcher(None, a, b)
-        for e in s.get_opcodes():
-            if e[0] == "replace":
-                out.append('<del>'+''.join(a[e[1]:e[2]]) + '</del><ins>'+''.join(b[e[3]:e[4]])+"</ins>")
-            elif e[0] == "delete":
-                out.append('<del class="diff">'+ ''.join(a[e[1]:e[2]]) + "</del>")
-            elif e[0] == "insert":
-                out.append('<ins class="diff">'+''.join(b[e[3]:e[4]]) + "</ins>")
-            elif e[0] == "equal":
-                out.append(''.join(b[e[3]:e[4]]))
-            else:
-                raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
-        return ''.join(out)
+    	for e in s.get_opcodes():
+    		if e[0] == "replace":
+    			out.append('<del>'+''.join(a[e[1]:e[2]]) + '</del><ins>'+''.join(b[e[3]:e[4]])+"</ins>")
+    		elif e[0] == "delete":
+    			out.append('<del class="diff">'+ ''.join(a[e[1]:e[2]]) + "</del>")
+    		elif e[0] == "insert":
+    			out.append('<ins class="diff">'+''.join(b[e[3]:e[4]]) + "</ins>")
+    		elif e[0] == "equal":
+    			out.append(''.join(b[e[3]:e[4]]))
+    		else:
+    			raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
+    	return ''.join(out)
     '''
 
     def get_diff(self):

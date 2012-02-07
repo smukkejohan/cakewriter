@@ -15,10 +15,16 @@ import tagging
 
 class Chapter(models.Model):
     title = models.CharField('title', max_length=90)
+
+    #backup of old system
+    body_markdown_backup = models.TextField(blank=True, null=True)
+    summary_markdown_backup = models.TextField(blank=True, null=True)
+
     summary = models.TextField('summary', help_text="A short summary of the chapter.")
     summary_html = models.TextField(blank=True, null=True)
     body = models.TextField("body", help_text="You can use markdown formatting. Start with h2 '##' headers as the title is rendered as h1 '#'.")
     body_html = models.TextField(blank=True, null=True)
+
     mod_date = models.DateTimeField(default=datetime.now)
     pub_date = models.DateTimeField(default=datetime.now)
     index = models.IntegerField(help_text="The chapters position in the book. The higher the later.")
@@ -77,10 +83,13 @@ except tagging.AlreadyRegistered:
 
 class UserChapter(models.Model):
     title = models.CharField('title', max_length=60)
+
     summary = models.TextField('summary', help_text="A short summary of the chapter.")
     summary_html = models.TextField(blank=True, null=True)
+
     body = models.TextField("body", help_text="You can use markdown formatting. Start with h2 '##' headers as the title is rendered as h1 '#'.")
     body_html = models.TextField(blank=True, null=True)
+
     pub_date = models.DateTimeField(default=datetime.now)
     index = models.IntegerField(help_text="The chapters position in the book. The higher the later.")
     author = models.ForeignKey(User)
