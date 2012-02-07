@@ -21,5 +21,8 @@ def in_group(user, groups):
         {% endif %}
 
     """
-    group_list = force_unicode(groups).split(',')
-    return bool(user.groups.filter(name__in=group_list).values('name'))
+    if user.is_authenticated:
+        group_list = force_unicode(groups).split(',')
+        return bool(user.groups.filter(name__in=group_list).values('name'))
+    else:
+        return False

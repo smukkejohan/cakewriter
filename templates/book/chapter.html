@@ -28,9 +28,9 @@
                 {% ifequal request.user related_wiki.created_by %}
                 <a id="edit_button" class="button float_left" title="Edit chapter" href="{{ related_wiki.get_absolute_url }}/_edit/"></a>
                 {% else %}
-                       {% if request.user|in_group:'Editors' %}
-                           <a id="edit_button" class="button float_left" title="Edit chapter" href="{{ related_wiki.get_absolute_url }}/_edit/"></a>
-                       {% endif %}
+                   {% if request.user|in_group:'Editors' %}
+                       <a id="edit_button" class="button float_left" title="Edit chapter" href="{{ related_wiki.get_absolute_url }}/_edit/"></a>
+                   {% endif %}
                 {% endifequal %}
             {% endif %}
         </div>
