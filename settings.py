@@ -165,10 +165,12 @@ CHAPTER_RATING_OPTIONS = (
     ('5', 'Brilliant'),
 )
 
+
 if DEVELOPMENT_MODE:
     TAGGING_AUTOCOMPLETE_JS_BASE_URL = 'jquery-autocomplete'
 else:
     TAGGING_AUTOCOMPLETE_JS_BASE_URL = STATIC_URL+'jquery-autocomplete'
+    TINYMCE_JS_URL = 'http://m.winning-without-losing.com/js/tiny_mce/tiny_mce_src.js'
 
 try:
     from settings_local import *
