@@ -136,7 +136,8 @@ $(document).ready(function() {
  
 
 $(document).ready(function(){
-	
+    document.domain = 'winning-without-losing.com';
+
 	$(".toggle_container").hide();
  
 	$(".trigger").toggle(function(){
