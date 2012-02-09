@@ -257,6 +257,7 @@ class Revision(models.Model):
         return self.revision_user if self.revision_user else _('Anonymous')
     
     def save(self, *args, **kwargs):
+        """
         # Check if contents have changed... if not, silently ignore save
         if self.article and self.article.current_revision:
             if self.article.current_revision.contents == self.contents:
@@ -276,10 +277,11 @@ class Revision(models.Model):
         else:
             self.counter = 1
         self.previous_revision = self.article.current_revision
+        """
 
         # Create pre-parsed contents - no need to parse on-the-fly
-        ext = WIKI_MARKDOWN_EXTENSIONS
-        ext += ["wikilinks(base_url=%s/)" % reverse('wiki_view', args=('',))]
+        #ext = WIKI_MARKDOWN_EXTENSIONS
+        #ext += ["wikilinks(base_url=%s/)" % reverse('wiki_view', args=('',))]
 
         self.contents = sanitizeHtml(self.contents)
         self.contents_parsed = self.contents
