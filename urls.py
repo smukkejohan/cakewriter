@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     
     url(r'^$', 'views.index', name='index'),
     
-    (r'^book/', include('cakewriter.book.urls')),
+    (r'^book/', include('book.urls')),
     
     (r'^', include('accounts.urls')),
     
