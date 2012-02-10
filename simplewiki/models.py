@@ -16,26 +16,26 @@ from django.template.defaultfilters import slugify
 from book.models import Chapter
 def isTag(x): return x[0] == "<" and x[-1] == ">"
 def html2list(x, b=0):
-	mode = 'char'
-	cur = ''
-	output = []
-	for c in x:
-		if mode == 'tag':
-			if c == '>': 
-				if b: cur += ']'
-				else: cur += c
-				output.append(cur); cur = ''; mode = 'char'
-			else: cur += c
-		elif mode == 'char':
-			if c == '<': 
-				output.append(cur)
-				if b: cur = '['
-				else: cur = c
-				mode = 'tag'
-			elif c in string.whitespace: output.append(cur+c); cur = ''
-			else: cur += c
-	output.append(cur)
-	return filter(lambda x: x is not '', output)
+    mode = 'char'
+    cur = ''
+    output = []
+    for c in x:
+        if mode == 'tag':
+            if c == '>':
+                if b: cur += ']'
+                else: cur += c
+                output.append(cur); cur = ''; mode = 'char'
+            else: cur += c
+        elif mode == 'char':
+            if c == '<':
+                output.append(cur)
+                if b: cur = '['
+                else: cur = c
+                mode = 'tag'
+            elif c in string.whitespace: output.append(cur+c); cur = ''
+            else: cur += c
+    output.append(cur)
+    return filter(lambda x: x is not '', output)
 
 class ShouldHaveExactlyOneRootSlug(Exception):
     pass
@@ -45,7 +45,7 @@ class Article(models.Model):
        'slug' and 'parent' field should be maintained centrally, since users
        aren't allowed to change them, anyways.
     """
-    
+
     title = models.CharField(max_length=512, verbose_name=_('Article title'),
                              blank=False)
     slug = models.SlugField(max_length=100, verbose_name=_('slug'),
@@ -111,7 +111,7 @@ class Article(models.Model):
             return cls.get_url_reverse(path[1:], a, return_list+[article])
         except Exception, e:
             return None
-    
+
     def can_read(self, user):
         """ Check read permissions and return True/False."""
         if self.permissions:
@@ -140,7 +140,7 @@ class Article(models.Model):
             return unicode(_('Root article'))
         else:
             return self.get_url()
-    
+
     class Meta:
         unique_together = (('slug', 'parent'),)
         verbose_name = _('Article')
@@ -159,13 +159,13 @@ class ArticleAttachment(models.Model):
     file = models.FileField(max_length=255, upload_to=get_attachment_filepath, verbose_name=_('Attachment'))
     uploaded_by = models.ForeignKey(User, blank=True, verbose_name=_('Uploaded by'), null=True)
     uploaded_on = models.DateTimeField(auto_now_add = True, verbose_name=_('Upload date'))
-    
+
     def download_url(self):
         return reverse('wiki_view_attachment', args=(self.article.get_url(), self.filename()))
-    
+
     def filename(self):
         return '.'.join(self.file.name.split('/')[-1].split('.')[:-1])
-    
+
     def get_size(self):
         try:
             size = self.file.size
@@ -175,13 +175,13 @@ class ArticleAttachment(models.Model):
 
     def filename(self):
         return '.'.join(self.file.name.split('/')[-1].split('.')[:-1])
-    
+
     def is_image(self):
         fname = self.filename().split('.')
         if len(fname) > 1 and fname[-1].lower() in WIKI_IMAGE_EXTENSIONS:
             return True
         return False
-    
+
     def get_thumb(self):
         return self.get_thumb_impl(*WIKI_IMAGE_THUMB_SIZE)
 
@@ -196,15 +196,15 @@ class ArticleAttachment(models.Model):
         """Requires Python Imaging Library (PIL)"""
         if not self.get_size():
             return False
-        
+
         if not self.is_image():
             return False
-    
+
         base_path = os.path.dirname(self.file.path)
         orig_name = self.filename().split('.')
         thumb_filename = "%s__thumb__%d_%d.%s" % ('.'.join(orig_name[:-1]), width, height, orig_name[-1])
         thumb_filepath = "%s%s%s" % (base_path, os.sep, thumb_filename)
-    
+
         if force or not os.path.exists(thumb_filepath):
             try:
                 import Image
@@ -218,26 +218,26 @@ class ArticleAttachment(models.Model):
 
     def get_thumb_impl(self, width, height):
         """Requires Python Imaging Library (PIL)"""
-        
+
         if not self.get_size():
             return False
-        
+
         if not self.is_image():
             return False
-    
+
         self.mk_thumb(width, height)
-        
+
         orig_name = self.filename().split('.')
         thumb_filename = "%s__thumb__%d_%d.%s" % ('.'.join(orig_name[:-1]), width, height, orig_name[-1])
         thumb_url = settings.MEDIA_URL + WIKI_ATTACHMENTS + self.article.get_url() +'/' + thumb_filename
-    
+
         return thumb_url
 
     def __unicode__(self):
         return self.filename()
-    
+
 class Revision(models.Model):
-    
+
     article = models.ForeignKey(Article, verbose_name=_('Article'))
     revision_text = models.CharField(max_length=255, blank=True, null=True, 
                                      verbose_name=_('Description of change'))
@@ -252,12 +252,12 @@ class Revision(models.Model):
     contents_parsed = models.TextField(editable=True, blank=True, null=True)
     counter = models.IntegerField(verbose_name=_('Revision#'), default=1, editable=False)
     previous_revision = models.ForeignKey('self', blank=True, null=True, editable=True)
-    
+
     def get_user(self):
         return self.revision_user if self.revision_user else _('Anonymous')
-    
+
     def save(self, *args, **kwargs):
-        """
+
         # Check if contents have changed... if not, silently ignore save
         if self.article and self.article.current_revision:
             if self.article.current_revision.contents == self.contents:
@@ -266,7 +266,7 @@ class Revision(models.Model):
                 import datetime
                 self.article.modified_on = datetime.datetime.now()
                 self.article.save()
-        
+
         # Increment counter according to previous revision
         previous_revision = Revision.objects.filter(article=self.article).order_by('-counter')
         if previous_revision.count() > 0:
@@ -277,7 +277,7 @@ class Revision(models.Model):
         else:
             self.counter = 1
         self.previous_revision = self.article.current_revision
-        """
+
 
         # Create pre-parsed contents - no need to parse on-the-fly
         #ext = WIKI_MARKDOWN_EXTENSIONS
@@ -290,7 +290,7 @@ class Revision(models.Model):
         #                                extensions=ext,
         #                                safe_mode='escape',)
         super(Revision, self).save(*args, **kwargs)
-                
+
     def delete(self, **kwargs):
         """If a current revision is deleted, then regress to the previous
         revision or insert a stub, if no other revisions are available"""
@@ -314,43 +314,28 @@ class Revision(models.Model):
 
     def get_diff(self):
         out = []
-        b = self.contents_parsed
+        b = self.contents
         if self.previous_revision:
-            a = self.previous_revision.contents_parsed
+            a = self.previous_revision.contents
             a, b = html2list(a), html2list(b)
         else:
-            a = self.contents_parsed
+            a = self.contents
             a, b = html2list(a), html2list(b)
         s = difflib.SequenceMatcher(None, a, b)
-    	for e in s.get_opcodes():
-    		if e[0] == "replace":
-    			out.append('<del>'+''.join(a[e[1]:e[2]]) + '</del><ins>'+''.join(b[e[3]:e[4]])+"</ins>")
-    		elif e[0] == "delete":
-    			out.append('<del class="diff">'+ ''.join(a[e[1]:e[2]]) + "</del>")
-    		elif e[0] == "insert":
-    			out.append('<ins class="diff">'+''.join(b[e[3]:e[4]]) + "</ins>")
-    		elif e[0] == "equal":
-    			out.append(''.join(b[e[3]:e[4]]))
-    		else:
-    			raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
-    	return ''.join(out)
-    '''
+        for e in s.get_opcodes():
+            if e[0] == "replace":
+                out.append('<del>'+''.join(a[e[1]:e[2]]) + '</del><ins>'+''.join(b[e[3]:e[4]])+"</ins>")
+            elif e[0] == "delete":
+                out.append('<del class="diff">'+ ''.join(a[e[1]:e[2]]) + "</del>")
+            elif e[0] == "insert":
+                out.append('<ins class="diff">'+''.join(b[e[3]:e[4]]) + "</ins>")
+            elif e[0] == "equal":
+                out.append(''.join(b[e[3]:e[4]]))
+            else:
+                raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
+        return ''.join(out)
 
-    def get_diff(self):
-        if self.previous_revision:
-            previous = self.previous_revision.contents.splitlines(1)
-        else:
-            previous = []
 
-        # Todo: difflib.HtmlDiff would look pretty for our history pages!
-        diff = difflib.unified_diff(previous, self.contents.splitlines(1))
-        # let's skip the preamble
-        diff.next(); diff.next(); diff.next()
-
-        for d in diff:
-            yield d
-    '''
-    
     def __unicode__(self):
         return "r%d" % self.counter
 
