@@ -4,7 +4,6 @@ from book.models import LatestChapterFeed
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-from django.views.generic.simple import direct_to_template
 
 urlpatterns = patterns('',
     
@@ -22,7 +21,7 @@ urlpatterns = patterns('',
     
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^edit/', direct_to_template, {'template': 'simplewiki_error.html'}),
+    (r'^edit', include('simplewiki.urls')),
     (r'^captcha/', include('captcha.urls')),
     (r'^tinymce/', include('tinymce.urls')),
     (r'^newsletters/', include('emencia.django.newsletter.urls')),
