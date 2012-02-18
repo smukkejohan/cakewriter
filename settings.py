@@ -124,7 +124,7 @@ INSTALLED_APPS = (
     'book',
     'accounts',
     'usermessage',
-    #'captcha',
+    'captcha',
     'simplewiki',
     'pages',
     'tinymce',
