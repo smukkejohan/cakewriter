@@ -7,7 +7,7 @@ urlpatterns = patterns('',
     url(r'^/?([a-zA-Z\d/_-]*)/_history/([0-9]*)/$', 'simplewiki.views.history', name='wiki_history'),
 
     url(r'^/?([a-zA-Z\d/_-]*)$', 'simplewiki.views.view', name='wiki_view'),
-    url(r'^(.*)$', 'simplewiki.views.encode_err', name='wiki_encode_err')
+    url(r'^(.*)$', 'simplewiki.views.encode_err', name='wiki_encode_err'),
 
 #    url(r'^/?([a-zA-Z\d/_-]*)/_discussion/$', 'simplewiki.views.discussion', name='wiki_discussion'),
 #    url(r'^/?([a-zA-Z\d/_-]*)/_create/$', 'simplewiki.views.create', name='wiki_create'),
